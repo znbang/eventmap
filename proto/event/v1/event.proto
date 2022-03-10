@@ -1,0 +1,97 @@
+syntax = "proto3";
+package event.v1;
+import "google/protobuf/timestamp.proto";
+option go_package = "github.com/znbang/eventmap/gen/event/v1;eventv1";
+
+service EventService {
+  rpc CreateEvent (CreateEventRequest) returns (CreateEventResponse);
+  rpc UpdateEvent (UpdateEventRequest) returns (UpdateEventResponse);
+  rpc DeleteEvent (DeleteEventRequest) returns (DeleteEventResponse);
+  rpc GetEvent (GetEventRequest) returns (GetEventResponse);
+  rpc ListActiveEvent(ListActiveEventRequest) returns (ListActiveEventResponse);
+  rpc ListEvent(ListEventRequest) returns (ListEventResponse);
+  rpc ListUserEvent(ListUserEventRequest) returns (ListUserEventResponse);
+}
+
+message Event {
+  string id = 1;
+  string user_id = 2;
+  google.protobuf.Timestamp start_date = 3;
+  google.protobuf.Timestamp end_date = 4;
+  string name = 5;
+  string location = 6;
+  string url = 7;
+  string detail = 8;
+  double lat = 9;
+  double lng = 10;
+  int32 zoom = 11;
+  google.protobuf.Timestamp created_at = 12;
+  google.protobuf.Timestamp updated_at = 13;
+}
+
+message CreateEventRequest {
+  Event event = 1;
+}
+
+message CreateEventResponse {
+  string id = 1;
+}
+
+message UpdateEventRequest {
+  Event event = 1;
+}
+
+message UpdateEventResponse {
+  string id = 1;
+}
+
+message DeleteEventRequest {
+  string id = 1;
+}
+
+message DeleteEventResponse {
+}
+
+message GetEventRequest {
+  string id = 1;
+}
+
+message GetEventResponse {
+  Event event = 1;
+}
+
+message ListEventRequest {
+  int32 page = 1;
+  int32 size = 2;
+  string filter = 3;
+}
+
+message ListEventResponse {
+  int32 page = 1;
+  int32 size = 2;
+  int32 total = 3;
+  repeated Event items = 4;
+}
+
+message ListActiveEventRequest {
+}
+
+message ListActiveEventResponse {
+  int32 page = 1;
+  int32 size = 2;
+  int32 total = 3;
+  repeated Event items = 4;
+}
+
+message ListUserEventRequest {
+  int32 page = 1;
+  int32 size = 2;
+  string filter = 3;
+}
+
+message ListUserEventResponse {
+  int32 page = 1;
+  int32 size = 2;
+  int32 total = 3;
+  repeated Event items = 4;
+}

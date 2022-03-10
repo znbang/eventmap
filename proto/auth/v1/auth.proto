@@ -1,0 +1,36 @@
+syntax = "proto3";
+package auth.v1;
+option go_package = "github.com/znbang/eventmap/gen/auth/v1;authv1";
+
+service AuthService {
+  rpc ListProvider (ListProviderRequest) returns (ListProviderResponse);
+  rpc GetUser (GetUserRequest) returns (GetUserResponse);
+  rpc Logout (LogoutRequest) returns (LogoutResponse);
+}
+
+message Provider {
+  string name = 1;
+  string url = 2;
+}
+
+message ListProviderRequest {
+}
+
+message ListProviderResponse {
+  repeated Provider providers = 1;
+}
+
+message GetUserRequest {
+}
+
+message GetUserResponse {
+  string email = 1;
+  string name= 2;
+  string token = 3;
+}
+
+message LogoutRequest {
+}
+
+message LogoutResponse {
+}

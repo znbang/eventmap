@@ -1,0 +1,47 @@
+{
+  "name": "eventmap",
+  "version": "0.0.1",
+  "description": "EventMap App",
+  "productName": "EventMap App",
+  "author": "Zhenbang Wei",
+  "private": true,
+  "scripts": {
+    "test": "echo \"No test specified\" && exit 0"
+  },
+  "dependencies": {
+    "@bufbuild/connect-web": "^0.1.0",
+    "@googlemaps/js-api-loader": "^1.14.3",
+    "@googlemaps/markerclusterer": "^2.0.10",
+    "@quasar/app-webpack": "^3.5.9",
+    "@quasar/extras": "^1.15.1",
+    "axios": "^0.27.2",
+    "core-js": "^3.6.5",
+    "dotenv": "^16.0.1",
+    "pinia": "^2.0.17",
+    "quasar": "^2.7.7",
+    "vue": "^3.0.0",
+    "vue-gtag": "^2.0.1",
+    "vue-i18n": "^9.2.2",
+    "vue-router": "^4.1.3"
+  },
+  "browserslist": [
+    "last 10 Chrome versions",
+    "last 10 Firefox versions",
+    "last 4 Edge versions",
+    "last 7 Safari versions",
+    "last 8 Android versions",
+    "last 8 ChromeAndroid versions",
+    "last 8 FirefoxAndroid versions",
+    "last 10 iOS versions",
+    "last 5 Opera versions"
+  ],
+  "engines": {
+    "node": ">= 12.22.1",
+    "npm": ">= 6.13.4",
+    "yarn": ">= 1.21.1"
+  },
+  "devDependencies": {
+    "@bufbuild/protoc-gen-connect-web": "^0.1.0",
+    "@bufbuild/protoc-gen-es": "^0.0.10"
+  }
+}

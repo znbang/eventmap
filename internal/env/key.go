@@ -1,0 +1,27 @@
+package env
+
+const (
+	Port                 = "PORT"
+	CookieName           = "COOKIE_NAME"
+	CookieSecret         = "COOKIE_SECRET"
+	JWTSecret            = "JWT_SECRET"
+	DatabaseURL          = "DATABASE_URL"
+	PyroscopeServer      = "PYROSCOPE_SERVER"
+	JaegerURL            = "JAEGER_URL"
+	GoogleClientID       = "GOOGLE_CLIENT_ID"
+	GoogleClientSecret   = "GOOGLE_CLIENT_SECRET"
+	GoogleRedirectURI    = "GOOGLE_REDIRECT_URI"
+	GoogleUserInfoURL    = "GOOGLE_USER_INFO_URL"
+	FacebookClientID     = "FACEBOOK_CLIENT_ID"
+	FacebookClientSecret = "FACEBOOK_CLIENT_SECRET"
+	FacebookRedirectURI  = "FACEBOOK_REDIRECT_URI"
+	FacebookUserInfoURL  = "FACEBOOK_USER_INFO_URL"
+	GithubClientID       = "GITHUB_CLIENT_ID"
+	GithubClientSecret   = "GITHUB_CLIENT_SECRET"
+	GithubRedirectURI    = "GITHUB_REDIRECT_URI"
+	GithubUserInfoURL    = "GITHUB_USER_INFO_URL"
+	LineClientID         = "LINE_CLIENT_ID"
+	LineClientSecret     = "LINE_CLIENT_SECRET"
+	LineRedirectURI      = "LINE_REDIRECT_URI"
+	LineUserInfoURL      = "LINE_USER_INFO_URL"
+)
