@@ -109,7 +109,7 @@ function getIcon(book) {
   }
 }
 
-onMounted(() => {
+function syncStatusStream() {
   (async() => {
     try {
       for await (const event of bookService.syncStatus({}, {signal})) {
@@ -122,7 +122,23 @@ onMounted(() => {
       }
     } catch (e) {}
   })()
-})
+}
+
+function syncStatusSse() {
+  const eventSource = new EventSource('/api/sync-book-status')
+  eventSource.addEventListener('message', async (event) => {
+    const task = JSON.parse(event.data)
+    state.items.forEach(item => {
+      if (item.job?.id === task.id) {
+        item.job.message = task.message
+        item.job.status = task.status
+      }
+    })
+  })
+}
+
+// onMounted(syncStatusStream)
+onMounted(syncStatusSse)
 
 onBeforeRouteLeave(watch(() => $route.query, updateState))
 onBeforeRouteLeave(() => abortController.abort())
