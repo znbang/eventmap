@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 )
 
 func internalServerError(w http.ResponseWriter, err error) {
@@ -34,6 +35,47 @@ func CreateSyncStatusHandler() http.HandlerFunc {
 				}
 			case <-r.Context().Done():
 				return
+			}
+		}
+	}
+}
+
+func CreateDownloadBookHandler(bookService *BookService) http.HandlerFunc {
+	return func(w http.ResponseWriter, q *http.Request) {
+		var (
+			book     Book
+			chapters []Chapter
+			bookId   string
+		)
+
+		params := q.URL.Query()
+		bookId = params.Get("id")
+		if bookId == "" {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		if err := bookService.BookRepository.FindById(&book, bookId); err != nil {
+			internalServerError(w, err)
+			return
+		}
+
+		if err := bookService.GetAllChapters(&chapters, bookId); err != nil {
+			internalServerError(w, err)
+			return
+		}
+
+		w.Header().Set("Content-Type", "text/plain; charset=UTF-8")
+		w.Header().Set("Content-Disposition", "attachment; filename*=UTF-8''"+url.PathEscape(book.Title)+".txt")
+
+		for _, chapter := range chapters {
+			texts := [...]string{chapter.Title, "\n\n", chapter.Body, "\n\n"}
+			for _, text := range texts {
+				data := []byte(text)
+				if _, err := w.Write(data); err != nil {
+					internalServerError(w, err)
+					return
+				}
 			}
 		}
 	}

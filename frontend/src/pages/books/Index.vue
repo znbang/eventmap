@@ -11,7 +11,7 @@
             <q-btn v-if="(item.job?.status || 0) === 0" dense flat round icon="refresh" @click="syncAll(item.id)"><q-tooltip>{{ $t('books.syncAll') }}</q-tooltip></q-btn>
             <q-btn v-if="(item.job?.status || 0) === 0" dense flat round icon="sync" @click="syncNew(item.id)"><q-tooltip>{{ $t('books.syncNew') }}</q-tooltip></q-btn>
             <q-btn v-if="(item.job?.status || 0) !== 0" dense flat round icon="stop_circle" @click="stopSync(item.id)" />
-            <q-btn dense flat round icon="save_alt" @click="download(item.id)"><q-tooltip>{{ $t('books.download') }}</q-tooltip></q-btn>
+            <q-btn dense flat round icon="save_alt" @click.prevent="downloadRpc(item.id)"><q-tooltip>{{ $t('books.download') }}</q-tooltip></q-btn>
           </q-card-section>
         </q-card>
       </q-expansion-item>
@@ -92,13 +92,17 @@ function deleteBook(id) {
   })
 }
 
-async function download(id) {
+async function downloadRpc(id) {
   const { title, content } = await bookService.downloadBook({ id })
   const blob = new Blob([content], { type: 'text/plain' })
   const a = document.createElement('a')
   a.href = URL.createObjectURL(blob)
   a.download = title + '.txt'
   a.click()
+}
+
+function downloadLink(id) {
+  location.href= `/api/download-book?id=${id}`
 }
 
 function getIcon(book) {

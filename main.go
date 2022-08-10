@@ -81,6 +81,7 @@ func main() {
 	mux.Handle("/api/", auth.WithUser(userService, loginService, http.StripPrefix("/api", api)))
 	mux.Handle("/backupdb", backupdb.CreateBackupDatabaseHandler(db, sqliteCreateTableSql))
 	mux.Handle("/api/sync-book-status", bookservice.CreateSyncStatusHandler())
+	mux.Handle("/api/download-book", bookservice.CreateDownloadBookHandler(bookService))
 	mux.Handle("/login/oauth2/code/", auth.CreateOauthHandleFunc(authService, loginService))
 
 	if spaFS, err := fs.Sub(distFS, "frontend/dist/spa"); err != nil {
