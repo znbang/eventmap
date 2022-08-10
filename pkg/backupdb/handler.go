@@ -16,18 +16,18 @@ func CreateBackupDatabaseHandler(db *dbx.DB, createTableSql string) http.Handler
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
 			w.WriteHeader(http.StatusMethodNotAllowed)
-			_, _ = fmt.Fprint(w, "Method not allowed")
+			return
 		}
 
 		bak, err := dbx.Sqlite("eventmap." + time.Now().Format("20060102150405") + ".db")
 		// bak, err := dbx.Open(env.Get(env.DatabaseURL))
 		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			_, _ = fmt.Fprintf(w, "Open database failed: %v", err)
+			http.Error(w, fmt.Sprintf("Open database failed: %v", err), http.StatusInternalServerError)
+			return
 		}
 		if err = bak.Exec(createTableSql).Error; err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			_, _ = fmt.Fprintf(w, "Create tables failed: %v", err)
+			http.Error(w, fmt.Sprintf("Create table failed: %v", err), http.StatusInternalServerError)
+			return
 		}
 		defer bak.Close()
 
@@ -42,8 +42,8 @@ func CreateBackupDatabaseHandler(db *dbx.DB, createTableSql string) http.Handler
 
 		for _, model := range models {
 			if err = dbx.CopyTable(model, db, bak); err != nil {
-				w.WriteHeader(http.StatusInternalServerError)
-				_, _ = fmt.Fprintf(w, "%v", err)
+				http.Error(w, fmt.Sprintf("%v", err), http.StatusInternalServerError)
+				return
 			}
 			model = nil
 		}

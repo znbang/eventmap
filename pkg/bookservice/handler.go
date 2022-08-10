@@ -7,11 +7,6 @@ import (
 	"net/url"
 )
 
-func internalServerError(w http.ResponseWriter, err error) {
-	w.WriteHeader(http.StatusInternalServerError)
-	_, _ = fmt.Fprintf(w, "%v", err)
-}
-
 func CreateSyncStatusHandler() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/event-stream")
@@ -26,9 +21,11 @@ func CreateSyncStatusHandler() http.HandlerFunc {
 			select {
 			case event := <-ch:
 				if data, err := json.Marshal(event); err != nil {
-					internalServerError(w, err)
+					http.Error(w, err.Error(), http.StatusInternalServerError)
+					return
 				} else if _, err = fmt.Fprintf(w, "data: %v\n\n", string(data)); err != nil {
-					internalServerError(w, err)
+					http.Error(w, err.Error(), http.StatusInternalServerError)
+					return
 				}
 				if f, ok := w.(http.Flusher); ok {
 					f.Flush()
@@ -51,17 +48,17 @@ func CreateDownloadBookHandler(bookService *BookService) http.HandlerFunc {
 		params := q.URL.Query()
 		bookId = params.Get("id")
 		if bookId == "" {
-			w.WriteHeader(http.StatusBadRequest)
+			http.Error(w, "id is required", http.StatusBadRequest)
 			return
 		}
 
 		if err := bookService.BookRepository.FindById(&book, bookId); err != nil {
-			internalServerError(w, err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
 		if err := bookService.GetAllChapters(&chapters, bookId); err != nil {
-			internalServerError(w, err)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
@@ -73,7 +70,7 @@ func CreateDownloadBookHandler(bookService *BookService) http.HandlerFunc {
 			for _, text := range texts {
 				data := []byte(text)
 				if _, err := w.Write(data); err != nil {
-					internalServerError(w, err)
+					http.Error(w, err.Error(), http.StatusInternalServerError)
 					return
 				}
 			}
