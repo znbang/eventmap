@@ -14,13 +14,13 @@ require (
 	golang.org/x/net v0.0.0-20220809012201-f428fae20770
 	golang.org/x/oauth2 v0.0.0-20220808172628-8227340efae7
 	google.golang.org/protobuf v1.28.1
-	gorm.io/driver/postgres v1.3.8
+	gorm.io/driver/postgres v1.3.7
 	gorm.io/driver/sqlite v1.3.6
-	gorm.io/gorm v1.23.8
+	gorm.io/gorm v1.23.5
 )
 
 require (
-	cloud.google.com/go/compute v1.7.0 // indirect
+	cloud.google.com/go/compute v1.8.0 // indirect
 	github.com/andybalholm/cascadia v1.3.1 // indirect
 	github.com/antchfx/htmlquery v1.2.3 // indirect
 	github.com/antchfx/xmlquery v1.2.4 // indirect
