@@ -37,7 +37,7 @@ func WithUser(userService *userservice.UserService, loginService *login.Service,
 			user        userservice.User
 		)
 
-		if err = loginService.FindByID(&userSession, claims.Subject); err != nil {
+		if err = loginService.FindSessionById(&userSession, claims.Subject); err != nil {
 			next.ServeHTTP(w, r)
 			return
 		}

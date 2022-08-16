@@ -59,18 +59,9 @@ func main() {
 	loginService := login.NewService(userSessionRepository)
 	authService := auth.NewService(userService)
 
-	authServer := &auth.AuthServer{
-		LoginService: loginService,
-		UserService:  userService,
-	}
-
-	bookServer := &bookservice.BookServer{
-		BookService: bookService,
-	}
-
-	eventServer := &eventservice.EventServer{
-		EventService: eventService,
-	}
+	authServer := auth.NewAuthServer(loginService, userService)
+	bookServer := bookservice.NewBookServer(bookService)
+	eventServer := eventservice.NewEventServer(eventService)
 
 	api := http.NewServeMux()
 	api.Handle(bookv1connect.NewBookServiceHandler(bookServer))
@@ -90,7 +81,7 @@ func main() {
 		mux.Handle("/", http.FileServer(modfs.New(http.FS(spaFS), time.Now())))
 	}
 
-	go bookServer.HandleBookJob()
+	go bookService.HandleBookJob()
 
 	addr := ":" + env.Get(env.Port)
 	if err := http.ListenAndServe(addr, h2c.NewHandler(mux, &http2.Server{})); err != nil {

@@ -2,16 +2,17 @@ package auth
 
 import (
 	"errors"
+
 	"github.com/znbang/eventmap/pkg/userservice"
 )
 
 type Service struct {
-	*userservice.UserService
+	userService *userservice.UserService
 }
 
 func NewService(userService *userservice.UserService) *Service {
 	return &Service{
-		UserService: userService,
+		userService: userService,
 	}
 }
 
@@ -24,8 +25,8 @@ func (s *Service) Login(user *userservice.User, provider string, accessToken str
 
 	*user = userInfo.ToUser()
 
-	if err := s.UserService.FindByUid(user, user.Uid, user.Provider); errors.Is(err, userservice.ErrNoSuchUser) {
-		return s.UserService.Register(user)
+	if err := s.userService.FindByUid(user, user.Uid, user.Provider); errors.Is(err, userservice.ErrNoSuchUser) {
+		return s.userService.Register(user)
 	} else {
 		return err
 	}

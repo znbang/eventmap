@@ -1,18 +1,19 @@
 package eventservice
 
 import (
+	"time"
+
 	"github.com/microcosm-cc/bluemonday"
 	"github.com/znbang/eventmap/pkg/uuid"
-	"time"
 )
 
 type EventService struct {
-	EventRepository
+	eventRepository EventRepository
 }
 
 func NewEventService(eventRepository EventRepository) *EventService {
 	return &EventService{
-		EventRepository: eventRepository,
+		eventRepository: eventRepository,
 	}
 }
 
@@ -22,7 +23,7 @@ func (s *EventService) GetActiveEvents(events *EventList) error {
 	d := time.Now()
 	d = time.Date(d.Year(), d.Month(), d.Day(), 0, 0, 0, 0, d.Location())
 
-	if err := s.EventRepository.FindByEndDateAfter(&items, d); err != nil {
+	if err := s.eventRepository.FindByEndDateAfter(&items, d); err != nil {
 		return err
 	}
 
@@ -40,11 +41,11 @@ func (s *EventService) GetEvents(events *EventList, q string, page int, size int
 		items []Event
 	)
 
-	if err := s.EventRepository.CountAll(&total, q); err != nil {
+	if err := s.eventRepository.CountAll(&total, q); err != nil {
 		return err
 	}
 
-	if err := s.EventRepository.FindAll(&items, q, page, size); err != nil {
+	if err := s.eventRepository.FindAll(&items, q, page, size); err != nil {
 		return err
 	}
 
@@ -62,11 +63,11 @@ func (s *EventService) GetEventsByUser(events *EventList, userId string, q strin
 		items []Event
 	)
 
-	if err := s.EventRepository.CountByUserId(&total, userId, q); err != nil {
+	if err := s.eventRepository.CountByUserId(&total, userId, q); err != nil {
 		return err
 	}
 
-	if err := s.EventRepository.FindByUserId(&items, userId, q, page, size); err != nil {
+	if err := s.eventRepository.FindByUserId(&items, userId, q, page, size); err != nil {
 		return err
 	}
 
@@ -87,13 +88,13 @@ func (s *EventService) CreateEvent(userId string, input *Event) error {
 	input.ID = uuid.ULID()
 	input.UserID = userId
 
-	return s.EventRepository.Create(input)
+	return s.eventRepository.Create(input)
 }
 
 func (s *EventService) UpdateEvent(userId string, input Event) error {
 	var event Event
 
-	if err := s.EventRepository.FindByIdAndUserId(&event, input.ID, userId); err != nil {
+	if err := s.eventRepository.FindByIdAndUserId(&event, input.ID, userId); err != nil {
 		return err
 	}
 
@@ -111,5 +112,5 @@ func (s *EventService) UpdateEvent(userId string, input Event) error {
 	event.StartDate = input.StartDate
 	event.EndDate = input.EndDate
 
-	return s.EventRepository.Save(&event)
+	return s.eventRepository.Save(&event)
 }

@@ -15,7 +15,13 @@ import (
 )
 
 type EventServer struct {
-	*EventService
+	eventService *EventService
+}
+
+func NewEventServer(eventService *EventService) *EventServer {
+	return &EventServer{
+		eventService: eventService,
+	}
 }
 
 func (s *EventServer) CreateEvent(ctx context.Context, r *connect.Request[v1.CreateEventRequest]) (*connect.Response[v1.CreateEventResponse], error) {
@@ -38,7 +44,7 @@ func (s *EventServer) CreateEvent(ctx context.Context, r *connect.Request[v1.Cre
 		return nil, errors.New(fmt.Sprintf("%v", validate.Errors))
 	}
 
-	if err := s.EventService.CreateEvent(user.ID, &event); err != nil {
+	if err := s.eventService.CreateEvent(user.ID, &event); err != nil {
 		return nil, err
 	}
 
@@ -67,7 +73,7 @@ func (s *EventServer) UpdateEvent(ctx context.Context, r *connect.Request[v1.Upd
 		return nil, errors.New(fmt.Sprintf("%v", validate.Errors))
 	}
 
-	if err := s.EventService.UpdateEvent(user.ID, event); err != nil {
+	if err := s.eventService.UpdateEvent(user.ID, event); err != nil {
 		return nil, err
 	}
 
@@ -83,7 +89,7 @@ func (s *EventServer) DeleteEvent(ctx context.Context, r *connect.Request[v1.Del
 		return nil, err
 	}
 
-	if err := s.EventService.DeleteByIdAndUserId(r.Msg.Id, user.ID); err != nil {
+	if err := s.eventService.eventRepository.DeleteByIdAndUserId(r.Msg.Id, user.ID); err != nil {
 		return nil, err
 	}
 
@@ -93,7 +99,7 @@ func (s *EventServer) DeleteEvent(ctx context.Context, r *connect.Request[v1.Del
 func (s *EventServer) GetEvent(ctx context.Context, r *connect.Request[v1.GetEventRequest]) (*connect.Response[v1.GetEventResponse], error) {
 	var event Event
 
-	if err := s.EventService.FindById(&event, r.Msg.Id); err != nil {
+	if err := s.eventService.eventRepository.FindById(&event, r.Msg.Id); err != nil {
 		return nil, err
 	}
 
@@ -105,7 +111,7 @@ func (s *EventServer) GetEvent(ctx context.Context, r *connect.Request[v1.GetEve
 func (s *EventServer) ListActiveEvent(ctx context.Context, r *connect.Request[v1.ListActiveEventRequest]) (*connect.Response[v1.ListActiveEventResponse], error) {
 	var events EventList
 
-	if err := s.EventService.GetActiveEvents(&events); err != nil {
+	if err := s.eventService.GetActiveEvents(&events); err != nil {
 		return nil, err
 	}
 
@@ -125,7 +131,7 @@ func (s *EventServer) ListEvent(ctx context.Context, r *connect.Request[v1.ListE
 		page, size = mvc.PageSize(r.Msg.Page, r.Msg.Size)
 	)
 
-	if err := s.EventService.GetEvents(&events, r.Msg.Filter, page, size); err != nil {
+	if err := s.eventService.GetEvents(&events, r.Msg.Filter, page, size); err != nil {
 		return nil, err
 	}
 
@@ -148,7 +154,7 @@ func (s *EventServer) ListUserEvent(ctx context.Context, r *connect.Request[v1.L
 		return nil, err
 	}
 
-	if err := s.EventService.GetEventsByUser(&events, user.ID, r.Msg.Filter, page, size); err != nil {
+	if err := s.eventService.GetEventsByUser(&events, user.ID, r.Msg.Filter, page, size); err != nil {
 		return nil, err
 	}
 

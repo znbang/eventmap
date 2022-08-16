@@ -27,8 +27,15 @@ var (
 )
 
 type AuthServer struct {
-	LoginService *login.Service
-	*userservice.UserService
+	loginService *login.Service
+	userService *userservice.UserService
+}
+
+func NewAuthServer(loginService *login.Service, userService *userservice.UserService) *AuthServer {
+	return &AuthServer{
+		loginService: loginService,
+		userService: userService,
+	}
 }
 
 func (s *AuthServer) ListProvider(ctx context.Context, r *connect.Request[v1.ListProviderRequest]) (*connect.Response[v1.ListProviderResponse], error) {
@@ -60,17 +67,17 @@ func (s *AuthServer) GetUser(ctx context.Context, r *connect.Request[v1.GetUserR
 	}
 
 	// load user session
-	if err := s.LoginService.FindByID(&userSession, sessionId); err != nil {
+	if err := s.loginService.FindSessionById(&userSession, sessionId); err != nil {
 		return nil, connect.NewError(connect.CodeUnauthenticated, err)
 	}
 
 	// update user session
-	if err := s.LoginService.Save(&userSession); err != nil {
+	if err := s.loginService.SaveSession(&userSession); err != nil {
 		return nil, connect.NewError(connect.CodeUnauthenticated, err)
 	}
 
 	// get user
-	if err := s.UserService.FindById(&user, userSession.UserID); err != nil {
+	if err := s.userService.FindById(&user, userSession.UserID); err != nil {
 		return nil, connect.NewError(connect.CodeUnauthenticated, err)
 	}
 
@@ -102,7 +109,7 @@ func (s *AuthServer) Logout(ctx context.Context, r *connect.Request[v1.LogoutReq
 	resp := connect.NewResponse(&v1.LogoutResponse{})
 	deleteCookie(resp)
 	if sessionId, ok := ctx.Value("sessionId").(string); ok {
-		if err := s.LoginService.DeleteByID(sessionId); err != nil {
+		if err := s.loginService.DeleteSessionById(sessionId); err != nil {
 			return nil, err
 		}
 	}
@@ -139,7 +146,7 @@ func CreateOauthHandleFunc(authService *Service, loginService *login.Service) ht
 			return
 		}
 
-		if err := loginService.CreateUserSession(&userSession, user.ID); err != nil {
+		if err := loginService.CreateSession(&userSession, user.ID); err != nil {
 			unauthenticated(w, fmt.Errorf("auth: create session failed: %v", err))
 			return
 		}

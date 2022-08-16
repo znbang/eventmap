@@ -4,13 +4,14 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
+
 	"github.com/znbang/eventmap/internal/env"
 	"github.com/znbang/eventmap/pkg/uuid"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/facebook"
 	"golang.org/x/oauth2/github"
 	"golang.org/x/oauth2/google"
-	"io"
 )
 
 func getProviders() map[string]oauth2.Config {

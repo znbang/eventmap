@@ -2,21 +2,22 @@ package bookservice
 
 import (
 	"errors"
+
 	"github.com/microcosm-cc/bluemonday"
 	"github.com/znbang/eventmap/pkg/uuid"
 )
 
 type BookService struct {
-	BookRepository
-	ChapterRepository
-	BookJobRepository
+	bookRepository BookRepository
+	chapterRepository ChapterRepository
+	bookJobRepository BookJobRepository
 }
 
 func NewBookService(bookRepository BookRepository, bookJobRepository BookJobRepository, chapterRepository ChapterRepository) *BookService {
 	return &BookService{
-		BookRepository:    bookRepository,
-		BookJobRepository: bookJobRepository,
-		ChapterRepository: chapterRepository,
+		bookRepository:    bookRepository,
+		bookJobRepository: bookJobRepository,
+		chapterRepository: chapterRepository,
 	}
 }
 
@@ -26,11 +27,11 @@ func (s *BookService) GetBooksByUser(books *BookList, userId string, q string, p
 		items []Book
 	)
 
-	if err := s.BookRepository.CountByUserId(&total, userId, q); err != nil {
+	if err := s.bookRepository.CountByUserId(&total, userId, q); err != nil {
 		return err
 	}
 
-	if err := s.BookRepository.FindByUserId(&items, userId, q, page, size); err != nil {
+	if err := s.bookRepository.FindByUserId(&items, userId, q, page, size); err != nil {
 		return err
 	}
 
@@ -48,11 +49,11 @@ func (s *BookService) GetChapterTitles(chapters *ChapterList, bookId string, pag
 		items []Chapter
 	)
 
-	if err := s.ChapterRepository.CountByBookId(&total, bookId); err != nil {
+	if err := s.chapterRepository.CountByBookId(&total, bookId); err != nil {
 		return err
 	}
 
-	if err := s.ChapterRepository.FindByBookId(&items, bookId, page, size); err != nil {
+	if err := s.chapterRepository.FindByBookId(&items, bookId, page, size); err != nil {
 		return err
 	}
 
@@ -65,7 +66,7 @@ func (s *BookService) GetChapterTitles(chapters *ChapterList, bookId string, pag
 }
 
 func (s *BookService) GetAllChapters(chapters *[]Chapter, bookId string) error {
-	return s.ChapterRepository.FindAllByBookId(chapters, bookId)
+	return s.chapterRepository.FindAllByBookId(chapters, bookId)
 }
 
 func (s *BookService) CreateBook(userID string, input *Book) error {
@@ -75,13 +76,13 @@ func (s *BookService) CreateBook(userID string, input *Book) error {
 	input.ID = uuid.ULID()
 	input.UserID = userID
 
-	return s.BookRepository.Create(input)
+	return s.bookRepository.Create(input)
 }
 
 func (s *BookService) UpdateBook(userId string, input *Book) error {
 	var book Book
 
-	if err := s.BookRepository.FindByIdAndUserId(&book, input.ID, userId); err != nil {
+	if err := s.bookRepository.FindByIdAndUserId(&book, input.ID, userId); err != nil {
 		return err
 	}
 
@@ -90,29 +91,29 @@ func (s *BookService) UpdateBook(userId string, input *Book) error {
 	book.Author = p.Sanitize(input.Author)
 	book.URL = input.URL
 
-	return s.BookRepository.Save(&book)
+	return s.bookRepository.Save(&book)
 }
 
 func (s *BookService) DeleteBook(userId, bookId string) error {
 	var book Book
 
-	if err := s.BookRepository.FindByIdAndUserId(&book, bookId, userId); errors.Is(err, ErrNoSuchBook) {
+	if err := s.bookRepository.FindByIdAndUserId(&book, bookId, userId); errors.Is(err, ErrNoSuchBook) {
 		return errors.New("book: current user is not the owner of the book")
 	}
 
-	return s.BookRepository.Delete(&book)
+	return s.bookRepository.Delete(&book)
 }
 
 func (s *BookService) SyncBook(book Book) error {
 	job := BookJob{}
-	if err := s.BookJobRepository.FindByBookId(&job, book.ID); errors.Is(err, ErrNoSuchBookJob) {
+	if err := s.bookJobRepository.FindByBookId(&job, book.ID); errors.Is(err, ErrNoSuchBookJob) {
 		job = BookJob{
 			ID:     uuid.ULID(),
 			BookID: book.ID,
 			Status: StatusPending,
 		}
 
-		return s.BookJobRepository.Create(&job)
+		return s.bookJobRepository.Create(&job)
 	} else if err != nil {
 		return err
 	}
@@ -120,7 +121,7 @@ func (s *BookService) SyncBook(book Book) error {
 	if job.IsDone() {
 		job.Status = StatusPending
 		job.Message = ""
-		return s.BookJobRepository.Save(&job)
+		return s.bookJobRepository.Save(&job)
 	}
 
 	return nil
@@ -129,11 +130,11 @@ func (s *BookService) SyncBook(book Book) error {
 func (s *BookService) StopSyncBook(bookId string) error {
 	var bookJob BookJob
 
-	if err := s.BookJobRepository.FindByBookId(&bookJob, bookId); err != nil {
+	if err := s.bookJobRepository.FindByBookId(&bookJob, bookId); err != nil {
 		return err
 	}
 
 	bookJob.Status = StatusDone
 
-	return s.BookJobRepository.Save(&bookJob)
+	return s.bookJobRepository.Save(&bookJob)
 }

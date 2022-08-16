@@ -1,8 +1,9 @@
 package auth
 
 import (
-	"github.com/znbang/eventmap/pkg/userservice"
 	"strconv"
+
+	"github.com/znbang/eventmap/pkg/userservice"
 )
 
 type UserInfo interface {

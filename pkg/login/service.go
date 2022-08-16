@@ -5,20 +5,32 @@ import (
 )
 
 type Service struct {
-	Repository
+	userSessionRepository UserSessionRepository
 }
 
-func NewService(repository Repository) *Service {
+func NewService(userSessionRepository UserSessionRepository) *Service {
 	return &Service{
-		Repository: repository,
+		userSessionRepository: userSessionRepository,
 	}
 }
 
-func (s *Service) CreateUserSession(userSession *UserSession, userId string) error {
+func (s *Service) CreateSession(userSession *UserSession, userId string) error {
 	*userSession = UserSession{
 		ID:     uuid.RandomID(),
 		UserID: userId,
 	}
 
-	return s.Repository.Create(userSession)
+	return s.userSessionRepository.Create(userSession)
+}
+
+func (s *Service) FindSessionById(userSession *UserSession, id string) error {
+	return s.userSessionRepository.FindByID(userSession, id)
+}
+
+func (s *Service) SaveSession(userSession *UserSession) error {
+	return s.userSessionRepository.Save(userSession)
+}
+
+func (s *Service) DeleteSessionById(id string) error {
+	return s.userSessionRepository.DeleteByID(id)
 }

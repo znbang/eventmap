@@ -9,7 +9,7 @@ type userSessionRepository struct {
 	*dbx.DB
 }
 
-func NewUserSessionRepository(db *dbx.DB) login.Repository {
+func NewUserSessionRepository(db *dbx.DB) login.UserSessionRepository {
 	return &userSessionRepository{
 		DB: db,
 	}

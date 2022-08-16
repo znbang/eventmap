@@ -2,10 +2,11 @@ package bookservice
 
 import (
 	"errors"
-	"github.com/znbang/eventmap/pkg/crawlerservice"
-	"github.com/znbang/eventmap/pkg/uuid"
 	"log"
 	"time"
+
+	"github.com/znbang/eventmap/pkg/crawlerservice"
+	"github.com/znbang/eventmap/pkg/uuid"
 )
 
 func (s *BookService) HandleBookJob() {
@@ -13,7 +14,7 @@ func (s *BookService) HandleBookJob() {
 		time.Sleep(5 * time.Second)
 
 		jobs := make([]BookJob, 0)
-		if err := s.BookJobRepository.Find100Pending(&jobs); err != nil {
+		if err := s.bookJobRepository.Find100Pending(&jobs); err != nil {
 			log.Println(err)
 		}
 
@@ -40,7 +41,7 @@ func (s *BookService) handleBookJob(job BookJob) error {
 	)
 
 	// 取得第一章下載 URL
-	if err := s.BookRepository.FindById(&book, job.BookID); err == nil {
+	if err := s.bookRepository.FindById(&book, job.BookID); err == nil {
 		url = book.URL
 	} else if errors.Is(err, ErrNoSuchBook) {
 		return errors.New("找不到書本。")
@@ -49,7 +50,7 @@ func (s *BookService) handleBookJob(job BookJob) error {
 	}
 
 	// 取得最末章下載 URL 和頁碼
-	if err := s.ChapterRepository.FindLastChapterByBookId(&chapter, job.BookID); err == nil {
+	if err := s.chapterRepository.FindLastChapterByBookId(&chapter, job.BookID); err == nil {
 		url = chapter.URL
 		page = chapter.Page
 	} else if errors.Is(err, ErrNoSuchChapter) {
@@ -83,7 +84,7 @@ func (s *BookService) handleBookJob(job BookJob) error {
 		} else {
 			page = page + 1
 
-			if err := s.ChapterRepository.Create(&Chapter{
+			if err := s.chapterRepository.Create(&Chapter{
 				ID:     uuid.ULID(),
 				BookID: book.ID,
 				URL:    url,
@@ -99,7 +100,7 @@ func (s *BookService) handleBookJob(job BookJob) error {
 			}
 
 			book.UpdatedAt = time.Now()
-			if err := s.BookRepository.Save(&book); err != nil {
+			if err := s.bookRepository.Save(&book); err != nil {
 				return err
 			}
 
@@ -107,7 +108,7 @@ func (s *BookService) handleBookJob(job BookJob) error {
 		}
 
 		// 檢查是否被使用者停止
-		if err := s.BookJobRepository.FindById(&job, job.ID); err != nil {
+		if err := s.bookJobRepository.FindById(&job, job.ID); err != nil {
 			return err
 		} else if job.IsDone() {
 			return nil
@@ -126,13 +127,13 @@ func (s *BookService) handleBookJob(job BookJob) error {
 func (s *BookService) updateBookJobMessage(jobId string, message string) error {
 	var job BookJob
 
-	if err := s.BookJobRepository.FindById(&job, jobId); err != nil {
+	if err := s.bookJobRepository.FindById(&job, jobId); err != nil {
 		return err
 	}
 
 	job.Message = message
 
-	return s.BookJobRepository.Save(&job)
+	return s.bookJobRepository.Save(&job)
 }
 
 func (s *BookService) markTaskRunning(job BookJob) error {
@@ -141,7 +142,7 @@ func (s *BookService) markTaskRunning(job BookJob) error {
 	if err := EventBus.Post(Event{job.ID, "", StatusRunning}); err != nil {
 		return err
 	}
-	return s.BookJobRepository.Save(&job)
+	return s.bookJobRepository.Save(&job)
 }
 
 func (s *BookService) markTaskDone(job BookJob, message string) error {
@@ -150,5 +151,5 @@ func (s *BookService) markTaskDone(job BookJob, message string) error {
 	if err := EventBus.Post(Event{job.ID, message, StatusDone}); err != nil {
 		return err
 	}
-	return s.BookJobRepository.Save(&job)
+	return s.bookJobRepository.Save(&job)
 }

@@ -1,6 +1,6 @@
 package login
 
-type Repository interface {
+type UserSessionRepository interface {
 	FindByID(userSession *UserSession, id string) error
 	DeleteByID(id string) error
 	Create(userSession *UserSession) error

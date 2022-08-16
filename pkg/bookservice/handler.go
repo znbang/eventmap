@@ -52,7 +52,7 @@ func CreateDownloadBookHandler(bookService *BookService) http.HandlerFunc {
 			return
 		}
 
-		if err := bookService.BookRepository.FindById(&book, bookId); err != nil {
+		if err := bookService.bookRepository.FindById(&book, bookId); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}

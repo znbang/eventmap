@@ -17,7 +17,13 @@ import (
 )
 
 type BookServer struct {
-	*BookService
+	bookService *BookService
+}
+
+func NewBookServer(bookService *BookService) *BookServer {
+	return &BookServer{
+		bookService: bookService,
+	}
 }
 
 func (s *BookServer) CreateBook(ctx context.Context, r *connect.Request[v1.CreateBookRequest]) (*connect.Response[v1.CreateBookResponse], error) {
@@ -32,7 +38,7 @@ func (s *BookServer) CreateBook(ctx context.Context, r *connect.Request[v1.Creat
 
 	book := convertPBToBook(r.Msg.Book)
 
-	if err := validateBook(s.BookRepository, validate, user, &book); err != nil {
+	if err := validateBook(s.bookService.bookRepository, validate, user, &book); err != nil {
 		return nil, err
 	}
 
@@ -40,11 +46,11 @@ func (s *BookServer) CreateBook(ctx context.Context, r *connect.Request[v1.Creat
 		return nil, errors.New(fmt.Sprintf("%v", validate.Errors))
 	}
 
-	if err := s.BookService.CreateBook(user.ID, &book); err != nil {
+	if err := s.bookService.CreateBook(user.ID, &book); err != nil {
 		return nil, err
 	}
 
-	if err := s.BookService.SyncBook(book); err != nil {
+	if err := s.bookService.SyncBook(book); err != nil {
 		return nil, err
 	}
 
@@ -65,7 +71,7 @@ func (s *BookServer) UpdateBook(ctx context.Context, r *connect.Request[v1.Updat
 
 	book := convertPBToBook(r.Msg.Book)
 
-	if err := validateBook(s.BookRepository, validate, user, &book); err != nil {
+	if err := validateBook(s.bookService.bookRepository, validate, user, &book); err != nil {
 		return nil, err
 	}
 
@@ -73,7 +79,7 @@ func (s *BookServer) UpdateBook(ctx context.Context, r *connect.Request[v1.Updat
 		return nil, errors.New(fmt.Sprintf("%v", validate.Errors))
 	}
 
-	if err := s.BookService.UpdateBook(user.ID, &book); err != nil {
+	if err := s.bookService.UpdateBook(user.ID, &book); err != nil {
 		return nil, err
 	}
 
@@ -89,7 +95,7 @@ func (s *BookServer) DeleteBook(ctx context.Context, r *connect.Request[v1.Delet
 		return nil, err
 	}
 
-	if err := s.BookService.DeleteBook(user.ID, r.Msg.Id); err != nil {
+	if err := s.bookService.DeleteBook(user.ID, r.Msg.Id); err != nil {
 		return nil, err
 	}
 
@@ -106,7 +112,7 @@ func (s *BookServer) DeleteChapter(ctx context.Context, r *connect.Request[v1.De
 		return nil, err
 	}
 
-	if err := s.BookRepository.FindById(&book, r.Msg.Id); err != nil {
+	if err := s.bookService.bookRepository.FindById(&book, r.Msg.Id); err != nil {
 		return nil, err
 	}
 
@@ -114,7 +120,7 @@ func (s *BookServer) DeleteChapter(ctx context.Context, r *connect.Request[v1.De
 		return nil, errors.New("user is not book's owner")
 	}
 
-	if err := s.ChapterRepository.DeleteByPage(r.Msg.Id, int(r.Msg.Page)); err != nil {
+	if err := s.bookService.chapterRepository.DeleteByPage(r.Msg.Id, int(r.Msg.Page)); err != nil {
 		return nil, err
 	}
 
@@ -124,7 +130,7 @@ func (s *BookServer) DeleteChapter(ctx context.Context, r *connect.Request[v1.De
 func (s *BookServer) GetBook(ctx context.Context, r *connect.Request[v1.GetBookRequest]) (*connect.Response[v1.GetBookResponse], error) {
 	var book Book
 
-	if err := s.BookRepository.FindById(&book, r.Msg.Id); err != nil {
+	if err := s.bookService.bookRepository.FindById(&book, r.Msg.Id); err != nil {
 		return nil, err
 	}
 
@@ -141,11 +147,11 @@ func (s *BookServer) GetToc(ctx context.Context, r *connect.Request[v1.GetTocReq
 		page, size = mvc.PageSize(r.Msg.Page, r.Msg.Size)
 	)
 
-	if err := s.BookRepository.FindById(&book, bookId); err != nil {
+	if err := s.bookService.bookRepository.FindById(&book, bookId); err != nil {
 		return nil, err
 	}
 
-	if err := s.BookService.GetChapterTitles(&chapters, bookId, page, size); err != nil {
+	if err := s.bookService.GetChapterTitles(&chapters, bookId, page, size); err != nil {
 		return nil, err
 	}
 
@@ -167,15 +173,15 @@ func (s *BookServer) GetChapter(ctx context.Context, r *connect.Request[v1.GetCh
 		bookId  = r.Msg.Id
 	)
 
-	if err := s.BookRepository.FindById(&book, bookId); err != nil {
+	if err := s.bookService.bookRepository.FindById(&book, bookId); err != nil {
 		return nil, err
 	}
 
-	if err := s.ChapterRepository.FindByBookIdAndPage(&chapter, bookId, page); err != nil {
+	if err := s.bookService.chapterRepository.FindByBookIdAndPage(&chapter, bookId, page); err != nil {
 		return nil, err
 	}
 
-	if err := s.ChapterRepository.CountByBookId(&total, bookId); err != nil {
+	if err := s.bookService.chapterRepository.CountByBookId(&total, bookId); err != nil {
 		return nil, err
 	}
 
@@ -198,7 +204,7 @@ func (s *BookServer) ListBook(ctx context.Context, r *connect.Request[v1.ListBoo
 		return nil, err
 	}
 
-	if err := s.BookService.GetBooksByUser(&books, user.ID, r.Msg.Filter, page, size); err != nil {
+	if err := s.bookService.GetBooksByUser(&books, user.ID, r.Msg.Filter, page, size); err != nil {
 		return nil, err
 	}
 
@@ -221,11 +227,11 @@ func (s *BookServer) SyncNew(ctx context.Context, r *connect.Request[v1.SyncNewR
 		return nil, err
 	}
 
-	if err := s.BookRepository.FindByIdAndUserId(&book, bookId, user.ID); err != nil {
+	if err := s.bookService.bookRepository.FindByIdAndUserId(&book, bookId, user.ID); err != nil {
 		return nil, err
 	}
 
-	if err := s.BookService.SyncBook(book); err != nil {
+	if err := s.bookService.SyncBook(book); err != nil {
 		return nil, err
 	}
 
@@ -243,15 +249,15 @@ func (s *BookServer) SyncAll(ctx context.Context, r *connect.Request[v1.SyncAllR
 		return nil, err
 	}
 
-	if err := s.BookRepository.FindByIdAndUserId(&book, bookId, user.ID); err != nil {
+	if err := s.bookService.bookRepository.FindByIdAndUserId(&book, bookId, user.ID); err != nil {
 		return nil, err
 	}
 
-	if err := s.ChapterRepository.DeleteByBookId(bookId); err != nil {
+	if err := s.bookService.chapterRepository.DeleteByBookId(bookId); err != nil {
 		return nil, err
 	}
 
-	if err := s.BookService.SyncBook(book); err != nil {
+	if err := s.bookService.SyncBook(book); err != nil {
 		return nil, err
 	}
 
@@ -268,7 +274,7 @@ func (s *BookServer) StopSync(ctx context.Context, r *connect.Request[v1.StopSyn
 		return nil, err
 	}
 
-	if err := s.BookService.StopSyncBook(bookId); err != nil {
+	if err := s.bookService.StopSyncBook(bookId); err != nil {
 		return nil, err
 	}
 
@@ -305,11 +311,11 @@ func (s *BookServer) DownloadBook(ctx context.Context, r *connect.Request[v1.Dow
 		sb       strings.Builder
 	)
 
-	if err := s.BookRepository.FindById(&book, bookId); err != nil {
+	if err := s.bookService.bookRepository.FindById(&book, bookId); err != nil {
 		return nil, err
 	}
 
-	if err := s.BookService.GetAllChapters(&chapters, bookId); err != nil {
+	if err := s.bookService.GetAllChapters(&chapters, bookId); err != nil {
 		return nil, err
 	}
 
