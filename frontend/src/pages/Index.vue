@@ -68,8 +68,8 @@ export default {
           const response = await eventService.listActiveEvent({})
           const items = response.items || []
           const events = items.map(a => {
-            a.startDate = date.formatDate(new Date(a.startDate), 'YYYY-MM-DD')
-            a.endDate = date.formatDate(new Date(a.endDate), 'YYYY-MM-DD')
+            a.startDate = date.formatDate(a.startDate.toDate(), 'YYYY-MM-DD')
+            a.endDate = date.formatDate(a.endDate.toDate(), 'YYYY-MM-DD')
             return a
           })
           addMarkers(map, events)
