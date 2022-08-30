@@ -20,12 +20,6 @@ import (
 
 const GetUserPath = "/api/auth.v1.AuthService/GetUser"
 
-var (
-	CookieName   = env.Get(env.CookieName)
-	CookieSecret = []byte(env.Get(env.CookieSecret))
-	JwtSecret    = []byte(env.Get(env.JWTSecret))
-)
-
 type AuthServer struct {
 	loginService *login.Service
 	userService *userservice.UserService
@@ -88,7 +82,7 @@ func (s *AuthServer) GetUser(ctx context.Context, r *connect.Request[v1.GetUserR
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	signedToken, err := token.SignedString(JwtSecret)
+	signedToken, err := token.SignedString([]byte(env.Get(env.JWTSecret)))
 	if err != nil {
 		return nil, connect.NewError(connect.CodeUnauthenticated, err)
 	}
@@ -100,7 +94,7 @@ func (s *AuthServer) GetUser(ctx context.Context, r *connect.Request[v1.GetUserR
 	})
 
 	// update cookie
-	addCookie(resp, CookieName, CookieSecret, sessionId)
+	addCookie(resp, env.Get(env.CookieName), []byte(env.Get(env.CookieSecret)), sessionId)
 
 	return resp, nil
 }
@@ -152,8 +146,8 @@ func CreateOauthHandleFunc(authService *Service, loginService *login.Service) ht
 		}
 
 		cookie := http.Cookie{
-			Name:     CookieName,
-			Value:    sign(userSession.ID, CookieSecret),
+			Name:     env.Get(env.CookieName),
+			Value:    sign(userSession.ID, []byte(env.Get(env.CookieSecret))),
 			Path:     "/api/auth.v1.AuthService/GetUser",
 			MaxAge:   30 * 24 * 60 * 60,
 			HttpOnly: true,
@@ -166,7 +160,7 @@ func CreateOauthHandleFunc(authService *Service, loginService *login.Service) ht
 
 func getSessionIdFromCookie[T any](r *connect.Request[T], sessionId *string) error {
 	request := http.Request{Header: r.Header()}
-	cookie, err := request.Cookie(CookieName)
+	cookie, err := request.Cookie(env.Get(env.CookieName))
 	if err != nil {
 		return err
 	}
@@ -185,7 +179,7 @@ func getSessionIdFromCookie[T any](r *connect.Request[T], sessionId *string) err
 	*sessionId = values[0]
 	sig := values[1]
 
-	if !verify(*sessionId, sig, CookieSecret) {
+	if !verify(*sessionId, sig, []byte(env.Get(env.CookieSecret))) {
 		return http.ErrNoCookie
 	}
 
@@ -206,7 +200,7 @@ func addCookie[T any](w *connect.Response[T], cookieName string, cookieSecret []
 
 func deleteCookie[T any](w *connect.Response[T]) {
 	cookie := http.Cookie{
-		Name:   CookieName,
+		Name:   env.Get(env.CookieName),
 		Path:   GetUserPath,
 		MaxAge: -1,
 	}
