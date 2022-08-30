@@ -1,14 +1,22 @@
 package dbx
 
 import (
-	"gorm.io/driver/postgres"
+	"log"
+	
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
-	"log"
 )
 
 type DB struct {
 	*gorm.DB
+}
+
+func Open(dsn string) (*DB, error) {
+	db, err := gorm.Open(sqlite.Open(dsn), &gorm.Config{})
+	if err != nil {
+		return nil, err
+	}
+	return &DB{DB: db}, nil
 }
 
 func (db *DB) Close() {
@@ -19,26 +27,4 @@ func (db *DB) Close() {
 			log.Fatal(err)
 		}
 	}
-}
-
-func Open(dsn string) (*DB, error) {
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if err != nil {
-		return nil, err
-	}
-	return &DB{DB: db}, nil
-}
-
-func Sqlite(dsn string) (*DB, error) {
-	db, err := gorm.Open(sqlite.Open(dsn), &gorm.Config{})
-	if err != nil {
-		return nil, err
-	}
-	return &DB{DB: db}, nil
-}
-
-func CopyTable(rows any, db *DB, bak *DB) error {
-	return db.FindInBatches(rows, 100, func(tx *gorm.DB, batch int) error {
-		return bak.Create(rows).Error
-	}).Error
 }

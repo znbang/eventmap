@@ -15,7 +15,6 @@ import (
 	"github.com/znbang/eventmap/internal/env"
 	"github.com/znbang/eventmap/internal/gorm/repository"
 	"github.com/znbang/eventmap/pkg/auth"
-	"github.com/znbang/eventmap/pkg/backupdb"
 	"github.com/znbang/eventmap/pkg/bookservice"
 	"github.com/znbang/eventmap/pkg/eventservice"
 	"github.com/znbang/eventmap/pkg/login"
@@ -28,12 +27,6 @@ import (
 //go:embed frontend/dist/spa
 var distFS embed.FS
 
-//go:embed schema.pgsql.sql
-var pgsqlCreateTableSql string
-
-//go:embed schema.sqlite.sql
-var sqliteCreateTableSql string
-
 // @title EventMap API
 // @version 1.0
 // @license.name Apache 2.0
@@ -41,7 +34,7 @@ func main() {
 	env.Verify()
 
 	// db, err := dbx.Open(env.Get(env.DatabaseURL))
-	db, err := dbx.Sqlite("eventmap.sqlite")
+	db, err := dbx.Open("eventmap.sqlite")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -70,7 +63,6 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.Handle("/api/", auth.WithUser(userService, loginService, http.StripPrefix("/api", api)))
-	mux.Handle("/backupdb", backupdb.CreateBackupDatabaseHandler(db, sqliteCreateTableSql))
 	mux.Handle("/api/sync-book-status", bookservice.CreateSyncStatusHandler())
 	mux.Handle("/api/download-book", bookservice.CreateDownloadBookHandler(bookService))
 	mux.Handle("/login/oauth2/code/", auth.CreateOauthHandleFunc(authService, loginService))

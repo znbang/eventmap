@@ -25,6 +25,7 @@ tasks:
     deps: [assets]
     cmds:
       - go build -trimpath -ldflags="-s -w" .
+      - go build -trimpath -ldflags="-s -w" ./cmd/backupdb
 
   build-freebsd:
     deps: [assets]
@@ -33,6 +34,7 @@ tasks:
       GOOS: freebsd
     cmds:
       - go build -trimpath -ldflags="-s -w" .
+      - go build -trimpath -ldflags="-s -w" ./cmd/backupdb
 
   build-linux:
     deps: [assets]
@@ -41,6 +43,7 @@ tasks:
       GOOS: linux
     cmds:
       - go build -trimpath -ldflags="-s -w" .
+      - go build -trimpath -ldflags="-s -w" ./cmd/backupdb
 
   assets:
     deps: [grpc]
@@ -85,14 +88,19 @@ tasks:
       - echo start service
       - ssh -t -p {{.PORT}} {{.USER}}@{{.HOST}} "sudo service {{.EXE}} start"
 
+  deploy-backupdb:
+    cmds:
+      - echo packing
+      - git archive main -o main.zip
+      - echo uploading
+      - scp -P {{.PORT}} main.zip {{.USER}}@{{.HOST}}:.
+      - cmd /c del main.zip
+      - echo building
+      - ssh -t -p {{.PORT}} {{.USER}}@{{.HOST}} "mkdir main; unzip -q -d main main.zip; cd main; go build -trimpath -ldflags=\"-s -w\" ./cmd/backupdb"
+      - ssh -t -p {{.PORT}} {{.USER}}@{{.HOST}} "cp main/backupdb .; rm -rf main; rm -f main.zip"
+
   gosec:
     dir: echo
     cmds:
       - go install github.com/securego/gosec/cmd/gosec@latest
       - gosec --quiet ./...
-
-  swag:
-    dir: echo
-    cmds:
-      - go install github.com/swaggo/swag/cmd/swag@latest
-      - swag init
