@@ -34,7 +34,7 @@ func main() {
 	env.Verify()
 
 	// db, err := dbx.Open(env.Get(env.DatabaseURL))
-	db, err := dbx.Open("eventmap.sqlite")
+	db, err := dbx.Open("eventmap.db")
 	if err != nil {
 		log.Fatal(err)
 	}

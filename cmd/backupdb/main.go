@@ -170,8 +170,8 @@ func backup(srcDSN, bakDSN, schema string, tables []string) error {
 }
 
 func main() {
-	srcDSN := "eventmap.sqlite"
-	bakDSN := "eventmap." + time.Now().Format("20060102150405") + ".sqlite"
+	srcDSN := "eventmap.db"
+	bakDSN := "eventmap." + time.Now().Format("20060102150405") + ".db"
 	if err := backup(srcDSN, bakDSN, db.SqliteSchema, tables); err != nil {
 		fmt.Println("backup failed:", err)
 	}
