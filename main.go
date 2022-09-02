@@ -5,6 +5,7 @@ import (
 	"io/fs"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	_ "github.com/joho/godotenv/autoload"
@@ -27,9 +28,6 @@ import (
 //go:embed frontend/dist/spa
 var distFS embed.FS
 
-// @title EventMap API
-// @version 1.0
-// @license.name Apache 2.0
 func main() {
 	env.Verify()
 
@@ -75,7 +73,11 @@ func main() {
 
 	go bookService.HandleBookJob()
 
-	addr := ":" + env.Get(env.Port)
+	addr := env.Get(env.Port)
+	if !strings.Contains(addr, ":") {
+		addr = ":" + addr
+	}
+
 	if err := http.ListenAndServe(addr, h2c.NewHandler(mux, &http2.Server{})); err != nil {
 		log.Fatal(err)
 	}
