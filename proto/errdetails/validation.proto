@@ -1,0 +1,7 @@
+syntax = "proto3";
+package errdetails.v1;
+option go_package = "github.com/znbang/bento/gen/errdetails/v1;errdetailsv1";
+
+message ValidationError {
+  map<string, string> errors = 1;
+}

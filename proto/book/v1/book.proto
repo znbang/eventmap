@@ -56,7 +56,9 @@ enum BookJobStatus {
 }
 
 message CreateBookRequest {
-  Book book = 1;
+  string title = 1;
+  string author = 2;
+  string url = 3;
 }
 
 message CreateBookResponse {
@@ -64,7 +66,10 @@ message CreateBookResponse {
 }
 
 message UpdateBookRequest {
-  Book book = 1;
+  string id = 1;
+  string title = 2;
+  string author = 3;
+  string url = 4;
 }
 
 message UpdateBookResponse {

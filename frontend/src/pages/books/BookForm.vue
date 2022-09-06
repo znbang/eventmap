@@ -15,6 +15,8 @@ import { tr } from 'boot/i18n'
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { bookService } from 'components/service'
+import { connectErrorDetails } from '@bufbuild/connect-web'
+import { ValidationError } from '../../../gen/errdetails/validation_pb'
 
 const $route = useRoute()
 const $router = useRouter()
@@ -32,9 +34,13 @@ async function fetchData() {
 async function onSubmit() {
   const id = $route.params.id
   const fn = id ? bookService.updateBook : bookService.createBook
-  fn({ book: model.value })
+  fn({ ...model.value })
     .then(() => $router.push('/books'))
-    .catch(error => errors.value = tr(error.response.data))
+    .catch(e => {
+      const err = connectErrorDetails(e, ValidationError)
+        .find(it => it.errors)
+      errors.value = tr(err?.errors || {})
+    })
 }
 
 fetchData()

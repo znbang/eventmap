@@ -3,10 +3,10 @@ package bookservice
 import (
 	"context"
 	"errors"
-	"fmt"
 	"strings"
 
 	"github.com/bufbuild/connect-go"
+	"github.com/mitchellh/mapstructure"
 	v1 "github.com/znbang/eventmap/gen/book/v1"
 	"github.com/znbang/eventmap/internal/mvc"
 	"github.com/znbang/eventmap/pkg/auth"
@@ -29,6 +29,7 @@ func NewBookServer(bookService *BookService) *BookServer {
 func (s *BookServer) CreateBook(ctx context.Context, r *connect.Request[v1.CreateBookRequest]) (*connect.Response[v1.CreateBookResponse], error) {
 	var (
 		user     userservice.User
+		book     Book
 		validate = validation.New()
 	)
 
@@ -36,14 +37,12 @@ func (s *BookServer) CreateBook(ctx context.Context, r *connect.Request[v1.Creat
 		return nil, err
 	}
 
-	book := convertPBToBook(r.Msg.Book)
-
-	if err := validateBook(s.bookService.bookRepository, validate, user, &book); err != nil {
-		return nil, err
+	if err := mapstructure.Decode(r.Msg, &book); err != nil {
+		return nil, connect.NewError(connect.CodeInvalidArgument, err)
 	}
 
-	if validate.HasErrors() {
-		return nil, errors.New(fmt.Sprintf("%v", validate.Errors))
+	if err := validateAddBook(s.bookService.bookRepository, validate, user, &book); err != nil {
+		return nil, err
 	}
 
 	if err := s.bookService.CreateBook(user.ID, &book); err != nil {
@@ -59,24 +58,71 @@ func (s *BookServer) CreateBook(ctx context.Context, r *connect.Request[v1.Creat
 	}), nil
 }
 
+func validateAddBook(bookRepository BookRepository, validate *validation.Validation, user userservice.User, input *Book) error {
+	input.Title = strings.TrimSpace(input.Title)
+	input.Author = strings.TrimSpace(input.Author)
+	input.URL = strings.TrimSpace(input.URL)
+
+	validate.Required(input.Title, "title", "books.required.title")
+	validate.Required(input.Author, "author", "books.required.author")
+	if validate.Required(input.URL, "url", "books.required.url") {
+		validate.URL(input.URL, "url", "books.invalid.url")
+	}
+
+	errs := validate.Errors
+
+	if errs["title"] == "" && errs["author"] == "" {
+		var book Book
+		if err := bookRepository.FindByUserIdAndTitleAndAuthor(&book, user.ID, input.Title, input.Author); errors.Is(err, ErrNoSuchBook) {
+		} else if err != nil {
+			return err
+		} else if book.ID != input.ID {
+			errs["title"] = "books.exists.title"
+			errs["author"] = "books.exists.author"
+		}
+	}
+
+	if errs["url"] == "" {
+		var book Book
+		if err := bookRepository.FindByUserIdAndUrl(&book, user.ID, input.URL); errors.Is(err, ErrNoSuchBook) {
+		} else if err != nil {
+			return err
+		} else if book.ID != input.ID {
+			errs["url"] = "books.exists.url"
+		}
+	}
+
+	if errs["url"] == "" {
+		crawler := crawlerservice.New()
+		if !crawler.Supports(input.URL) {
+			errs["url"] = "books.invalid.url"
+		}
+	}
+
+	if validate.HasErrors() {
+		return mvc.NewValidationError(validate)
+	}
+
+	return nil
+}
+
 func (s *BookServer) UpdateBook(ctx context.Context, r *connect.Request[v1.UpdateBookRequest]) (*connect.Response[v1.UpdateBookResponse], error) {
 	var (
 		user     userservice.User
+		book     Book
 		validate = validation.New()
 	)
 
 	if err := auth.CurrentUser(ctx, &user); err != nil {
-		return nil, err
+		return nil, connect.NewError(connect.CodeUnauthenticated, err)
 	}
 
-	book := convertPBToBook(r.Msg.Book)
-
-	if err := validateBook(s.bookService.bookRepository, validate, user, &book); err != nil {
-		return nil, err
+	if err := mapstructure.Decode(r.Msg, &book); err != nil {
+		return nil, connect.NewError(connect.CodeInvalidArgument, err)
 	}
 
-	if validate.HasErrors() {
-		return nil, errors.New(fmt.Sprintf("%v", validate.Errors))
+	if err := validateUpdateBook(s.bookService.bookRepository, validate, user, &book); err != nil {
+		return nil, err
 	}
 
 	if err := s.bookService.UpdateBook(user.ID, &book); err != nil {
@@ -86,6 +132,11 @@ func (s *BookServer) UpdateBook(ctx context.Context, r *connect.Request[v1.Updat
 	return connect.NewResponse(&v1.UpdateBookResponse{
 		Id: book.ID,
 	}), nil
+}
+
+func validateUpdateBook(bookRepository BookRepository, validate *validation.Validation, user userservice.User, input *Book) error {
+	validate.Required(input.ID, "id", "books.required.id")
+	return validateAddBook(bookRepository, validate, user, input)
 }
 
 func (s *BookServer) DeleteBook(ctx context.Context, r *connect.Request[v1.DeleteBookRequest]) (*connect.Response[v1.DeleteBookResponse], error) {
@@ -365,15 +416,6 @@ func convertBookJobToPB(src *BookJob) *v1.BookJob {
 	}
 }
 
-func convertPBToBook(src *v1.Book) Book {
-	return Book{
-		ID:     src.Id,
-		Title:  src.Title,
-		Author: src.Author,
-		URL:    src.Url,
-	}
-}
-
 func convertChapterItems(src []Chapter) []*v1.Chapter {
 	items := make([]*v1.Chapter, 0, len(src))
 	for _, item := range src {
@@ -393,48 +435,4 @@ func convertChapterToPB(src Chapter) *v1.Chapter {
 		CreatedAt: timestamppb.New(src.CreatedAt),
 		UpdatedAt: timestamppb.New(src.UpdatedAt),
 	}
-}
-
-func validateBook(bookRepository BookRepository, validate *validation.Validation, user userservice.User, input *Book) error {
-	input.Title = strings.TrimSpace(input.Title)
-	input.Author = strings.TrimSpace(input.Author)
-	input.URL = strings.TrimSpace(input.URL)
-
-	validate.Required(input.Title, "title", "books.required.title")
-	validate.Required(input.Author, "author", "books.required.author")
-	if validate.Required(input.URL, "url", "books.required.url") {
-		validate.URL(input.URL, "url", "books.invalid.url")
-	}
-
-	errs := validate.Errors
-
-	if errs["title"] == "" && errs["author"] == "" {
-		var book Book
-		if err := bookRepository.FindByUserIdAndTitleAndAuthor(&book, user.ID, input.Title, input.Author); errors.Is(err, ErrNoSuchBook) {
-		} else if err != nil {
-			return err
-		} else if book.ID != input.ID {
-			errs["title"] = "books.exists.title"
-			errs["author"] = "books.exists.author"
-		}
-	}
-
-	if errs["url"] == "" {
-		var book Book
-		if err := bookRepository.FindByUserIdAndUrl(&book, user.ID, input.URL); errors.Is(err, ErrNoSuchBook) {
-		} else if err != nil {
-			return err
-		} else if book.ID != input.ID {
-			errs["url"] = "books.exists.url"
-		}
-	}
-
-	if errs["url"] == "" {
-		crawler := crawlerservice.New()
-		if !crawler.Supports(input.URL) {
-			errs["url"] = "books.invalid.url"
-		}
-	}
-
-	return nil
 }

@@ -30,7 +30,15 @@ message Event {
 }
 
 message CreateEventRequest {
-  Event event = 1;
+  google.protobuf.Timestamp start_date = 1;
+  google.protobuf.Timestamp end_date = 2;
+  string name = 3;
+  string location = 4;
+  string url = 5;
+  string detail = 6;
+  double lat = 7;
+  double lng = 8;
+  int32 zoom = 9;
 }
 
 message CreateEventResponse {
@@ -38,7 +46,16 @@ message CreateEventResponse {
 }
 
 message UpdateEventRequest {
-  Event event = 1;
+  string id = 1;
+  google.protobuf.Timestamp start_date = 2;
+  google.protobuf.Timestamp end_date = 3;
+  string name = 4;
+  string location = 5;
+  string url = 6;
+  string detail = 7;
+  double lat = 8;
+  double lng = 9;
+  int32 zoom = 10;
 }
 
 message UpdateEventResponse {

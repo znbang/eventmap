@@ -42,6 +42,8 @@ import { useRoute, useRouter } from 'vue-router'
 import { Loader } from '@googlemaps/js-api-loader'
 import { eventService } from 'components/service'
 import { Timestamp } from '@bufbuild/protobuf'
+import { connectErrorDetails } from '@bufbuild/connect-web'
+import { ValidationError } from '../../../gen/errdetails/validation_pb'
 
 const $route = useRoute()
 const $router = useRouter()
@@ -100,10 +102,8 @@ const initMap = (google) => {
 const getEvent = async (id) => {
   const response = await eventService.getEvent({ id })
   Object.assign(form, response.event)
-  form.startDate = form.startDate.toDate()
-  form.endDate = form.endDate.toDate()
-  const startDate = date.formatDate(form.startDate, 'YYYY-MM-DD')
-  const endDate = date.formatDate(form.endDate, 'YYYY-MM-DD')
+  const startDate = date.formatDate(form.startDate.toDate(), 'YYYY-MM-DD')
+  const endDate = date.formatDate(form.endDate.toDate(), 'YYYY-MM-DD')
   if (startDate === endDate) {
     dateInput.value = startDate
     dateRange.value = startDate
@@ -130,25 +130,29 @@ function onDateUpdate(value) {
   if (value) {
     if (typeof value === 'string') {
       dateInput.value = value
-      form.startDate = form.endDate = new Date(date.formatDate(value, 'YYYY-MM-DDTHH:mm:ss.SSSZ'))
+      form.startDate = form.endDate = Timestamp.fromDate(new Date(date.formatDate(value, 'YYYY-MM-DDTHH:mm:ss.SSSZ')))
     } else {
       dateInput.value = value.from + ' - ' + value.to
-      form.startDate = new Date(date.formatDate(value.from, 'YYYY-MM-DDTHH:mm:ss.SSSZ'))
-      form.endDate = new Date(date.formatDate(value.to, 'YYYY-MM-DDTHH:mm:ss.SSSZ'))
+      form.startDate = Timestamp.fromDate(new Date(date.formatDate(value.from, 'YYYY-MM-DDTHH:mm:ss.SSSZ')))
+      form.endDate = Timestamp.fromDate(new Date(date.formatDate(value.to, 'YYYY-MM-DDTHH:mm:ss.SSSZ')))
     }
   } else {
     dateInput.value = ''
+    form.startDate = Timestamp.fromDate(new Date(0))
+    form.endDate = Timestamp.fromDate(new Date(0))
   }
 }
 
 function onSubmit() {
   const id = $route.params.id
   const fn = id ? eventService.updateEvent : eventService.createEvent
-  form.startDate = Timestamp.fromDate(form.startDate)
-  form.endDate = Timestamp.fromDate(form.endDate)
-  fn({ event: form })
+  fn({ ...form })
     .then(() => $router.push('/events/user'))
-    .catch(error => errors.value = tr(error.response.data))
+    .catch(e => {
+      const err = connectErrorDetails(e, ValidationError)
+        .find(it => it.errors)
+      errors.value = tr(err?.errors || {})
+    })
 }
 </script>
 

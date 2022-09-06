@@ -2,10 +2,9 @@ package eventservice
 
 import (
 	"context"
-	"errors"
-	"fmt"
 
 	"github.com/bufbuild/connect-go"
+	"github.com/mitchellh/mapstructure"
 	v1 "github.com/znbang/eventmap/gen/event/v1"
 	"github.com/znbang/eventmap/internal/mvc"
 	"github.com/znbang/eventmap/pkg/auth"
@@ -27,21 +26,23 @@ func NewEventServer(eventService *EventService) *EventServer {
 func (s *EventServer) CreateEvent(ctx context.Context, r *connect.Request[v1.CreateEventRequest]) (*connect.Response[v1.CreateEventResponse], error) {
 	var (
 		user     userservice.User
+		event Event
 		validate = validation.New()
 	)
 
 	if err := auth.CurrentUser(ctx, &user); err != nil {
-		return nil, err
+		return nil, connect.NewError(connect.CodeUnauthenticated, err)
 	}
 
-	event := convertPBToEvent(r.Msg.Event)
-
-	if err := validateEvent(validate, event); err != nil {
-		return nil, err
+	if err := mapstructure.Decode(r.Msg, &event); err != nil {
+		return nil, connect.NewError(connect.CodeInvalidArgument, err)
 	}
 
-	if validate.HasErrors() {
-		return nil, errors.New(fmt.Sprintf("%v", validate.Errors))
+	event.StartDate = r.Msg.StartDate.AsTime()
+	event.EndDate = r.Msg.EndDate.AsTime()
+
+	if err := validateCreateEvent(validate, event); err != nil {
+		return nil, err
 	}
 
 	if err := s.eventService.CreateEvent(user.ID, &event); err != nil {
@@ -53,24 +54,56 @@ func (s *EventServer) CreateEvent(ctx context.Context, r *connect.Request[v1.Cre
 	}), nil
 }
 
+func validateCreateEvent(validate *validation.Validation, input Event) error {
+	if validate.Required(input.Name, "name", "events.required.name") {
+		validate.Max(input.Name, 255, "name", "events.size.name")
+	}
+	validate.Required(input.StartDate, "startDate", "events.required.date")
+	if input.StartDate.Unix() == 0 {
+		validate.Errors["startDate"] = "events.required.date"
+	}
+	validate.Required(input.EndDate, "endDate", "events.required.date")
+	if input.EndDate.Unix() == 0 {
+		validate.Errors["endDate"] = "events.required.date"
+	}
+	if validate.Required(input.Location, "location", "events.required.location") {
+		validate.Max(input.Location, 255, "location", "events.size.location")
+	}
+	validate.Required(input.Lat, "lat", "events.required.location")
+	validate.Required(input.Lng, "lng", "events.required.location")
+	validate.Required(input.Zoom, "zoom", "events.required.zoom")
+	validate.Required(input.Detail, "detail", "events.required.detail")
+	if len(input.URL) > 0 {
+		validate.URL(input.URL, "url", "events.invalid.url")
+	}
+
+	if validate.HasErrors() {
+		return mvc.NewValidationError(validate)
+	}
+
+	return nil
+}
+
 func (s *EventServer) UpdateEvent(ctx context.Context, r *connect.Request[v1.UpdateEventRequest]) (*connect.Response[v1.UpdateEventResponse], error) {
 	var (
 		user     userservice.User
+		event    Event
 		validate = validation.New()
 	)
 
 	if err := auth.CurrentUser(ctx, &user); err != nil {
-		return nil, err
+		return nil, connect.NewError(connect.CodeUnauthenticated, err)
 	}
 
-	event := convertPBToEvent(r.Msg.Event)
-
-	if err := validateEvent(validate, event); err != nil {
-		return nil, err
+	if err := mapstructure.Decode(r.Msg, &event); err != nil {
+		return nil, connect.NewError(connect.CodeInvalidArgument, err)
 	}
 
-	if validate.HasErrors() {
-		return nil, errors.New(fmt.Sprintf("%v", validate.Errors))
+	event.StartDate = r.Msg.StartDate.AsTime()
+	event.EndDate = r.Msg.EndDate.AsTime()
+
+	if err := validateUpdateEvent(validate, event); err != nil {
+		return nil, err
 	}
 
 	if err := s.eventService.UpdateEvent(user.ID, event); err != nil {
@@ -80,6 +113,11 @@ func (s *EventServer) UpdateEvent(ctx context.Context, r *connect.Request[v1.Upd
 	return connect.NewResponse(&v1.UpdateEventResponse{
 		Id: event.ID,
 	}), nil
+}
+
+func validateUpdateEvent(validate *validation.Validation, input Event) error {
+	validate.Required(input.ID, "id", "events.id.date")
+	return validateCreateEvent(validate, input)
 }
 
 func (s *EventServer) DeleteEvent(ctx context.Context, r *connect.Request[v1.DeleteEventRequest]) (*connect.Response[v1.DeleteEventResponse], error) {
@@ -190,38 +228,4 @@ func convertEventToPB(src Event) *v1.Event {
 		CreatedAt: timestamppb.New(src.CreatedAt),
 		UpdatedAt: timestamppb.New(src.UpdatedAt),
 	}
-}
-
-func convertPBToEvent(src *v1.Event) Event {
-	return Event{
-		ID:        src.Id,
-		StartDate: src.StartDate.AsTime(),
-		EndDate:   src.EndDate.AsTime(),
-		Name:      src.Name,
-		Location:  src.Location,
-		URL:       src.Url,
-		Detail:    src.Detail,
-		Lat:       src.Lat,
-		Lng:       src.Lng,
-		Zoom:      int(src.Zoom),
-	}
-}
-
-func validateEvent(validate *validation.Validation, event Event) error {
-	if validate.Required(event.Name, "name", "events.required.name") {
-		validate.Max(event.Name, 255, "name", "events.size.name")
-	}
-	validate.Required(event.StartDate, "startDate", "events.required.date")
-	validate.Required(event.EndDate, "endDate", "events.required.date")
-	if validate.Required(event.Location, "location", "events.required.location") {
-		validate.Max(event.Location, 255, "location", "events.size.location")
-	}
-	validate.Required(event.Lat, "lat", "events.required.location")
-	validate.Required(event.Lng, "lng", "events.required.location")
-	validate.Required(event.Zoom, "zoom", "events.required.zoom")
-	validate.Required(event.Detail, "detail", "events.required.detail")
-	if len(event.URL) > 0 {
-		validate.URL(event.URL, "url", "events.invalid.url")
-	}
-	return nil
 }
