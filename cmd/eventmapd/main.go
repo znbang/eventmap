@@ -1,7 +1,6 @@
 package main
 
 import (
-	"embed"
 	"io/fs"
 	"log"
 	"net/http"
@@ -9,6 +8,7 @@ import (
 	"time"
 
 	_ "github.com/joho/godotenv/autoload"
+	"github.com/znbang/eventmap"
 	"github.com/znbang/eventmap/gen/auth/v1/authv1connect"
 	"github.com/znbang/eventmap/gen/book/v1/bookv1connect"
 	"github.com/znbang/eventmap/gen/event/v1/eventv1connect"
@@ -24,9 +24,6 @@ import (
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 )
-
-//go:embed frontend/dist/spa
-var distFS embed.FS
 
 func main() {
 	env.Verify()
@@ -65,7 +62,7 @@ func main() {
 	mux.Handle("/api/download-book", bookservice.CreateDownloadBookHandler(bookService))
 	mux.Handle("/login/oauth2/code/", auth.CreateOauthHandleFunc(authService, loginService))
 
-	if spaFS, err := fs.Sub(distFS, "frontend/dist/spa"); err != nil {
+	if spaFS, err := fs.Sub(assets.FS, "frontend/dist/spa"); err != nil {
 		log.Fatal(err)
 	} else {
 		mux.Handle("/", http.FileServer(modfs.New(http.FS(spaFS), time.Now())))
