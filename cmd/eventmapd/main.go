@@ -25,13 +25,10 @@ import (
 	"golang.org/x/net/http2/h2c"
 )
 
-func main() {
-	env.Verify()
-
-	// db, err := dbx.Open(env.Get(env.DatabaseURL))
+func start() error {
 	db, err := dbx.Open("eventmap.db")
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	bookRepository := repository.NewBookRepository(db)
@@ -63,7 +60,7 @@ func main() {
 	mux.Handle("/login/oauth2/code/", auth.CreateOauthHandleFunc(authService, loginService))
 
 	if spaFS, err := fs.Sub(assets.FS, "frontend/dist/spa"); err != nil {
-		log.Fatal(err)
+		return err
 	} else {
 		mux.Handle("/", http.FileServer(modfs.New(http.FS(spaFS), time.Now())))
 	}
@@ -75,7 +72,13 @@ func main() {
 		addr = ":" + addr
 	}
 
-	if err := http.ListenAndServe(addr, h2c.NewHandler(mux, &http2.Server{})); err != nil {
-		log.Fatal(err)
+	return http.ListenAndServe(addr, h2c.NewHandler(mux, &http2.Server{}))
+}
+
+func main() {
+	env.Verify()
+
+	if err := start(); err != nil {
+		log.Fatalln(err)
 	}
 }
