@@ -299,8 +299,6 @@ func (s *BookServer) SyncStatus(ctx context.Context, r *connect.Request[v1.SyncS
 			}
 		}
 	}
-
-	return nil
 }
 
 func (s *BookServer) DownloadBook(ctx context.Context, r *connect.Request[v1.DownloadBookRequest]) (*connect.Response[v1.DownloadBookResponse], error) {

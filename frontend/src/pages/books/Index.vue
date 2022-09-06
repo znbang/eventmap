@@ -143,8 +143,8 @@ function syncStatusSse() {
   })
 }
 
-// onMounted(syncStatusStream)
-onMounted(syncStatusSse)
+onMounted(syncStatusStream)
+// onMounted(syncStatusSse)
 
 onBeforeRouteLeave(watch(() => $route.query, updateState))
 onBeforeRouteLeave(() => abortController.abort())
