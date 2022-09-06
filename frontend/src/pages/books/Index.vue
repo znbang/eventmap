@@ -99,6 +99,8 @@ async function downloadRpc(id) {
   a.href = URL.createObjectURL(blob)
   a.download = title + '.txt'
   a.click()
+  document.removeChild(a)
+  URL.revokeObjectURL(a.href)
 }
 
 function downloadLink(id) {
