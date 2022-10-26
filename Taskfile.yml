@@ -8,7 +8,7 @@ vars:
 
 tasks:
   default:
-    deps: [grpc, assets, build-windows]
+    deps: [grpc, assets, build]
 
   tools:
     cmds:
@@ -39,6 +39,7 @@ tasks:
       - ./*.js
       - ./*.json
       - src/**/*
+      - gen/**/*
     generates:
       - dist/**/*
 
