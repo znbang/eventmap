@@ -13,8 +13,8 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/oklog/ulid/v2 v2.1.0
 	github.com/znbang/validation v0.0.0-20220420073928-78e5e1b2044a
-	golang.org/x/net v0.1.0
-	golang.org/x/oauth2 v0.1.0
+	golang.org/x/net v0.2.0
+	golang.org/x/oauth2 v0.2.0
 	google.golang.org/protobuf v1.28.1
 	gorm.io/driver/sqlite v1.4.3
 	gorm.io/gorm v1.24.1
@@ -42,7 +42,7 @@ require (
 	github.com/saintfish/chardet v0.0.0-20120816061221-3af4cd4741ca // indirect
 	github.com/temoto/robotstxt v1.1.1 // indirect
 	golang.org/x/crypto v0.0.0-20211215153901-e495a2d5b3d3 // indirect
-	golang.org/x/sys v0.1.0 // indirect
+	golang.org/x/sys v0.2.0 // indirect
 	golang.org/x/text v0.4.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 )
