@@ -16,6 +16,7 @@ tasks:
       - go install github.com/bufbuild/buf/cmd/buf@latest
       - go install github.com/bufbuild/connect-go/cmd/protoc-gen-connect-go@latest
       - go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+      - npm i -g @quasar/cli @bufbuild/protoc-gen-connect-web @bufbuild/protoc-gen-es
 
   grpc:
     cmds:

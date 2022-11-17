@@ -26,7 +26,7 @@ import (
 )
 
 func start() error {
-	db, err := dbx.Open("eventmap.db")
+	db, err := dbx.Open("/mnt/db/eventmap.db")
 	if err != nil {
 		return err
 	}

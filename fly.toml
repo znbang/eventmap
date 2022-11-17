@@ -1,0 +1,68 @@
+# fly.toml file generated for eventmap on 2022-11-16T12:37:12+08:00
+
+app = "eventmap"
+kill_signal = "SIGINT"
+kill_timeout = 5
+processes = []
+
+[env]
+  PORT = "8080"
+
+  DATABASE_URL="/mnt/db/eventmap.db"
+  COOKIE_NAME="EVENTMAP_SID"
+
+#  GOOGLE_API_KEY=""
+#  GOOGLE_CLIENT_ID=""
+#  GOOGLE_CLIENT_SECRET=""
+  GOOGLE_REDIRECT_URI="https://eventmap.app/login/oauth2/code/google"
+  GOOGLE_USER_INFO_URL="https://www.googleapis.com/oauth2/v3/userinfo"
+
+#  FACEBOOK_CLIENT_ID=""
+#  FACEBOOK_CLIENT_SECRET=""
+  FACEBOOK_REDIRECT_URI="https://eventmap.app/login/oauth2/code/facebook"
+  FACEBOOK_USER_INFO_URL="https://graph.facebook.com/v10.0/me?fields=id,name,picture{url},email"
+
+#  GITHUB_CLIENT_ID=""
+#  GITHUB_CLIENT_SECRET=""
+  GITHUB_REDIRECT_URI="https://eventmap.app/login/oauth2/code/github"
+  GITHUB_USER_INFO_URL="https://api.github.com/user"
+
+#  LINE_CLIENT_ID=""
+#  LINE_CLIENT_SECRET=""
+  LINE_REDIRECT_URI="https://eventmap.app/login/oauth2/code/line"
+  LINE_USER_INFO_URL="https://api.line.me/v2/profile"
+
+[experimental]
+  allowed_public_ports = []
+  auto_rollback = true
+
+[mounts]
+  source="eventmapdb"
+  destination="/mnt/db"
+  
+
+[[services]]
+  http_checks = []
+  internal_port = 8080
+  processes = ["app"]
+  protocol = "tcp"
+  script_checks = []
+  [services.concurrency]
+    hard_limit = 25
+    soft_limit = 20
+    type = "connections"
+
+  [[services.ports]]
+    force_https = true
+    handlers = ["http"]
+    port = 80
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = 443
+
+  [[services.tcp_checks]]
+    grace_period = "1s"
+    interval = "15s"
+    restart_limit = 0
+    timeout = "2s"
