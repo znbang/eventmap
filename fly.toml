@@ -11,7 +11,7 @@ processes = []
   DATABASE_URL="/mnt/db/eventmap.db"
   COOKIE_NAME="EVENTMAP_SID"
 
-#  GOOGLE_API_KEY=""
+#  GOOGLE_MAPS_API_KEY=""
 #  GOOGLE_CLIENT_ID=""
 #  GOOGLE_CLIENT_SECRET=""
   GOOGLE_REDIRECT_URI="https://eventmap.app/login/oauth2/code/google"

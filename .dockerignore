@@ -1,7 +1,7 @@
 # flyctl launch added from .gitignore
 **\.env
 **\.idea
-# **\gen
+**\gen
 **\eventmap
 **\eventmap.exe
 **\eventmap.db
@@ -24,7 +24,7 @@ frontend\**\node_modules
 
 # Quasar core related directories
 frontend\**\.quasar
-# frontend\dist
+frontend\dist
 
 # Cordova related directories and files
 frontend\src-cordova\node_modules
