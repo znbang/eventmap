@@ -1,4 +1,4 @@
-name: Fly Deploy
+name: Deployment
 
 on: [push]
 
@@ -6,10 +6,10 @@ env:
   FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
 jobs:
-  deploy:
+  deployment:
     runs-on: ubuntu-latest
     environment: production
     steps:
       - uses: actions/checkout@v3
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy --build-arg  GOOGLE_MAPS_API_KEY=${{ env.GOOGLE_MAPS_API_KEY }}
+      - run: flyctl deploy --build-arg GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }}
