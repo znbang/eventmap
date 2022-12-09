@@ -12,7 +12,6 @@ WORKDIR /app
 COPY . .
 RUN go install github.com/go-task/task/v3/cmd/task@latest
 RUN task tools
-RUN task grpc
 RUN task assets
 RUN task build
 

@@ -1,7 +1,6 @@
 # flyctl launch added from .gitignore
 **\.env
 **\.idea
-**\gen
 **\eventmap
 **\eventmap.exe
 **\eventmap.db
