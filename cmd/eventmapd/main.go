@@ -26,7 +26,7 @@ import (
 )
 
 func start() error {
-	db, err := dbx.Open("/mnt/db/eventmap.db")
+	db, err := dbx.Open(env.Get(env.DatabaseURL))
 	if err != nil {
 		return err
 	}
