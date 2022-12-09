@@ -1,14 +1,14 @@
 version: v1
 plugins:
-  - name: go
+  - plugin: buf.build/protocolbuffers/go
     out: gen
     opt: paths=source_relative
-  - name: connect-go
+  - plugin: buf.build/bufbuild/connect-go
     out: gen
     opt: paths=source_relative
-  - name: es
+  - plugin: buf.build/bufbuild/es
     out: frontend/gen
     opt: target=js+dts
-  - name: connect-web
+  - plugin: buf.build/bufbuild/connect-web
     out: frontend/gen
     opt: target=js+dts
