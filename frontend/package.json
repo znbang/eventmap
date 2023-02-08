@@ -9,22 +9,22 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
-    "@bufbuild/connect-web": "^0.5.0",
+    "@bufbuild/connect-web": "^0.7.0",
     "@bufbuild/protobuf": "^1.0.0",
     "@googlemaps/js-api-loader": "^1.15.1",
     "@googlemaps/markerclusterer": "^2.0.15",
-    "@quasar/extras": "^1.15.9",
-    "core-js": "^3.27.1",
+    "@quasar/extras": "^1.15.10",
+    "core-js": "^3.27.2",
     "dotenv": "^16.0.3",
-    "pinia": "^2.0.28",
-    "quasar": "^2.11.3",
-    "vue": "^3.2.45",
+    "pinia": "^2.0.30",
+    "quasar": "^2.11.5",
+    "vue": "^3.2.47",
     "vue-gtag": "^2.0.1",
     "vue-i18n": "^9.2.2",
     "vue-router": "^4.1.6"
   },
   "devDependencies": {
-    "@quasar/app-webpack": "^3.6.2"
+    "@quasar/app-webpack": "^3.7.1"
   },
   "browserslist": [
     "last 10 Chrome versions",
