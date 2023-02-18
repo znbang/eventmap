@@ -46,8 +46,8 @@ func WithUser(userService *userservice.UserService, loginService *login.Service,
 			next.ServeHTTP(w, r)
 			return
 		} else {
-			ctx := context.WithValue(r.Context(), "sessionId", userSession.ID)
-			ctx = context.WithValue(ctx, "currentUser", user)
+			ctx := context.WithValue(r.Context(), sessionIdKey, userSession.ID)
+			ctx = context.WithValue(ctx, currentUserKey, user)
 			r = r.WithContext(ctx)
 			next.ServeHTTP(w, r)
 		}
@@ -55,7 +55,7 @@ func WithUser(userService *userservice.UserService, loginService *login.Service,
 }
 
 func CurrentUser(ctx context.Context, user *userservice.User) error {
-	if obj := ctx.Value("currentUser"); obj != nil {
+	if obj := ctx.Value(currentUserKey); obj != nil {
 		*user = obj.(userservice.User)
 		return nil
 	}

@@ -57,7 +57,7 @@ func (s *QuanBen) Download(result *Result, url string) error {
 		callback := e.Request.Ctx.Get("callback")
 
 		onclick := e.Attr("onclick")
-		r := regexp.MustCompile("load_more\\('(.+)','(\\d+)'\\)")
+		r := regexp.MustCompile(`load_more\('(.+)','(\d+)'\)`)
 		if r.MatchString(onclick) {
 			matches := r.FindStringSubmatch(onclick)
 			if len(matches) == 3 {

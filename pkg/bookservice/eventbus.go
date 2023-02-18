@@ -45,7 +45,7 @@ func (e *eventBus) Post(event Event) error {
 	e.mutex.RLock()
 	defer e.mutex.RUnlock()
 
-	for c, _ := range e.subscribers {
+	for c := range e.subscribers {
 		select {
 		case c <- event:
 		default:
@@ -59,7 +59,7 @@ func (e *eventBus) Close() {
 	e.mutex.Lock()
 	defer e.mutex.Unlock()
 
-	for c, _ := range e.subscribers {
+	for c := range e.subscribers {
 		close(c)
 		delete(e.subscribers, c)
 	}

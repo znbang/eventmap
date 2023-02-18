@@ -51,27 +51,26 @@ func sliceScan(rs *sql.Rows) ([]interface{}, error) {
 	return values, rs.Err()
 }
 
-func prepareQueryStmt(src *sql.DB, table string, id any) (*sql.Stmt, error) {
-	if id == nil {
-		return src.Prepare(fmt.Sprintf("select * from %s order by id limit 1000", table))
-	} else {
-		return src.Prepare(fmt.Sprintf("select * from %s where id>? order by id limit 1000", table))
-	}
-}
-
 func query(src *sql.DB, table string, id any) ([][]interface{}, []string, error) {
-	queryStmt, err := prepareQueryStmt(src, table, id)
+	queryStmt, err := func() (*sql.Stmt, error) {
+		if id == nil {
+			return src.Prepare(fmt.Sprintf("select * from %s order by id limit 1000", table))
+		} else {
+			return src.Prepare(fmt.Sprintf("select * from %s where id>? order by id limit 1000", table))
+		}
+	}()
 	if err != nil {
 		return nil, nil, err
 	}
 	defer queryStmt.Close()
 
-	var rs *sql.Rows
-	if id == nil {
-		rs, err = queryStmt.Query()
-	} else {
-		rs, err = queryStmt.Query(id)
-	}
+	rs, err := func() (*sql.Rows, error) {
+		if id == nil {
+			return queryStmt.Query()
+		} else {
+			return queryStmt.Query(id)
+		}
+	}()
 	if err != nil {
 		return nil, nil, err
 	}
@@ -103,29 +102,40 @@ func copyRows(table string, src *sql.DB, bak *sql.DB, id any) (any, error) {
 
 	insertSql := genInsertSql(table, columns)
 
-	tx, err := bak.Begin()
-	insertStmt, err := tx.Prepare(insertSql)
+	err = withTx(bak, func(tx *sql.Tx) error {
+		if insertStmt, err := tx.Prepare(insertSql); err != nil {
+			return err
+		} else {
+			for _, row := range rows {
+				_, err = insertStmt.Exec(row...)
+				if err != nil {
+					return err
+				}
+
+				id = row[0]
+			}
+		}
+
+		return nil
+	})
+
 	if err != nil {
 		return nil, err
 	}
 
-	id = nil
-
-	for _, row := range rows {
-		_, err = insertStmt.Exec(row...)
-		if err != nil {
-			_ = tx.Rollback()
-			return nil, err
-		}
-
-		id = row[0]
-	}
-
-	if err = tx.Commit(); err != nil {
-		return nil, err
-	}
-
 	return id, nil
+}
+
+func withTx(db *sql.DB, fn func(tx *sql.Tx) error) error {
+	if tx, err := db.Begin(); err != nil {
+		return err
+	} else if err = fn(tx); err != nil {
+		_ = tx.Rollback()
+		return err
+	} else if err = tx.Commit(); err != nil {
+		return err
+	}
+	return nil
 }
 
 func copyTable(table string, src *sql.DB, bak *sql.DB) error {

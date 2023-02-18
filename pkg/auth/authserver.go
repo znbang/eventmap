@@ -102,7 +102,7 @@ func (s *AuthServer) GetUser(ctx context.Context, r *connect.Request[v1.GetUserR
 func (s *AuthServer) Logout(ctx context.Context, r *connect.Request[v1.LogoutRequest]) (*connect.Response[v1.LogoutResponse], error) {
 	resp := connect.NewResponse(&v1.LogoutResponse{})
 	deleteCookie(resp)
-	if sessionId, ok := ctx.Value("sessionId").(string); ok {
+	if sessionId, ok := ctx.Value(sessionIdKey).(string); ok {
 		if err := s.loginService.DeleteSessionById(sessionId); err != nil {
 			return nil, err
 		}
