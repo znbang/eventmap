@@ -72,7 +72,7 @@ func validateCreateEvent(validate *validation.Validation, input Event) error {
 	validate.Required(input.Lat, "lat", "events.required.location")
 	validate.Required(input.Lng, "lng", "events.required.location")
 	validate.Required(input.Zoom, "zoom", "events.required.zoom")
-	validate.Required(input.Detail, "detail", "events.required.detail")
+	// validate.Required(input.Detail, "detail", "events.required.detail")
 	if len(input.URL) > 0 {
 		validate.URL(input.URL, "url", "events.invalid.url")
 	}
