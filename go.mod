@@ -15,7 +15,7 @@ require (
 	github.com/znbang/validation v0.0.0-20230224070611-692a30e6c48a
 	golang.org/x/net v0.8.0
 	golang.org/x/oauth2 v0.6.0
-	google.golang.org/protobuf v1.29.1
+	google.golang.org/protobuf v1.30.0
 	gorm.io/driver/sqlite v1.4.4
 	gorm.io/gorm v1.24.6
 )

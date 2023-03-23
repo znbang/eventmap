@@ -9,7 +9,7 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
-    "@bufbuild/connect-web": "^0.8.3",
+    "@bufbuild/connect-web": "^0.8.4",
     "@bufbuild/protobuf": "^1.1.1",
     "@googlemaps/js-api-loader": "^1.15.1",
     "@googlemaps/markerclusterer": "^2.0.15",
@@ -17,7 +17,7 @@
     "core-js": "^3.29.1",
     "dotenv": "^16.0.3",
     "pinia": "^2.0.33",
-    "quasar": "^2.11.7",
+    "quasar": "^2.11.8",
     "vue": "^3.2.47",
     "vue-gtag": "^2.0.1",
     "vue-i18n": "^9.2.2",
