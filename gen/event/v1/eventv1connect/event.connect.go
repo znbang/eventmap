@@ -25,6 +25,35 @@ const (
 	EventServiceName = "event.v1.EventService"
 )
 
+// These constants are the fully-qualified names of the RPCs defined in this package. They're
+// exposed at runtime as Spec.Procedure and as the final two segments of the HTTP route.
+//
+// Note that these are different from the fully-qualified method names used by
+// google.golang.org/protobuf/reflect/protoreflect. To convert from these constants to
+// reflection-formatted method names, remove the leading slash and convert the remaining slash to a
+// period.
+const (
+	// EventServiceCreateEventProcedure is the fully-qualified name of the EventService's CreateEvent
+	// RPC.
+	EventServiceCreateEventProcedure = "/event.v1.EventService/CreateEvent"
+	// EventServiceUpdateEventProcedure is the fully-qualified name of the EventService's UpdateEvent
+	// RPC.
+	EventServiceUpdateEventProcedure = "/event.v1.EventService/UpdateEvent"
+	// EventServiceDeleteEventProcedure is the fully-qualified name of the EventService's DeleteEvent
+	// RPC.
+	EventServiceDeleteEventProcedure = "/event.v1.EventService/DeleteEvent"
+	// EventServiceGetEventProcedure is the fully-qualified name of the EventService's GetEvent RPC.
+	EventServiceGetEventProcedure = "/event.v1.EventService/GetEvent"
+	// EventServiceListActiveEventProcedure is the fully-qualified name of the EventService's
+	// ListActiveEvent RPC.
+	EventServiceListActiveEventProcedure = "/event.v1.EventService/ListActiveEvent"
+	// EventServiceListEventProcedure is the fully-qualified name of the EventService's ListEvent RPC.
+	EventServiceListEventProcedure = "/event.v1.EventService/ListEvent"
+	// EventServiceListUserEventProcedure is the fully-qualified name of the EventService's
+	// ListUserEvent RPC.
+	EventServiceListUserEventProcedure = "/event.v1.EventService/ListUserEvent"
+)
+
 // EventServiceClient is a client for the event.v1.EventService service.
 type EventServiceClient interface {
 	CreateEvent(context.Context, *connect_go.Request[v1.CreateEventRequest]) (*connect_go.Response[v1.CreateEventResponse], error)
@@ -48,37 +77,37 @@ func NewEventServiceClient(httpClient connect_go.HTTPClient, baseURL string, opt
 	return &eventServiceClient{
 		createEvent: connect_go.NewClient[v1.CreateEventRequest, v1.CreateEventResponse](
 			httpClient,
-			baseURL+"/event.v1.EventService/CreateEvent",
+			baseURL+EventServiceCreateEventProcedure,
 			opts...,
 		),
 		updateEvent: connect_go.NewClient[v1.UpdateEventRequest, v1.UpdateEventResponse](
 			httpClient,
-			baseURL+"/event.v1.EventService/UpdateEvent",
+			baseURL+EventServiceUpdateEventProcedure,
 			opts...,
 		),
 		deleteEvent: connect_go.NewClient[v1.DeleteEventRequest, v1.DeleteEventResponse](
 			httpClient,
-			baseURL+"/event.v1.EventService/DeleteEvent",
+			baseURL+EventServiceDeleteEventProcedure,
 			opts...,
 		),
 		getEvent: connect_go.NewClient[v1.GetEventRequest, v1.GetEventResponse](
 			httpClient,
-			baseURL+"/event.v1.EventService/GetEvent",
+			baseURL+EventServiceGetEventProcedure,
 			opts...,
 		),
 		listActiveEvent: connect_go.NewClient[v1.ListActiveEventRequest, v1.ListActiveEventResponse](
 			httpClient,
-			baseURL+"/event.v1.EventService/ListActiveEvent",
+			baseURL+EventServiceListActiveEventProcedure,
 			opts...,
 		),
 		listEvent: connect_go.NewClient[v1.ListEventRequest, v1.ListEventResponse](
 			httpClient,
-			baseURL+"/event.v1.EventService/ListEvent",
+			baseURL+EventServiceListEventProcedure,
 			opts...,
 		),
 		listUserEvent: connect_go.NewClient[v1.ListUserEventRequest, v1.ListUserEventResponse](
 			httpClient,
-			baseURL+"/event.v1.EventService/ListUserEvent",
+			baseURL+EventServiceListUserEventProcedure,
 			opts...,
 		),
 	}
@@ -148,38 +177,38 @@ type EventServiceHandler interface {
 // and JSON codecs. They also support gzip compression.
 func NewEventServiceHandler(svc EventServiceHandler, opts ...connect_go.HandlerOption) (string, http.Handler) {
 	mux := http.NewServeMux()
-	mux.Handle("/event.v1.EventService/CreateEvent", connect_go.NewUnaryHandler(
-		"/event.v1.EventService/CreateEvent",
+	mux.Handle(EventServiceCreateEventProcedure, connect_go.NewUnaryHandler(
+		EventServiceCreateEventProcedure,
 		svc.CreateEvent,
 		opts...,
 	))
-	mux.Handle("/event.v1.EventService/UpdateEvent", connect_go.NewUnaryHandler(
-		"/event.v1.EventService/UpdateEvent",
+	mux.Handle(EventServiceUpdateEventProcedure, connect_go.NewUnaryHandler(
+		EventServiceUpdateEventProcedure,
 		svc.UpdateEvent,
 		opts...,
 	))
-	mux.Handle("/event.v1.EventService/DeleteEvent", connect_go.NewUnaryHandler(
-		"/event.v1.EventService/DeleteEvent",
+	mux.Handle(EventServiceDeleteEventProcedure, connect_go.NewUnaryHandler(
+		EventServiceDeleteEventProcedure,
 		svc.DeleteEvent,
 		opts...,
 	))
-	mux.Handle("/event.v1.EventService/GetEvent", connect_go.NewUnaryHandler(
-		"/event.v1.EventService/GetEvent",
+	mux.Handle(EventServiceGetEventProcedure, connect_go.NewUnaryHandler(
+		EventServiceGetEventProcedure,
 		svc.GetEvent,
 		opts...,
 	))
-	mux.Handle("/event.v1.EventService/ListActiveEvent", connect_go.NewUnaryHandler(
-		"/event.v1.EventService/ListActiveEvent",
+	mux.Handle(EventServiceListActiveEventProcedure, connect_go.NewUnaryHandler(
+		EventServiceListActiveEventProcedure,
 		svc.ListActiveEvent,
 		opts...,
 	))
-	mux.Handle("/event.v1.EventService/ListEvent", connect_go.NewUnaryHandler(
-		"/event.v1.EventService/ListEvent",
+	mux.Handle(EventServiceListEventProcedure, connect_go.NewUnaryHandler(
+		EventServiceListEventProcedure,
 		svc.ListEvent,
 		opts...,
 	))
-	mux.Handle("/event.v1.EventService/ListUserEvent", connect_go.NewUnaryHandler(
-		"/event.v1.EventService/ListUserEvent",
+	mux.Handle(EventServiceListUserEventProcedure, connect_go.NewUnaryHandler(
+		EventServiceListUserEventProcedure,
 		svc.ListUserEvent,
 		opts...,
 	))

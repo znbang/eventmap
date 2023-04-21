@@ -25,6 +25,23 @@ const (
 	AuthServiceName = "auth.v1.AuthService"
 )
 
+// These constants are the fully-qualified names of the RPCs defined in this package. They're
+// exposed at runtime as Spec.Procedure and as the final two segments of the HTTP route.
+//
+// Note that these are different from the fully-qualified method names used by
+// google.golang.org/protobuf/reflect/protoreflect. To convert from these constants to
+// reflection-formatted method names, remove the leading slash and convert the remaining slash to a
+// period.
+const (
+	// AuthServiceListProviderProcedure is the fully-qualified name of the AuthService's ListProvider
+	// RPC.
+	AuthServiceListProviderProcedure = "/auth.v1.AuthService/ListProvider"
+	// AuthServiceGetUserProcedure is the fully-qualified name of the AuthService's GetUser RPC.
+	AuthServiceGetUserProcedure = "/auth.v1.AuthService/GetUser"
+	// AuthServiceLogoutProcedure is the fully-qualified name of the AuthService's Logout RPC.
+	AuthServiceLogoutProcedure = "/auth.v1.AuthService/Logout"
+)
+
 // AuthServiceClient is a client for the auth.v1.AuthService service.
 type AuthServiceClient interface {
 	ListProvider(context.Context, *connect_go.Request[v1.ListProviderRequest]) (*connect_go.Response[v1.ListProviderResponse], error)
@@ -44,17 +61,17 @@ func NewAuthServiceClient(httpClient connect_go.HTTPClient, baseURL string, opts
 	return &authServiceClient{
 		listProvider: connect_go.NewClient[v1.ListProviderRequest, v1.ListProviderResponse](
 			httpClient,
-			baseURL+"/auth.v1.AuthService/ListProvider",
+			baseURL+AuthServiceListProviderProcedure,
 			opts...,
 		),
 		getUser: connect_go.NewClient[v1.GetUserRequest, v1.GetUserResponse](
 			httpClient,
-			baseURL+"/auth.v1.AuthService/GetUser",
+			baseURL+AuthServiceGetUserProcedure,
 			opts...,
 		),
 		logout: connect_go.NewClient[v1.LogoutRequest, v1.LogoutResponse](
 			httpClient,
-			baseURL+"/auth.v1.AuthService/Logout",
+			baseURL+AuthServiceLogoutProcedure,
 			opts...,
 		),
 	}
@@ -96,18 +113,18 @@ type AuthServiceHandler interface {
 // and JSON codecs. They also support gzip compression.
 func NewAuthServiceHandler(svc AuthServiceHandler, opts ...connect_go.HandlerOption) (string, http.Handler) {
 	mux := http.NewServeMux()
-	mux.Handle("/auth.v1.AuthService/ListProvider", connect_go.NewUnaryHandler(
-		"/auth.v1.AuthService/ListProvider",
+	mux.Handle(AuthServiceListProviderProcedure, connect_go.NewUnaryHandler(
+		AuthServiceListProviderProcedure,
 		svc.ListProvider,
 		opts...,
 	))
-	mux.Handle("/auth.v1.AuthService/GetUser", connect_go.NewUnaryHandler(
-		"/auth.v1.AuthService/GetUser",
+	mux.Handle(AuthServiceGetUserProcedure, connect_go.NewUnaryHandler(
+		AuthServiceGetUserProcedure,
 		svc.GetUser,
 		opts...,
 	))
-	mux.Handle("/auth.v1.AuthService/Logout", connect_go.NewUnaryHandler(
-		"/auth.v1.AuthService/Logout",
+	mux.Handle(AuthServiceLogoutProcedure, connect_go.NewUnaryHandler(
+		AuthServiceLogoutProcedure,
 		svc.Logout,
 		opts...,
 	))

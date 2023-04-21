@@ -25,6 +25,44 @@ const (
 	BookServiceName = "book.v1.BookService"
 )
 
+// These constants are the fully-qualified names of the RPCs defined in this package. They're
+// exposed at runtime as Spec.Procedure and as the final two segments of the HTTP route.
+//
+// Note that these are different from the fully-qualified method names used by
+// google.golang.org/protobuf/reflect/protoreflect. To convert from these constants to
+// reflection-formatted method names, remove the leading slash and convert the remaining slash to a
+// period.
+const (
+	// BookServiceCreateBookProcedure is the fully-qualified name of the BookService's CreateBook RPC.
+	BookServiceCreateBookProcedure = "/book.v1.BookService/CreateBook"
+	// BookServiceUpdateBookProcedure is the fully-qualified name of the BookService's UpdateBook RPC.
+	BookServiceUpdateBookProcedure = "/book.v1.BookService/UpdateBook"
+	// BookServiceDeleteBookProcedure is the fully-qualified name of the BookService's DeleteBook RPC.
+	BookServiceDeleteBookProcedure = "/book.v1.BookService/DeleteBook"
+	// BookServiceDeleteChapterProcedure is the fully-qualified name of the BookService's DeleteChapter
+	// RPC.
+	BookServiceDeleteChapterProcedure = "/book.v1.BookService/DeleteChapter"
+	// BookServiceGetBookProcedure is the fully-qualified name of the BookService's GetBook RPC.
+	BookServiceGetBookProcedure = "/book.v1.BookService/GetBook"
+	// BookServiceGetTocProcedure is the fully-qualified name of the BookService's GetToc RPC.
+	BookServiceGetTocProcedure = "/book.v1.BookService/GetToc"
+	// BookServiceGetChapterProcedure is the fully-qualified name of the BookService's GetChapter RPC.
+	BookServiceGetChapterProcedure = "/book.v1.BookService/GetChapter"
+	// BookServiceListBookProcedure is the fully-qualified name of the BookService's ListBook RPC.
+	BookServiceListBookProcedure = "/book.v1.BookService/ListBook"
+	// BookServiceSyncNewProcedure is the fully-qualified name of the BookService's SyncNew RPC.
+	BookServiceSyncNewProcedure = "/book.v1.BookService/SyncNew"
+	// BookServiceSyncAllProcedure is the fully-qualified name of the BookService's SyncAll RPC.
+	BookServiceSyncAllProcedure = "/book.v1.BookService/SyncAll"
+	// BookServiceStopSyncProcedure is the fully-qualified name of the BookService's StopSync RPC.
+	BookServiceStopSyncProcedure = "/book.v1.BookService/StopSync"
+	// BookServiceSyncStatusProcedure is the fully-qualified name of the BookService's SyncStatus RPC.
+	BookServiceSyncStatusProcedure = "/book.v1.BookService/SyncStatus"
+	// BookServiceDownloadBookProcedure is the fully-qualified name of the BookService's DownloadBook
+	// RPC.
+	BookServiceDownloadBookProcedure = "/book.v1.BookService/DownloadBook"
+)
+
 // BookServiceClient is a client for the book.v1.BookService service.
 type BookServiceClient interface {
 	CreateBook(context.Context, *connect_go.Request[v1.CreateBookRequest]) (*connect_go.Response[v1.CreateBookResponse], error)
@@ -54,67 +92,67 @@ func NewBookServiceClient(httpClient connect_go.HTTPClient, baseURL string, opts
 	return &bookServiceClient{
 		createBook: connect_go.NewClient[v1.CreateBookRequest, v1.CreateBookResponse](
 			httpClient,
-			baseURL+"/book.v1.BookService/CreateBook",
+			baseURL+BookServiceCreateBookProcedure,
 			opts...,
 		),
 		updateBook: connect_go.NewClient[v1.UpdateBookRequest, v1.UpdateBookResponse](
 			httpClient,
-			baseURL+"/book.v1.BookService/UpdateBook",
+			baseURL+BookServiceUpdateBookProcedure,
 			opts...,
 		),
 		deleteBook: connect_go.NewClient[v1.DeleteBookRequest, v1.DeleteBookResponse](
 			httpClient,
-			baseURL+"/book.v1.BookService/DeleteBook",
+			baseURL+BookServiceDeleteBookProcedure,
 			opts...,
 		),
 		deleteChapter: connect_go.NewClient[v1.DeleteChapterRequest, v1.DeleteChapterResponse](
 			httpClient,
-			baseURL+"/book.v1.BookService/DeleteChapter",
+			baseURL+BookServiceDeleteChapterProcedure,
 			opts...,
 		),
 		getBook: connect_go.NewClient[v1.GetBookRequest, v1.GetBookResponse](
 			httpClient,
-			baseURL+"/book.v1.BookService/GetBook",
+			baseURL+BookServiceGetBookProcedure,
 			opts...,
 		),
 		getToc: connect_go.NewClient[v1.GetTocRequest, v1.GetTocResponse](
 			httpClient,
-			baseURL+"/book.v1.BookService/GetToc",
+			baseURL+BookServiceGetTocProcedure,
 			opts...,
 		),
 		getChapter: connect_go.NewClient[v1.GetChapterRequest, v1.GetChapterResponse](
 			httpClient,
-			baseURL+"/book.v1.BookService/GetChapter",
+			baseURL+BookServiceGetChapterProcedure,
 			opts...,
 		),
 		listBook: connect_go.NewClient[v1.ListBookRequest, v1.ListBookResponse](
 			httpClient,
-			baseURL+"/book.v1.BookService/ListBook",
+			baseURL+BookServiceListBookProcedure,
 			opts...,
 		),
 		syncNew: connect_go.NewClient[v1.SyncNewRequest, v1.SyncNewResponse](
 			httpClient,
-			baseURL+"/book.v1.BookService/SyncNew",
+			baseURL+BookServiceSyncNewProcedure,
 			opts...,
 		),
 		syncAll: connect_go.NewClient[v1.SyncAllRequest, v1.SyncAllResponse](
 			httpClient,
-			baseURL+"/book.v1.BookService/SyncAll",
+			baseURL+BookServiceSyncAllProcedure,
 			opts...,
 		),
 		stopSync: connect_go.NewClient[v1.StopSyncRequest, v1.StopSyncResponse](
 			httpClient,
-			baseURL+"/book.v1.BookService/StopSync",
+			baseURL+BookServiceStopSyncProcedure,
 			opts...,
 		),
 		syncStatus: connect_go.NewClient[v1.SyncStatusRequest, v1.SyncStatusResponse](
 			httpClient,
-			baseURL+"/book.v1.BookService/SyncStatus",
+			baseURL+BookServiceSyncStatusProcedure,
 			opts...,
 		),
 		downloadBook: connect_go.NewClient[v1.DownloadBookRequest, v1.DownloadBookResponse](
 			httpClient,
-			baseURL+"/book.v1.BookService/DownloadBook",
+			baseURL+BookServiceDownloadBookProcedure,
 			opts...,
 		),
 	}
@@ -226,68 +264,68 @@ type BookServiceHandler interface {
 // and JSON codecs. They also support gzip compression.
 func NewBookServiceHandler(svc BookServiceHandler, opts ...connect_go.HandlerOption) (string, http.Handler) {
 	mux := http.NewServeMux()
-	mux.Handle("/book.v1.BookService/CreateBook", connect_go.NewUnaryHandler(
-		"/book.v1.BookService/CreateBook",
+	mux.Handle(BookServiceCreateBookProcedure, connect_go.NewUnaryHandler(
+		BookServiceCreateBookProcedure,
 		svc.CreateBook,
 		opts...,
 	))
-	mux.Handle("/book.v1.BookService/UpdateBook", connect_go.NewUnaryHandler(
-		"/book.v1.BookService/UpdateBook",
+	mux.Handle(BookServiceUpdateBookProcedure, connect_go.NewUnaryHandler(
+		BookServiceUpdateBookProcedure,
 		svc.UpdateBook,
 		opts...,
 	))
-	mux.Handle("/book.v1.BookService/DeleteBook", connect_go.NewUnaryHandler(
-		"/book.v1.BookService/DeleteBook",
+	mux.Handle(BookServiceDeleteBookProcedure, connect_go.NewUnaryHandler(
+		BookServiceDeleteBookProcedure,
 		svc.DeleteBook,
 		opts...,
 	))
-	mux.Handle("/book.v1.BookService/DeleteChapter", connect_go.NewUnaryHandler(
-		"/book.v1.BookService/DeleteChapter",
+	mux.Handle(BookServiceDeleteChapterProcedure, connect_go.NewUnaryHandler(
+		BookServiceDeleteChapterProcedure,
 		svc.DeleteChapter,
 		opts...,
 	))
-	mux.Handle("/book.v1.BookService/GetBook", connect_go.NewUnaryHandler(
-		"/book.v1.BookService/GetBook",
+	mux.Handle(BookServiceGetBookProcedure, connect_go.NewUnaryHandler(
+		BookServiceGetBookProcedure,
 		svc.GetBook,
 		opts...,
 	))
-	mux.Handle("/book.v1.BookService/GetToc", connect_go.NewUnaryHandler(
-		"/book.v1.BookService/GetToc",
+	mux.Handle(BookServiceGetTocProcedure, connect_go.NewUnaryHandler(
+		BookServiceGetTocProcedure,
 		svc.GetToc,
 		opts...,
 	))
-	mux.Handle("/book.v1.BookService/GetChapter", connect_go.NewUnaryHandler(
-		"/book.v1.BookService/GetChapter",
+	mux.Handle(BookServiceGetChapterProcedure, connect_go.NewUnaryHandler(
+		BookServiceGetChapterProcedure,
 		svc.GetChapter,
 		opts...,
 	))
-	mux.Handle("/book.v1.BookService/ListBook", connect_go.NewUnaryHandler(
-		"/book.v1.BookService/ListBook",
+	mux.Handle(BookServiceListBookProcedure, connect_go.NewUnaryHandler(
+		BookServiceListBookProcedure,
 		svc.ListBook,
 		opts...,
 	))
-	mux.Handle("/book.v1.BookService/SyncNew", connect_go.NewUnaryHandler(
-		"/book.v1.BookService/SyncNew",
+	mux.Handle(BookServiceSyncNewProcedure, connect_go.NewUnaryHandler(
+		BookServiceSyncNewProcedure,
 		svc.SyncNew,
 		opts...,
 	))
-	mux.Handle("/book.v1.BookService/SyncAll", connect_go.NewUnaryHandler(
-		"/book.v1.BookService/SyncAll",
+	mux.Handle(BookServiceSyncAllProcedure, connect_go.NewUnaryHandler(
+		BookServiceSyncAllProcedure,
 		svc.SyncAll,
 		opts...,
 	))
-	mux.Handle("/book.v1.BookService/StopSync", connect_go.NewUnaryHandler(
-		"/book.v1.BookService/StopSync",
+	mux.Handle(BookServiceStopSyncProcedure, connect_go.NewUnaryHandler(
+		BookServiceStopSyncProcedure,
 		svc.StopSync,
 		opts...,
 	))
-	mux.Handle("/book.v1.BookService/SyncStatus", connect_go.NewServerStreamHandler(
-		"/book.v1.BookService/SyncStatus",
+	mux.Handle(BookServiceSyncStatusProcedure, connect_go.NewServerStreamHandler(
+		BookServiceSyncStatusProcedure,
 		svc.SyncStatus,
 		opts...,
 	))
-	mux.Handle("/book.v1.BookService/DownloadBook", connect_go.NewUnaryHandler(
-		"/book.v1.BookService/DownloadBook",
+	mux.Handle(BookServiceDownloadBookProcedure, connect_go.NewUnaryHandler(
+		BookServiceDownloadBookProcedure,
 		svc.DownloadBook,
 		opts...,
 	))
