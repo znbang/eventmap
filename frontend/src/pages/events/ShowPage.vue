@@ -30,7 +30,7 @@
 import { date } from 'quasar'
 import { ref, reactive, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { eventService } from 'components/service'
+import { eventService } from 'src/lib/service'
 
 const $route = useRoute()
 const item = reactive({})

@@ -15,8 +15,8 @@
 <script setup>
 import { reactive, watch } from 'vue'
 import { onBeforeRouteLeave, useRoute } from 'vue-router'
-import { useSwipePage } from 'components/swipe'
-import { bookService } from 'components/service'
+import { useSwipePage } from 'src/lib/swipe'
+import { bookService } from 'src/lib/service'
 import ZPagination from 'components/ZPagination.vue'
 
 const $route = useRoute()

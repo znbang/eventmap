@@ -40,10 +40,10 @@ import { tr } from 'boot/i18n'
 import { ref, reactive, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Loader } from '@googlemaps/js-api-loader'
-import { eventService } from 'components/service'
+import { eventService } from 'src/lib/service'
 import { Timestamp } from '@bufbuild/protobuf'
 import { connectErrorDetails } from '@bufbuild/connect-web'
-import { ValidationError } from 'app/gen/errdetails/validation_pb'
+import { ValidationError } from 'src/gen/errdetails/validation_pb'
 
 const $route = useRoute()
 const $router = useRouter()

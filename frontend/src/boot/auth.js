@@ -1,6 +1,6 @@
 import { boot } from 'quasar/wrappers'
 import { reactive } from 'vue'
-import { authService } from 'components/service'
+import { authService } from 'src/lib/service'
 
 const state = reactive({
   user: null

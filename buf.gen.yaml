@@ -7,8 +7,8 @@ plugins:
     out: gen
     opt: paths=source_relative
   - plugin: buf.build/bufbuild/es
-    out: frontend/gen
+    out: frontend/src/gen
     opt: target=js+dts
   - plugin: buf.build/bufbuild/connect-web
-    out: frontend/gen
+    out: frontend/src/gen
     opt: target=js+dts

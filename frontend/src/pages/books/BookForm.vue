@@ -14,9 +14,9 @@
 import { tr } from 'boot/i18n'
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { bookService } from 'components/service'
+import { bookService } from 'src/lib/service'
 import { connectErrorDetails } from '@bufbuild/connect-web'
-import { ValidationError } from 'app/gen/errdetails/validation_pb'
+import { ValidationError } from 'src/gen/errdetails/validation_pb'
 
 const $route = useRoute()
 const $router = useRouter()

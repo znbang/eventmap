@@ -10,7 +10,7 @@ import { defineComponent, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { Loader } from '@googlemaps/js-api-loader'
 import { MarkerClusterer } from '@googlemaps/markerclusterer'
-import { eventService } from 'components/service'
+import { eventService } from 'src/lib/service'
 
 export default defineComponent({
   setup() {

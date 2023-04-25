@@ -8,7 +8,7 @@
 
 <script setup>
 import { reactive } from 'vue'
-import { authService } from 'components/service'
+import { authService } from 'src/lib/service'
 
 const state = reactive({
   items: {},

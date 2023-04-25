@@ -30,8 +30,8 @@ import { useQuasar } from 'quasar'
 import { reactive, watch, onMounted } from 'vue'
 import { onBeforeRouteLeave, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { useSwipePage } from 'components/swipe'
-import { bookService } from 'components/service'
+import { useSwipePage } from 'src/lib/swipe'
+import { bookService } from 'src/lib/service'
 import ZPagination from 'components/ZPagination.vue'
 
 const $q = useQuasar()
