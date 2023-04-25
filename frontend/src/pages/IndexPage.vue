@@ -6,14 +6,13 @@
 
 <script>
 import { date, useQuasar } from 'quasar'
-import { onMounted } from 'vue'
+import { defineComponent, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { Loader } from '@googlemaps/js-api-loader'
 import { MarkerClusterer } from '@googlemaps/markerclusterer'
 import { eventService } from 'components/service'
 
-export default {
-  name: 'IndexPage',
+export default defineComponent({
   setup() {
     const $q = useQuasar()
     const $router = useRouter()
@@ -82,5 +81,5 @@ export default {
         })
     })
   }
-}
+})
 </script>

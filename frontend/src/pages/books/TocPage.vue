@@ -6,7 +6,7 @@
         {{ state.book.title }}
       </div>
       <hr>
-      <q-item v-for="item in state.items" :to="`/books/${state.book.id}/${item.page}`">
+      <q-item v-for="item in state.items" :key="item.id" :to="`/books/${state.book.id}/${item.page}`">
         <q-item-section>
           <q-item-label>{{ item.title }}</q-item-label>
         </q-item-section>

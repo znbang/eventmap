@@ -43,7 +43,7 @@ import { Loader } from '@googlemaps/js-api-loader'
 import { eventService } from 'components/service'
 import { Timestamp } from '@bufbuild/protobuf'
 import { connectErrorDetails } from '@bufbuild/connect-web'
-import { ValidationError } from '../../../gen/errdetails/validation_pb'
+import { ValidationError } from 'app/gen/errdetails/validation_pb'
 
 const $route = useRoute()
 const $router = useRouter()

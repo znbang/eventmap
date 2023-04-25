@@ -4,7 +4,7 @@
       <q-btn flat :to="`/books/${state.book.id}/toc`" style="float: right">{{ state.book.title }}</q-btn>
       <div class="text-h6">{{ state.chapter.title }}</div>
       <hr>
-      <p v-for="line in state.chapter.body.split('\n')">{{ line }}</p>
+      <p v-for="(line, index) in state.chapter.body.split('\n')" :key="index">{{ line }}</p>
     </div>
   </q-page>
   <q-footer class="bg-white">

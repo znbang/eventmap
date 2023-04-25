@@ -1,7 +1,7 @@
 <template>
   <q-page class="row justify-center" v-touch-swipe.left.right="swipePage">
     <q-list class="col col-md-8" separator>
-      <q-item v-for="item in state.items" :to="`/events/${item.id}/edit`">
+      <q-item v-for="item in state.items" :key="item.id" :to="`/events/${item.id}/edit`">
         <q-item-section>
           <q-item-label caption>{{ dateRange(item.startDate, item.endDate) }}</q-item-label>
           <q-item-label>{{ item.name }}</q-item-label>

@@ -1,7 +1,7 @@
 <template>
   <q-page class="row justify-center" v-touch-swipe.left.right="swipePage">
     <q-list class="col col-md-8" separator>
-      <q-expansion-item group="toc" :content-inset-level="1" :icon="getIcon(item)" :class="{spinner: item.job?.status === 2}" v-for="item in state.items" :label="item.title" :caption="item.author" :to="`/books/${item.id}/toc`">
+      <q-expansion-item group="toc" :content-inset-level="1" :icon="getIcon(item)" :class="{spinner: item.job?.status === 2}" v-for="item in state.items" :key="item.id" :label="item.title" :caption="item.author" :to="`/books/${item.id}/toc`">
         <q-card>
           <q-card-section class="row items-center">
             <span class="text-grey-6">{{item.job?.message}}</span>
