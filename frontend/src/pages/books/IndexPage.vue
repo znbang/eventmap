@@ -35,6 +35,7 @@ import { bookService } from 'src/lib/service'
 import RoutePagination from 'components/RoutePagination.vue'
 
 const $q = useQuasar()
+const $route = useRoute()
 const { t } = useI18n()
 const state = reactive({
   fabOffset: [18, 18],
@@ -55,7 +56,7 @@ function dragFab(evt) {
   ]
 }
 
-async function updateState(to) {
+async function updateState(to = $route) {
   const params = {
     page: parseInt(to.query.page || 1),
     filter: to.query.q || '',
@@ -147,7 +148,7 @@ onMounted(syncStatusStream)
 
 onBeforeRouteLeave(() => abortController.abort())
 onBeforeRouteUpdate(updateState)
-updateState(useRoute())
+updateState()
 </script>
 
 <style>

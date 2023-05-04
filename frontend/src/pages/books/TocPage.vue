@@ -34,6 +34,7 @@ import { useI18n } from "vue-i18n";
 import RoutePagination from 'components/RoutePagination.vue'
 
 const $q = useQuasar()
+const $route = useRoute()
 const { t } = useI18n()
 const state = reactive({
   book: {
@@ -44,7 +45,7 @@ const state = reactive({
 })
 const swipePage = useSwipePage(state)
 
-async function updateState(to) {
+async function updateState(to = $route) {
   const params = {
     id: to.params.id,
     page: parseInt(to.query.page || 1)
@@ -66,5 +67,5 @@ function deletePage(page) {
 }
 
 onBeforeRouteUpdate(updateState)
-updateState(useRoute())
+updateState()
 </script>

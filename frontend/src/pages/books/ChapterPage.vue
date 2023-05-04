@@ -19,6 +19,7 @@ import { useSwipePage } from 'src/lib/swipe'
 import { bookService } from 'src/lib/service'
 import RoutePagination from 'components/RoutePagination.vue'
 
+const $route = useRoute()
 const state = reactive({
   book: {
     id: '',
@@ -30,14 +31,14 @@ const state = reactive({
 })
 const swipePage = useSwipePage(state)
 
-async function updateState(to) {
+async function updateState(to = $route) {
   const page = parseInt(to.params.page || 1)
   const { book, chapter, total } = await bookService.getChapter({ id: to.params.id, page })
   Object.assign(state, { book, chapter, total })
 }
 
 onBeforeRouteUpdate(updateState)
-updateState(useRoute())
+updateState()
 </script>
 
 <style scoped>

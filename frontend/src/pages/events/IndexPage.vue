@@ -25,6 +25,7 @@ import { useSwipePage } from 'src/lib/swipe'
 import { eventService } from 'src/lib/service'
 import RoutePagination from 'components/RoutePagination.vue'
 
+const $route = useRoute()
 const state = reactive({
   fabOffset: [18, 18],
   dragging: false,
@@ -42,7 +43,7 @@ function dragFab(evt) {
   ]
 }
 
-async function updateState(to) {
+async function updateState(to = $route) {
   const params = {
     page: parseInt(to.query.page || 1),
     filter: to.query.q || '',
@@ -64,5 +65,5 @@ function dateRange(startDate, endDate) {
 }
 
 onBeforeRouteUpdate(updateState)
-updateState(useRoute())
+updateState()
 </script>
