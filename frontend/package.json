@@ -17,7 +17,7 @@
     "@bufbuild/protobuf": "^1.2.0",
     "@googlemaps/js-api-loader": "^1.15.1",
     "@googlemaps/markerclusterer": "^2.0.15",
-    "@quasar/extras": "^1.16.2",
+    "@quasar/extras": "^1.16.3",
     "axios": "^1.3.6",
     "core-js": "^3.30.1",
     "dotenv": "^16.0.3",
