@@ -3,8 +3,8 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
-import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router'
+import { ref } from 'vue'
+import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router'
 
 const $route = useRoute()
 const $router = useRouter()
@@ -20,7 +20,7 @@ function onUpdatePage(page) {
   $router.push($route.params.page ? {params: {...$route.params, page}} : {query: {...$route.query, page}})
 }
 
-onBeforeRouteLeave(watch(() => $route.query, () => {
-  page.value = parseInt($route.params.page || $route.query.page || 1)
-}))
+onBeforeRouteUpdate((to) => {
+  page.value = parseInt(to.params.page || to.query.page || 1)
+})
 </script>
