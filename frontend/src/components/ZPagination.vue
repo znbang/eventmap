@@ -1,13 +1,12 @@
 <template>
-  <q-pagination v-model="page" :max="total" @update:model-value="onUpdatePage" input size="1.5rem" class="justify-center" />
+  <q-pagination v-model="page" :max="total" :to-fn="pageLink" input size="1.5rem" class="justify-center" />
 </template>
 
 <script setup>
 import { ref } from 'vue'
-import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router'
+import { useRoute, onBeforeRouteUpdate } from 'vue-router'
 
 const $route = useRoute()
-const $router = useRouter()
 const page = ref(parseInt($route.params.page || $route.query.page || 1))
 const props = defineProps({
   total: {
@@ -16,8 +15,8 @@ const props = defineProps({
   }
 })
 
-function onUpdatePage(page) {
-  $router.push($route.params.page ? {params: {...$route.params, page}} : {query: {...$route.query, page}})
+function pageLink(page) {
+  return $route.params.page ? {params: {...$route.params, page}} : {query: {...$route.query, page}}
 }
 
 onBeforeRouteUpdate((to) => {
