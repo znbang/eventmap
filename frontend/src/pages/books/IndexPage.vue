@@ -27,15 +27,14 @@
 
 <script setup>
 import { useQuasar } from 'quasar'
-import { reactive, watch, onMounted } from 'vue'
-import { onBeforeRouteLeave, useRoute } from 'vue-router'
+import { reactive, onMounted } from 'vue'
+import { useRoute, onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useSwipePage } from 'src/lib/swipe'
 import { bookService } from 'src/lib/service'
 import RoutePagination from 'components/RoutePagination.vue'
 
 const $q = useQuasar()
-const $route = useRoute()
 const { t } = useI18n()
 const state = reactive({
   fabOffset: [18, 18],
@@ -56,10 +55,10 @@ function dragFab(evt) {
   ]
 }
 
-async function updateState() {
+async function updateState(to) {
   const params = {
-    page: parseInt($route.query.page || 1),
-    filter: $route.query.q || '',
+    page: parseInt(to.query.page || 1),
+    filter: to.query.q || '',
   }
   const { items, total } = await bookService.listBook(params)
   Object.assign(state, { items, total })
@@ -146,10 +145,9 @@ function syncStatusSse() {
 onMounted(syncStatusStream)
 // onMounted(syncStatusSse)
 
-onBeforeRouteLeave(watch(() => $route.query, updateState))
 onBeforeRouteLeave(() => abortController.abort())
-
-updateState()
+onBeforeRouteUpdate(updateState)
+updateState(useRoute())
 </script>
 
 <style>

@@ -13,16 +13,15 @@
 </template>
 
 <script setup>
-import { reactive, watch } from 'vue'
-import { onBeforeRouteLeave, useRoute } from 'vue-router'
+import { reactive } from 'vue'
+import { useRoute, onBeforeRouteUpdate } from 'vue-router'
 import { useSwipePage } from 'src/lib/swipe'
 import { bookService } from 'src/lib/service'
 import RoutePagination from 'components/RoutePagination.vue'
 
-const $route = useRoute()
 const state = reactive({
   book: {
-    id: $route.params.id,
+    id: '',
   },
   chapter: {
     body: '',
@@ -31,15 +30,14 @@ const state = reactive({
 })
 const swipePage = useSwipePage(state)
 
-async function updateState() {
-  const page = parseInt($route.params.page || 1)
-  const { book, chapter, total } = await bookService.getChapter({ id: state.book.id, page })
+async function updateState(to) {
+  const page = parseInt(to.params.page || 1)
+  const { book, chapter, total } = await bookService.getChapter({ id: to.params.id, page })
   Object.assign(state, { book, chapter, total })
 }
 
-onBeforeRouteLeave(watch(() => $route.params, updateState))
-
-updateState()
+onBeforeRouteUpdate(updateState)
+updateState(useRoute())
 </script>
 
 <style scoped>

@@ -26,29 +26,28 @@
 
 <script setup>
 import { useQuasar } from "quasar";
-import { reactive, watch } from 'vue'
-import { onBeforeRouteLeave, useRoute } from 'vue-router'
+import { reactive } from 'vue'
+import { useRoute, onBeforeRouteUpdate } from 'vue-router'
 import { useSwipePage } from 'src/lib/swipe'
 import { bookService } from 'src/lib/service'
 import { useI18n } from "vue-i18n";
 import RoutePagination from 'components/RoutePagination.vue'
 
 const $q = useQuasar()
-const $route = useRoute()
 const { t } = useI18n()
 const state = reactive({
   book: {
-    id: $route.params.id,
+    id: '',
   },
   items: [],
   total: 0,
 })
 const swipePage = useSwipePage(state)
 
-async function updateState() {
+async function updateState(to) {
   const params = {
-    id: state.book.id,
-    page: parseInt($route.query.page || 1)
+    id: to.params.id,
+    page: parseInt(to.query.page || 1)
   }
   const { book, total, items } = await bookService.getToc(params)
   Object.assign(state, { book, items, total })
@@ -66,7 +65,6 @@ function deletePage(page) {
   })
 }
 
-onBeforeRouteLeave(watch(() => $route.query, updateState))
-
-updateState()
+onBeforeRouteUpdate(updateState)
+updateState(useRoute())
 </script>

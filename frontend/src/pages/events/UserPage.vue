@@ -22,15 +22,14 @@
 
 <script setup>
 import { date, useQuasar } from 'quasar'
-import { reactive, watch } from 'vue'
-import { onBeforeRouteLeave, useRoute } from 'vue-router'
+import { reactive } from 'vue'
+import { useRoute, onBeforeRouteUpdate } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useSwipePage } from 'src/lib/swipe'
 import { eventService } from 'src/lib/service'
 import RoutePagination from 'components/RoutePagination.vue'
 
 const $q = useQuasar()
-const $route = useRoute()
 const { t } = useI18n()
 const state = reactive({
   fabOffset: [18, 18],
@@ -49,10 +48,10 @@ function dragFab(evt) {
   ]
 }
 
-async function updateState() {
+async function updateState(to) {
   const params = {
-    page: parseInt($route.query.page || 1),
-    filter: $route.query.q || '',
+    page: parseInt(to.query.page || 1),
+    filter: to.query.q || '',
   }
   const { items, total } = await eventService.listUserEvent(params)
   items.forEach(item => {
@@ -82,7 +81,6 @@ function dateRange(startDate, endDate) {
   }
 }
 
-onBeforeRouteLeave(watch(() => $route.query, updateState))
-
-updateState()
+onBeforeRouteUpdate(updateState)
+updateState(useRoute())
 </script>
