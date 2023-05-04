@@ -21,7 +21,7 @@
     </q-page-sticky>
   </q-page>
   <q-footer class="bg-white">
-    <z-pagination :total="state.total" />
+    <route-pagination :total="state.total"></route-pagination>
   </q-footer>
 </template>
 
@@ -32,7 +32,7 @@ import { onBeforeRouteLeave, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useSwipePage } from 'src/lib/swipe'
 import { bookService } from 'src/lib/service'
-import ZPagination from 'components/ZPagination.vue'
+import RoutePagination from 'components/RoutePagination.vue'
 
 const $q = useQuasar()
 const $route = useRoute()

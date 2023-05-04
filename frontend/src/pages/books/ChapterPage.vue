@@ -8,7 +8,7 @@
     </div>
   </q-page>
   <q-footer class="bg-white">
-    <z-pagination :total="state.total"></z-pagination>
+    <route-pagination :total="state.total"></route-pagination>
   </q-footer>
 </template>
 
@@ -17,7 +17,7 @@ import { reactive, watch } from 'vue'
 import { onBeforeRouteLeave, useRoute } from 'vue-router'
 import { useSwipePage } from 'src/lib/swipe'
 import { bookService } from 'src/lib/service'
-import ZPagination from 'components/ZPagination.vue'
+import RoutePagination from 'components/RoutePagination.vue'
 
 const $route = useRoute()
 const state = reactive({
