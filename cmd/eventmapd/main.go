@@ -72,6 +72,8 @@ func start() error {
 		addr = ":" + addr
 	}
 
+	log.Println("Starting server on", addr)
+
 	return http.ListenAndServe(addr, h2c.NewHandler(mux, &http2.Server{}))
 }
 
