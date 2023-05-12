@@ -22,7 +22,7 @@
     "core-js": "^3.30.1",
     "dotenv": "^16.0.3",
     "pinia": "^2.0.35",
-    "quasar": "^2.11.10",
+    "quasar": "^2.12.0",
     "vue": "^3.2.47",
     "vue-gtag": "^2.0.1",
     "vue-i18n": "^9.2.2",
@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@intlify/vite-plugin-vue-i18n": "^3.4.0",
-    "@quasar/app-vite": "^1.2.2",
+    "@quasar/app-vite": "^1.4.2",
     "autoprefixer": "^10.4.14",
     "eslint": "^8.39.0",
     "eslint-config-prettier": "^8.8.0",
