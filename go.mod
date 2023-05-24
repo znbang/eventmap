@@ -9,14 +9,14 @@ require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/joho/godotenv v1.5.1
 	github.com/mattn/go-sqlite3 v1.14.16
-	github.com/microcosm-cc/bluemonday v1.0.23
+	github.com/microcosm-cc/bluemonday v1.0.24
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/oklog/ulid/v2 v2.1.0
 	github.com/znbang/validation v0.0.0-20230224070611-692a30e6c48a
 	golang.org/x/net v0.10.0
 	golang.org/x/oauth2 v0.8.0
 	google.golang.org/protobuf v1.30.0
-	gorm.io/driver/sqlite v1.5.0
+	gorm.io/driver/sqlite v1.5.1
 	gorm.io/gorm v1.25.1
 )
 
