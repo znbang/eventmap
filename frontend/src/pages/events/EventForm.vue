@@ -42,7 +42,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { Loader } from '@googlemaps/js-api-loader'
 import { eventService } from 'src/lib/service'
 import { Timestamp } from '@bufbuild/protobuf'
-import { connectErrorDetails } from '@bufbuild/connect-web'
+import { ConnectError } from '@bufbuild/connect'
 import { ValidationError } from 'src/gen/errdetails/validation_pb'
 
 const $route = useRoute()
@@ -149,9 +149,10 @@ function onSubmit() {
   fn({ ...form })
     .then(() => $router.push('/events/user'))
     .catch(e => {
-      const err = connectErrorDetails(e, ValidationError)
-        .find(it => it.errors)
-      errors.value = tr(err?.errors || {})
+      if (e instanceof ConnectError) {
+        const err = e.findDetails(ValidationError).find(it => it.errors)
+        errors.value = tr(err?.errors || {})
+      }
     })
 }
 </script>

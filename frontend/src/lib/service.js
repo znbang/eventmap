@@ -1,5 +1,5 @@
 import { useTransport } from './transport'
-import { createPromiseClient } from '@bufbuild/connect-web'
+import { createPromiseClient } from '@bufbuild/connect'
 import { AuthService } from 'src/gen/auth/v1/auth_connectweb'
 import { BookService } from 'src/gen/book/v1/book_connectweb'
 import { EventService } from 'src/gen/event/v1/event_connectweb'

@@ -15,7 +15,7 @@ import { tr } from 'boot/i18n'
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { bookService } from 'src/lib/service'
-import { connectErrorDetails } from '@bufbuild/connect-web'
+import { ConnectError } from '@bufbuild/connect'
 import { ValidationError } from 'src/gen/errdetails/validation_pb'
 
 const $route = useRoute()
@@ -37,9 +37,10 @@ async function onSubmit() {
   fn({ ...model.value })
     .then(() => $router.push('/books'))
     .catch(e => {
-      const err = connectErrorDetails(e, ValidationError)
-        .find(it => it.errors)
-      errors.value = tr(err?.errors || {})
+      if (e instanceof ConnectError) {
+        const err = e.findDetails(ValidationError).find(it => it.errors)
+        errors.value = tr(err?.errors || {})
+      }
     })
 }
 
