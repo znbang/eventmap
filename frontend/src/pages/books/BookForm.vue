@@ -13,11 +13,13 @@
 <script setup>
 import { tr } from 'boot/i18n'
 import { ref } from 'vue'
+import { useQuasar } from 'quasar'
 import { useRoute, useRouter } from 'vue-router'
 import { bookService } from 'src/lib/service'
-import { ConnectError } from '@bufbuild/connect'
+import {Code, ConnectError} from '@bufbuild/connect'
 import { ValidationError } from 'src/gen/errdetails/validation_pb'
 
+const $q = useQuasar()
 const $route = useRoute()
 const $router = useRouter()
 const errors = ref({})
@@ -37,9 +39,11 @@ async function onSubmit() {
   fn({ ...model.value })
     .then(() => $router.push('/books'))
     .catch(e => {
-      if (e instanceof ConnectError) {
+      if (e instanceof ConnectError && e.code === Code.InvalidArgument) {
         const err = e.findDetails(ValidationError).find(it => it.errors)
         errors.value = tr(err?.errors || {})
+      } else {
+        $q.notify(e)
       }
     })
 }

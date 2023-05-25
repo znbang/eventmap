@@ -35,16 +35,17 @@
 </template>
 
 <script setup>
-import { date } from 'quasar'
+import { date, useQuasar } from 'quasar'
 import { tr } from 'boot/i18n'
 import { ref, reactive, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Loader } from '@googlemaps/js-api-loader'
 import { eventService } from 'src/lib/service'
 import { Timestamp } from '@bufbuild/protobuf'
-import { ConnectError } from '@bufbuild/connect'
+import { Code, ConnectError } from '@bufbuild/connect'
 import { ValidationError } from 'src/gen/errdetails/validation_pb'
 
+const $q = useQuasar()
 const $route = useRoute()
 const $router = useRouter()
 const dateInput = ref('')
@@ -149,9 +150,11 @@ function onSubmit() {
   fn({ ...form })
     .then(() => $router.push('/events/user'))
     .catch(e => {
-      if (e instanceof ConnectError) {
+      if (e instanceof ConnectError && e.code === Code.InvalidArgument) {
         const err = e.findDetails(ValidationError).find(it => it.errors)
         errors.value = tr(err?.errors || {})
+      } else {
+        $q.notify(e)
       }
     })
 }
