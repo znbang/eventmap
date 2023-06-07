@@ -1,5 +1,5 @@
 import { createConnectTransport } from '@bufbuild/connect-web'
-import { currentUser} from 'boot/auth'
+import { currentUser } from 'boot/auth'
 
 const auth = (next) => async (req) => {
   const user = currentUser()
