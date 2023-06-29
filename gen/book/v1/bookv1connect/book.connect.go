@@ -263,73 +263,103 @@ type BookServiceHandler interface {
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
 func NewBookServiceHandler(svc BookServiceHandler, opts ...connect_go.HandlerOption) (string, http.Handler) {
-	mux := http.NewServeMux()
-	mux.Handle(BookServiceCreateBookProcedure, connect_go.NewUnaryHandler(
+	bookServiceCreateBookHandler := connect_go.NewUnaryHandler(
 		BookServiceCreateBookProcedure,
 		svc.CreateBook,
 		opts...,
-	))
-	mux.Handle(BookServiceUpdateBookProcedure, connect_go.NewUnaryHandler(
+	)
+	bookServiceUpdateBookHandler := connect_go.NewUnaryHandler(
 		BookServiceUpdateBookProcedure,
 		svc.UpdateBook,
 		opts...,
-	))
-	mux.Handle(BookServiceDeleteBookProcedure, connect_go.NewUnaryHandler(
+	)
+	bookServiceDeleteBookHandler := connect_go.NewUnaryHandler(
 		BookServiceDeleteBookProcedure,
 		svc.DeleteBook,
 		opts...,
-	))
-	mux.Handle(BookServiceDeleteChapterProcedure, connect_go.NewUnaryHandler(
+	)
+	bookServiceDeleteChapterHandler := connect_go.NewUnaryHandler(
 		BookServiceDeleteChapterProcedure,
 		svc.DeleteChapter,
 		opts...,
-	))
-	mux.Handle(BookServiceGetBookProcedure, connect_go.NewUnaryHandler(
+	)
+	bookServiceGetBookHandler := connect_go.NewUnaryHandler(
 		BookServiceGetBookProcedure,
 		svc.GetBook,
 		opts...,
-	))
-	mux.Handle(BookServiceGetTocProcedure, connect_go.NewUnaryHandler(
+	)
+	bookServiceGetTocHandler := connect_go.NewUnaryHandler(
 		BookServiceGetTocProcedure,
 		svc.GetToc,
 		opts...,
-	))
-	mux.Handle(BookServiceGetChapterProcedure, connect_go.NewUnaryHandler(
+	)
+	bookServiceGetChapterHandler := connect_go.NewUnaryHandler(
 		BookServiceGetChapterProcedure,
 		svc.GetChapter,
 		opts...,
-	))
-	mux.Handle(BookServiceListBookProcedure, connect_go.NewUnaryHandler(
+	)
+	bookServiceListBookHandler := connect_go.NewUnaryHandler(
 		BookServiceListBookProcedure,
 		svc.ListBook,
 		opts...,
-	))
-	mux.Handle(BookServiceSyncNewProcedure, connect_go.NewUnaryHandler(
+	)
+	bookServiceSyncNewHandler := connect_go.NewUnaryHandler(
 		BookServiceSyncNewProcedure,
 		svc.SyncNew,
 		opts...,
-	))
-	mux.Handle(BookServiceSyncAllProcedure, connect_go.NewUnaryHandler(
+	)
+	bookServiceSyncAllHandler := connect_go.NewUnaryHandler(
 		BookServiceSyncAllProcedure,
 		svc.SyncAll,
 		opts...,
-	))
-	mux.Handle(BookServiceStopSyncProcedure, connect_go.NewUnaryHandler(
+	)
+	bookServiceStopSyncHandler := connect_go.NewUnaryHandler(
 		BookServiceStopSyncProcedure,
 		svc.StopSync,
 		opts...,
-	))
-	mux.Handle(BookServiceSyncStatusProcedure, connect_go.NewServerStreamHandler(
+	)
+	bookServiceSyncStatusHandler := connect_go.NewServerStreamHandler(
 		BookServiceSyncStatusProcedure,
 		svc.SyncStatus,
 		opts...,
-	))
-	mux.Handle(BookServiceDownloadBookProcedure, connect_go.NewUnaryHandler(
+	)
+	bookServiceDownloadBookHandler := connect_go.NewUnaryHandler(
 		BookServiceDownloadBookProcedure,
 		svc.DownloadBook,
 		opts...,
-	))
-	return "/book.v1.BookService/", mux
+	)
+	return "/book.v1.BookService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case BookServiceCreateBookProcedure:
+			bookServiceCreateBookHandler.ServeHTTP(w, r)
+		case BookServiceUpdateBookProcedure:
+			bookServiceUpdateBookHandler.ServeHTTP(w, r)
+		case BookServiceDeleteBookProcedure:
+			bookServiceDeleteBookHandler.ServeHTTP(w, r)
+		case BookServiceDeleteChapterProcedure:
+			bookServiceDeleteChapterHandler.ServeHTTP(w, r)
+		case BookServiceGetBookProcedure:
+			bookServiceGetBookHandler.ServeHTTP(w, r)
+		case BookServiceGetTocProcedure:
+			bookServiceGetTocHandler.ServeHTTP(w, r)
+		case BookServiceGetChapterProcedure:
+			bookServiceGetChapterHandler.ServeHTTP(w, r)
+		case BookServiceListBookProcedure:
+			bookServiceListBookHandler.ServeHTTP(w, r)
+		case BookServiceSyncNewProcedure:
+			bookServiceSyncNewHandler.ServeHTTP(w, r)
+		case BookServiceSyncAllProcedure:
+			bookServiceSyncAllHandler.ServeHTTP(w, r)
+		case BookServiceStopSyncProcedure:
+			bookServiceStopSyncHandler.ServeHTTP(w, r)
+		case BookServiceSyncStatusProcedure:
+			bookServiceSyncStatusHandler.ServeHTTP(w, r)
+		case BookServiceDownloadBookProcedure:
+			bookServiceDownloadBookHandler.ServeHTTP(w, r)
+		default:
+			http.NotFound(w, r)
+		}
+	})
 }
 
 // UnimplementedBookServiceHandler returns CodeUnimplemented from all methods.

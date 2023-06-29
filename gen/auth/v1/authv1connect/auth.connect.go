@@ -112,23 +112,33 @@ type AuthServiceHandler interface {
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
 func NewAuthServiceHandler(svc AuthServiceHandler, opts ...connect_go.HandlerOption) (string, http.Handler) {
-	mux := http.NewServeMux()
-	mux.Handle(AuthServiceListProviderProcedure, connect_go.NewUnaryHandler(
+	authServiceListProviderHandler := connect_go.NewUnaryHandler(
 		AuthServiceListProviderProcedure,
 		svc.ListProvider,
 		opts...,
-	))
-	mux.Handle(AuthServiceGetUserProcedure, connect_go.NewUnaryHandler(
+	)
+	authServiceGetUserHandler := connect_go.NewUnaryHandler(
 		AuthServiceGetUserProcedure,
 		svc.GetUser,
 		opts...,
-	))
-	mux.Handle(AuthServiceLogoutProcedure, connect_go.NewUnaryHandler(
+	)
+	authServiceLogoutHandler := connect_go.NewUnaryHandler(
 		AuthServiceLogoutProcedure,
 		svc.Logout,
 		opts...,
-	))
-	return "/auth.v1.AuthService/", mux
+	)
+	return "/auth.v1.AuthService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case AuthServiceListProviderProcedure:
+			authServiceListProviderHandler.ServeHTTP(w, r)
+		case AuthServiceGetUserProcedure:
+			authServiceGetUserHandler.ServeHTTP(w, r)
+		case AuthServiceLogoutProcedure:
+			authServiceLogoutHandler.ServeHTTP(w, r)
+		default:
+			http.NotFound(w, r)
+		}
+	})
 }
 
 // UnimplementedAuthServiceHandler returns CodeUnimplemented from all methods.

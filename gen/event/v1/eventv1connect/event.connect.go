@@ -176,43 +176,61 @@ type EventServiceHandler interface {
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
 func NewEventServiceHandler(svc EventServiceHandler, opts ...connect_go.HandlerOption) (string, http.Handler) {
-	mux := http.NewServeMux()
-	mux.Handle(EventServiceCreateEventProcedure, connect_go.NewUnaryHandler(
+	eventServiceCreateEventHandler := connect_go.NewUnaryHandler(
 		EventServiceCreateEventProcedure,
 		svc.CreateEvent,
 		opts...,
-	))
-	mux.Handle(EventServiceUpdateEventProcedure, connect_go.NewUnaryHandler(
+	)
+	eventServiceUpdateEventHandler := connect_go.NewUnaryHandler(
 		EventServiceUpdateEventProcedure,
 		svc.UpdateEvent,
 		opts...,
-	))
-	mux.Handle(EventServiceDeleteEventProcedure, connect_go.NewUnaryHandler(
+	)
+	eventServiceDeleteEventHandler := connect_go.NewUnaryHandler(
 		EventServiceDeleteEventProcedure,
 		svc.DeleteEvent,
 		opts...,
-	))
-	mux.Handle(EventServiceGetEventProcedure, connect_go.NewUnaryHandler(
+	)
+	eventServiceGetEventHandler := connect_go.NewUnaryHandler(
 		EventServiceGetEventProcedure,
 		svc.GetEvent,
 		opts...,
-	))
-	mux.Handle(EventServiceListActiveEventProcedure, connect_go.NewUnaryHandler(
+	)
+	eventServiceListActiveEventHandler := connect_go.NewUnaryHandler(
 		EventServiceListActiveEventProcedure,
 		svc.ListActiveEvent,
 		opts...,
-	))
-	mux.Handle(EventServiceListEventProcedure, connect_go.NewUnaryHandler(
+	)
+	eventServiceListEventHandler := connect_go.NewUnaryHandler(
 		EventServiceListEventProcedure,
 		svc.ListEvent,
 		opts...,
-	))
-	mux.Handle(EventServiceListUserEventProcedure, connect_go.NewUnaryHandler(
+	)
+	eventServiceListUserEventHandler := connect_go.NewUnaryHandler(
 		EventServiceListUserEventProcedure,
 		svc.ListUserEvent,
 		opts...,
-	))
-	return "/event.v1.EventService/", mux
+	)
+	return "/event.v1.EventService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case EventServiceCreateEventProcedure:
+			eventServiceCreateEventHandler.ServeHTTP(w, r)
+		case EventServiceUpdateEventProcedure:
+			eventServiceUpdateEventHandler.ServeHTTP(w, r)
+		case EventServiceDeleteEventProcedure:
+			eventServiceDeleteEventHandler.ServeHTTP(w, r)
+		case EventServiceGetEventProcedure:
+			eventServiceGetEventHandler.ServeHTTP(w, r)
+		case EventServiceListActiveEventProcedure:
+			eventServiceListActiveEventHandler.ServeHTTP(w, r)
+		case EventServiceListEventProcedure:
+			eventServiceListEventHandler.ServeHTTP(w, r)
+		case EventServiceListUserEventProcedure:
+			eventServiceListUserEventHandler.ServeHTTP(w, r)
+		default:
+			http.NotFound(w, r)
+		}
+	})
 }
 
 // UnimplementedEventServiceHandler returns CodeUnimplemented from all methods.
