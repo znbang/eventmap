@@ -13,31 +13,31 @@
     "build": "quasar build"
   },
   "dependencies": {
-    "@bufbuild/connect": "^0.10.1",
-    "@bufbuild/connect-web": "^0.10.1",
+    "@bufbuild/connect": "^0.11.0",
+    "@bufbuild/connect-web": "^0.11.0",
     "@bufbuild/protobuf": "^1.2.1",
     "@googlemaps/js-api-loader": "^1.16.2",
     "@googlemaps/markerclusterer": "^2.3.1",
     "@quasar/extras": "^1.16.4",
     "axios": "^1.4.0",
-    "core-js": "^3.31.0",
+    "core-js": "^3.31.1",
     "dotenv": "^16.3.1",
     "pinia": "^2.1.4",
-    "quasar": "^2.12.1",
+    "quasar": "^2.12.2",
     "vue": "^3.3.4",
     "vue-gtag": "^2.0.1",
     "vue-i18n": "^9.2.2",
-    "vue-router": "^4.2.2"
+    "vue-router": "^4.2.4"
   },
   "devDependencies": {
     "@intlify/vite-plugin-vue-i18n": "^3.4.0",
     "@quasar/app-vite": "^1.4.3",
     "autoprefixer": "^10.4.14",
-    "eslint": "^8.43.0",
+    "eslint": "^8.44.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-vue": "^9.15.1",
-    "postcss": "^8.4.24",
-    "prettier": "^2.8.8"
+    "postcss": "^8.4.25",
+    "prettier": "^3.0.0"
   },
   "engines": {
     "node": "^18 || ^16 || ^14.19",
