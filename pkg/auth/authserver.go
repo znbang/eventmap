@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/bufbuild/connect-go"
+	"connectrpc.com/connect"
 	"github.com/golang-jwt/jwt"
 	v1 "github.com/znbang/eventmap/gen/auth/v1"
 	"github.com/znbang/eventmap/internal/env"

@@ -3,7 +3,7 @@ package eventservice
 import (
 	"context"
 
-	"github.com/bufbuild/connect-go"
+	"connectrpc.com/connect"
 	"github.com/mitchellh/mapstructure"
 	v1 "github.com/znbang/eventmap/gen/event/v1"
 	"github.com/znbang/eventmap/internal/mvc"

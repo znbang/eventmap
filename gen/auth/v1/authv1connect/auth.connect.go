@@ -5,9 +5,9 @@
 package authv1connect
 
 import (
+	connect "connectrpc.com/connect"
 	context "context"
 	errors "errors"
-	connect_go "github.com/bufbuild/connect-go"
 	v1 "github.com/znbang/eventmap/gen/auth/v1"
 	http "net/http"
 	strings "strings"
@@ -18,7 +18,7 @@ import (
 // generated with a version of connect newer than the one compiled into your binary. You can fix the
 // problem by either regenerating this code with an older version of connect or updating the connect
 // version compiled into your binary.
-const _ = connect_go.IsAtLeastVersion0_1_0
+const _ = connect.IsAtLeastVersion0_1_0
 
 const (
 	// AuthServiceName is the fully-qualified name of the AuthService service.
@@ -44,9 +44,9 @@ const (
 
 // AuthServiceClient is a client for the auth.v1.AuthService service.
 type AuthServiceClient interface {
-	ListProvider(context.Context, *connect_go.Request[v1.ListProviderRequest]) (*connect_go.Response[v1.ListProviderResponse], error)
-	GetUser(context.Context, *connect_go.Request[v1.GetUserRequest]) (*connect_go.Response[v1.GetUserResponse], error)
-	Logout(context.Context, *connect_go.Request[v1.LogoutRequest]) (*connect_go.Response[v1.LogoutResponse], error)
+	ListProvider(context.Context, *connect.Request[v1.ListProviderRequest]) (*connect.Response[v1.ListProviderResponse], error)
+	GetUser(context.Context, *connect.Request[v1.GetUserRequest]) (*connect.Response[v1.GetUserResponse], error)
+	Logout(context.Context, *connect.Request[v1.LogoutRequest]) (*connect.Response[v1.LogoutResponse], error)
 }
 
 // NewAuthServiceClient constructs a client for the auth.v1.AuthService service. By default, it uses
@@ -56,20 +56,20 @@ type AuthServiceClient interface {
 //
 // The URL supplied here should be the base URL for the Connect or gRPC server (for example,
 // http://api.acme.com or https://acme.com/grpc).
-func NewAuthServiceClient(httpClient connect_go.HTTPClient, baseURL string, opts ...connect_go.ClientOption) AuthServiceClient {
+func NewAuthServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...connect.ClientOption) AuthServiceClient {
 	baseURL = strings.TrimRight(baseURL, "/")
 	return &authServiceClient{
-		listProvider: connect_go.NewClient[v1.ListProviderRequest, v1.ListProviderResponse](
+		listProvider: connect.NewClient[v1.ListProviderRequest, v1.ListProviderResponse](
 			httpClient,
 			baseURL+AuthServiceListProviderProcedure,
 			opts...,
 		),
-		getUser: connect_go.NewClient[v1.GetUserRequest, v1.GetUserResponse](
+		getUser: connect.NewClient[v1.GetUserRequest, v1.GetUserResponse](
 			httpClient,
 			baseURL+AuthServiceGetUserProcedure,
 			opts...,
 		),
-		logout: connect_go.NewClient[v1.LogoutRequest, v1.LogoutResponse](
+		logout: connect.NewClient[v1.LogoutRequest, v1.LogoutResponse](
 			httpClient,
 			baseURL+AuthServiceLogoutProcedure,
 			opts...,
@@ -79,31 +79,31 @@ func NewAuthServiceClient(httpClient connect_go.HTTPClient, baseURL string, opts
 
 // authServiceClient implements AuthServiceClient.
 type authServiceClient struct {
-	listProvider *connect_go.Client[v1.ListProviderRequest, v1.ListProviderResponse]
-	getUser      *connect_go.Client[v1.GetUserRequest, v1.GetUserResponse]
-	logout       *connect_go.Client[v1.LogoutRequest, v1.LogoutResponse]
+	listProvider *connect.Client[v1.ListProviderRequest, v1.ListProviderResponse]
+	getUser      *connect.Client[v1.GetUserRequest, v1.GetUserResponse]
+	logout       *connect.Client[v1.LogoutRequest, v1.LogoutResponse]
 }
 
 // ListProvider calls auth.v1.AuthService.ListProvider.
-func (c *authServiceClient) ListProvider(ctx context.Context, req *connect_go.Request[v1.ListProviderRequest]) (*connect_go.Response[v1.ListProviderResponse], error) {
+func (c *authServiceClient) ListProvider(ctx context.Context, req *connect.Request[v1.ListProviderRequest]) (*connect.Response[v1.ListProviderResponse], error) {
 	return c.listProvider.CallUnary(ctx, req)
 }
 
 // GetUser calls auth.v1.AuthService.GetUser.
-func (c *authServiceClient) GetUser(ctx context.Context, req *connect_go.Request[v1.GetUserRequest]) (*connect_go.Response[v1.GetUserResponse], error) {
+func (c *authServiceClient) GetUser(ctx context.Context, req *connect.Request[v1.GetUserRequest]) (*connect.Response[v1.GetUserResponse], error) {
 	return c.getUser.CallUnary(ctx, req)
 }
 
 // Logout calls auth.v1.AuthService.Logout.
-func (c *authServiceClient) Logout(ctx context.Context, req *connect_go.Request[v1.LogoutRequest]) (*connect_go.Response[v1.LogoutResponse], error) {
+func (c *authServiceClient) Logout(ctx context.Context, req *connect.Request[v1.LogoutRequest]) (*connect.Response[v1.LogoutResponse], error) {
 	return c.logout.CallUnary(ctx, req)
 }
 
 // AuthServiceHandler is an implementation of the auth.v1.AuthService service.
 type AuthServiceHandler interface {
-	ListProvider(context.Context, *connect_go.Request[v1.ListProviderRequest]) (*connect_go.Response[v1.ListProviderResponse], error)
-	GetUser(context.Context, *connect_go.Request[v1.GetUserRequest]) (*connect_go.Response[v1.GetUserResponse], error)
-	Logout(context.Context, *connect_go.Request[v1.LogoutRequest]) (*connect_go.Response[v1.LogoutResponse], error)
+	ListProvider(context.Context, *connect.Request[v1.ListProviderRequest]) (*connect.Response[v1.ListProviderResponse], error)
+	GetUser(context.Context, *connect.Request[v1.GetUserRequest]) (*connect.Response[v1.GetUserResponse], error)
+	Logout(context.Context, *connect.Request[v1.LogoutRequest]) (*connect.Response[v1.LogoutResponse], error)
 }
 
 // NewAuthServiceHandler builds an HTTP handler from the service implementation. It returns the path
@@ -111,18 +111,18 @@ type AuthServiceHandler interface {
 //
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
-func NewAuthServiceHandler(svc AuthServiceHandler, opts ...connect_go.HandlerOption) (string, http.Handler) {
-	authServiceListProviderHandler := connect_go.NewUnaryHandler(
+func NewAuthServiceHandler(svc AuthServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
+	authServiceListProviderHandler := connect.NewUnaryHandler(
 		AuthServiceListProviderProcedure,
 		svc.ListProvider,
 		opts...,
 	)
-	authServiceGetUserHandler := connect_go.NewUnaryHandler(
+	authServiceGetUserHandler := connect.NewUnaryHandler(
 		AuthServiceGetUserProcedure,
 		svc.GetUser,
 		opts...,
 	)
-	authServiceLogoutHandler := connect_go.NewUnaryHandler(
+	authServiceLogoutHandler := connect.NewUnaryHandler(
 		AuthServiceLogoutProcedure,
 		svc.Logout,
 		opts...,
@@ -144,14 +144,14 @@ func NewAuthServiceHandler(svc AuthServiceHandler, opts ...connect_go.HandlerOpt
 // UnimplementedAuthServiceHandler returns CodeUnimplemented from all methods.
 type UnimplementedAuthServiceHandler struct{}
 
-func (UnimplementedAuthServiceHandler) ListProvider(context.Context, *connect_go.Request[v1.ListProviderRequest]) (*connect_go.Response[v1.ListProviderResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("auth.v1.AuthService.ListProvider is not implemented"))
+func (UnimplementedAuthServiceHandler) ListProvider(context.Context, *connect.Request[v1.ListProviderRequest]) (*connect.Response[v1.ListProviderResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("auth.v1.AuthService.ListProvider is not implemented"))
 }
 
-func (UnimplementedAuthServiceHandler) GetUser(context.Context, *connect_go.Request[v1.GetUserRequest]) (*connect_go.Response[v1.GetUserResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("auth.v1.AuthService.GetUser is not implemented"))
+func (UnimplementedAuthServiceHandler) GetUser(context.Context, *connect.Request[v1.GetUserRequest]) (*connect.Response[v1.GetUserResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("auth.v1.AuthService.GetUser is not implemented"))
 }
 
-func (UnimplementedAuthServiceHandler) Logout(context.Context, *connect_go.Request[v1.LogoutRequest]) (*connect_go.Response[v1.LogoutResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("auth.v1.AuthService.Logout is not implemented"))
+func (UnimplementedAuthServiceHandler) Logout(context.Context, *connect.Request[v1.LogoutRequest]) (*connect.Response[v1.LogoutResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("auth.v1.AuthService.Logout is not implemented"))
 }

@@ -5,9 +5,9 @@
 package eventv1connect
 
 import (
+	connect "connectrpc.com/connect"
 	context "context"
 	errors "errors"
-	connect_go "github.com/bufbuild/connect-go"
 	v1 "github.com/znbang/eventmap/gen/event/v1"
 	http "net/http"
 	strings "strings"
@@ -18,7 +18,7 @@ import (
 // generated with a version of connect newer than the one compiled into your binary. You can fix the
 // problem by either regenerating this code with an older version of connect or updating the connect
 // version compiled into your binary.
-const _ = connect_go.IsAtLeastVersion0_1_0
+const _ = connect.IsAtLeastVersion0_1_0
 
 const (
 	// EventServiceName is the fully-qualified name of the EventService service.
@@ -56,13 +56,13 @@ const (
 
 // EventServiceClient is a client for the event.v1.EventService service.
 type EventServiceClient interface {
-	CreateEvent(context.Context, *connect_go.Request[v1.CreateEventRequest]) (*connect_go.Response[v1.CreateEventResponse], error)
-	UpdateEvent(context.Context, *connect_go.Request[v1.UpdateEventRequest]) (*connect_go.Response[v1.UpdateEventResponse], error)
-	DeleteEvent(context.Context, *connect_go.Request[v1.DeleteEventRequest]) (*connect_go.Response[v1.DeleteEventResponse], error)
-	GetEvent(context.Context, *connect_go.Request[v1.GetEventRequest]) (*connect_go.Response[v1.GetEventResponse], error)
-	ListActiveEvent(context.Context, *connect_go.Request[v1.ListActiveEventRequest]) (*connect_go.Response[v1.ListActiveEventResponse], error)
-	ListEvent(context.Context, *connect_go.Request[v1.ListEventRequest]) (*connect_go.Response[v1.ListEventResponse], error)
-	ListUserEvent(context.Context, *connect_go.Request[v1.ListUserEventRequest]) (*connect_go.Response[v1.ListUserEventResponse], error)
+	CreateEvent(context.Context, *connect.Request[v1.CreateEventRequest]) (*connect.Response[v1.CreateEventResponse], error)
+	UpdateEvent(context.Context, *connect.Request[v1.UpdateEventRequest]) (*connect.Response[v1.UpdateEventResponse], error)
+	DeleteEvent(context.Context, *connect.Request[v1.DeleteEventRequest]) (*connect.Response[v1.DeleteEventResponse], error)
+	GetEvent(context.Context, *connect.Request[v1.GetEventRequest]) (*connect.Response[v1.GetEventResponse], error)
+	ListActiveEvent(context.Context, *connect.Request[v1.ListActiveEventRequest]) (*connect.Response[v1.ListActiveEventResponse], error)
+	ListEvent(context.Context, *connect.Request[v1.ListEventRequest]) (*connect.Response[v1.ListEventResponse], error)
+	ListUserEvent(context.Context, *connect.Request[v1.ListUserEventRequest]) (*connect.Response[v1.ListUserEventResponse], error)
 }
 
 // NewEventServiceClient constructs a client for the event.v1.EventService service. By default, it
@@ -72,40 +72,40 @@ type EventServiceClient interface {
 //
 // The URL supplied here should be the base URL for the Connect or gRPC server (for example,
 // http://api.acme.com or https://acme.com/grpc).
-func NewEventServiceClient(httpClient connect_go.HTTPClient, baseURL string, opts ...connect_go.ClientOption) EventServiceClient {
+func NewEventServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...connect.ClientOption) EventServiceClient {
 	baseURL = strings.TrimRight(baseURL, "/")
 	return &eventServiceClient{
-		createEvent: connect_go.NewClient[v1.CreateEventRequest, v1.CreateEventResponse](
+		createEvent: connect.NewClient[v1.CreateEventRequest, v1.CreateEventResponse](
 			httpClient,
 			baseURL+EventServiceCreateEventProcedure,
 			opts...,
 		),
-		updateEvent: connect_go.NewClient[v1.UpdateEventRequest, v1.UpdateEventResponse](
+		updateEvent: connect.NewClient[v1.UpdateEventRequest, v1.UpdateEventResponse](
 			httpClient,
 			baseURL+EventServiceUpdateEventProcedure,
 			opts...,
 		),
-		deleteEvent: connect_go.NewClient[v1.DeleteEventRequest, v1.DeleteEventResponse](
+		deleteEvent: connect.NewClient[v1.DeleteEventRequest, v1.DeleteEventResponse](
 			httpClient,
 			baseURL+EventServiceDeleteEventProcedure,
 			opts...,
 		),
-		getEvent: connect_go.NewClient[v1.GetEventRequest, v1.GetEventResponse](
+		getEvent: connect.NewClient[v1.GetEventRequest, v1.GetEventResponse](
 			httpClient,
 			baseURL+EventServiceGetEventProcedure,
 			opts...,
 		),
-		listActiveEvent: connect_go.NewClient[v1.ListActiveEventRequest, v1.ListActiveEventResponse](
+		listActiveEvent: connect.NewClient[v1.ListActiveEventRequest, v1.ListActiveEventResponse](
 			httpClient,
 			baseURL+EventServiceListActiveEventProcedure,
 			opts...,
 		),
-		listEvent: connect_go.NewClient[v1.ListEventRequest, v1.ListEventResponse](
+		listEvent: connect.NewClient[v1.ListEventRequest, v1.ListEventResponse](
 			httpClient,
 			baseURL+EventServiceListEventProcedure,
 			opts...,
 		),
-		listUserEvent: connect_go.NewClient[v1.ListUserEventRequest, v1.ListUserEventResponse](
+		listUserEvent: connect.NewClient[v1.ListUserEventRequest, v1.ListUserEventResponse](
 			httpClient,
 			baseURL+EventServiceListUserEventProcedure,
 			opts...,
@@ -115,59 +115,59 @@ func NewEventServiceClient(httpClient connect_go.HTTPClient, baseURL string, opt
 
 // eventServiceClient implements EventServiceClient.
 type eventServiceClient struct {
-	createEvent     *connect_go.Client[v1.CreateEventRequest, v1.CreateEventResponse]
-	updateEvent     *connect_go.Client[v1.UpdateEventRequest, v1.UpdateEventResponse]
-	deleteEvent     *connect_go.Client[v1.DeleteEventRequest, v1.DeleteEventResponse]
-	getEvent        *connect_go.Client[v1.GetEventRequest, v1.GetEventResponse]
-	listActiveEvent *connect_go.Client[v1.ListActiveEventRequest, v1.ListActiveEventResponse]
-	listEvent       *connect_go.Client[v1.ListEventRequest, v1.ListEventResponse]
-	listUserEvent   *connect_go.Client[v1.ListUserEventRequest, v1.ListUserEventResponse]
+	createEvent     *connect.Client[v1.CreateEventRequest, v1.CreateEventResponse]
+	updateEvent     *connect.Client[v1.UpdateEventRequest, v1.UpdateEventResponse]
+	deleteEvent     *connect.Client[v1.DeleteEventRequest, v1.DeleteEventResponse]
+	getEvent        *connect.Client[v1.GetEventRequest, v1.GetEventResponse]
+	listActiveEvent *connect.Client[v1.ListActiveEventRequest, v1.ListActiveEventResponse]
+	listEvent       *connect.Client[v1.ListEventRequest, v1.ListEventResponse]
+	listUserEvent   *connect.Client[v1.ListUserEventRequest, v1.ListUserEventResponse]
 }
 
 // CreateEvent calls event.v1.EventService.CreateEvent.
-func (c *eventServiceClient) CreateEvent(ctx context.Context, req *connect_go.Request[v1.CreateEventRequest]) (*connect_go.Response[v1.CreateEventResponse], error) {
+func (c *eventServiceClient) CreateEvent(ctx context.Context, req *connect.Request[v1.CreateEventRequest]) (*connect.Response[v1.CreateEventResponse], error) {
 	return c.createEvent.CallUnary(ctx, req)
 }
 
 // UpdateEvent calls event.v1.EventService.UpdateEvent.
-func (c *eventServiceClient) UpdateEvent(ctx context.Context, req *connect_go.Request[v1.UpdateEventRequest]) (*connect_go.Response[v1.UpdateEventResponse], error) {
+func (c *eventServiceClient) UpdateEvent(ctx context.Context, req *connect.Request[v1.UpdateEventRequest]) (*connect.Response[v1.UpdateEventResponse], error) {
 	return c.updateEvent.CallUnary(ctx, req)
 }
 
 // DeleteEvent calls event.v1.EventService.DeleteEvent.
-func (c *eventServiceClient) DeleteEvent(ctx context.Context, req *connect_go.Request[v1.DeleteEventRequest]) (*connect_go.Response[v1.DeleteEventResponse], error) {
+func (c *eventServiceClient) DeleteEvent(ctx context.Context, req *connect.Request[v1.DeleteEventRequest]) (*connect.Response[v1.DeleteEventResponse], error) {
 	return c.deleteEvent.CallUnary(ctx, req)
 }
 
 // GetEvent calls event.v1.EventService.GetEvent.
-func (c *eventServiceClient) GetEvent(ctx context.Context, req *connect_go.Request[v1.GetEventRequest]) (*connect_go.Response[v1.GetEventResponse], error) {
+func (c *eventServiceClient) GetEvent(ctx context.Context, req *connect.Request[v1.GetEventRequest]) (*connect.Response[v1.GetEventResponse], error) {
 	return c.getEvent.CallUnary(ctx, req)
 }
 
 // ListActiveEvent calls event.v1.EventService.ListActiveEvent.
-func (c *eventServiceClient) ListActiveEvent(ctx context.Context, req *connect_go.Request[v1.ListActiveEventRequest]) (*connect_go.Response[v1.ListActiveEventResponse], error) {
+func (c *eventServiceClient) ListActiveEvent(ctx context.Context, req *connect.Request[v1.ListActiveEventRequest]) (*connect.Response[v1.ListActiveEventResponse], error) {
 	return c.listActiveEvent.CallUnary(ctx, req)
 }
 
 // ListEvent calls event.v1.EventService.ListEvent.
-func (c *eventServiceClient) ListEvent(ctx context.Context, req *connect_go.Request[v1.ListEventRequest]) (*connect_go.Response[v1.ListEventResponse], error) {
+func (c *eventServiceClient) ListEvent(ctx context.Context, req *connect.Request[v1.ListEventRequest]) (*connect.Response[v1.ListEventResponse], error) {
 	return c.listEvent.CallUnary(ctx, req)
 }
 
 // ListUserEvent calls event.v1.EventService.ListUserEvent.
-func (c *eventServiceClient) ListUserEvent(ctx context.Context, req *connect_go.Request[v1.ListUserEventRequest]) (*connect_go.Response[v1.ListUserEventResponse], error) {
+func (c *eventServiceClient) ListUserEvent(ctx context.Context, req *connect.Request[v1.ListUserEventRequest]) (*connect.Response[v1.ListUserEventResponse], error) {
 	return c.listUserEvent.CallUnary(ctx, req)
 }
 
 // EventServiceHandler is an implementation of the event.v1.EventService service.
 type EventServiceHandler interface {
-	CreateEvent(context.Context, *connect_go.Request[v1.CreateEventRequest]) (*connect_go.Response[v1.CreateEventResponse], error)
-	UpdateEvent(context.Context, *connect_go.Request[v1.UpdateEventRequest]) (*connect_go.Response[v1.UpdateEventResponse], error)
-	DeleteEvent(context.Context, *connect_go.Request[v1.DeleteEventRequest]) (*connect_go.Response[v1.DeleteEventResponse], error)
-	GetEvent(context.Context, *connect_go.Request[v1.GetEventRequest]) (*connect_go.Response[v1.GetEventResponse], error)
-	ListActiveEvent(context.Context, *connect_go.Request[v1.ListActiveEventRequest]) (*connect_go.Response[v1.ListActiveEventResponse], error)
-	ListEvent(context.Context, *connect_go.Request[v1.ListEventRequest]) (*connect_go.Response[v1.ListEventResponse], error)
-	ListUserEvent(context.Context, *connect_go.Request[v1.ListUserEventRequest]) (*connect_go.Response[v1.ListUserEventResponse], error)
+	CreateEvent(context.Context, *connect.Request[v1.CreateEventRequest]) (*connect.Response[v1.CreateEventResponse], error)
+	UpdateEvent(context.Context, *connect.Request[v1.UpdateEventRequest]) (*connect.Response[v1.UpdateEventResponse], error)
+	DeleteEvent(context.Context, *connect.Request[v1.DeleteEventRequest]) (*connect.Response[v1.DeleteEventResponse], error)
+	GetEvent(context.Context, *connect.Request[v1.GetEventRequest]) (*connect.Response[v1.GetEventResponse], error)
+	ListActiveEvent(context.Context, *connect.Request[v1.ListActiveEventRequest]) (*connect.Response[v1.ListActiveEventResponse], error)
+	ListEvent(context.Context, *connect.Request[v1.ListEventRequest]) (*connect.Response[v1.ListEventResponse], error)
+	ListUserEvent(context.Context, *connect.Request[v1.ListUserEventRequest]) (*connect.Response[v1.ListUserEventResponse], error)
 }
 
 // NewEventServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -175,38 +175,38 @@ type EventServiceHandler interface {
 //
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
-func NewEventServiceHandler(svc EventServiceHandler, opts ...connect_go.HandlerOption) (string, http.Handler) {
-	eventServiceCreateEventHandler := connect_go.NewUnaryHandler(
+func NewEventServiceHandler(svc EventServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
+	eventServiceCreateEventHandler := connect.NewUnaryHandler(
 		EventServiceCreateEventProcedure,
 		svc.CreateEvent,
 		opts...,
 	)
-	eventServiceUpdateEventHandler := connect_go.NewUnaryHandler(
+	eventServiceUpdateEventHandler := connect.NewUnaryHandler(
 		EventServiceUpdateEventProcedure,
 		svc.UpdateEvent,
 		opts...,
 	)
-	eventServiceDeleteEventHandler := connect_go.NewUnaryHandler(
+	eventServiceDeleteEventHandler := connect.NewUnaryHandler(
 		EventServiceDeleteEventProcedure,
 		svc.DeleteEvent,
 		opts...,
 	)
-	eventServiceGetEventHandler := connect_go.NewUnaryHandler(
+	eventServiceGetEventHandler := connect.NewUnaryHandler(
 		EventServiceGetEventProcedure,
 		svc.GetEvent,
 		opts...,
 	)
-	eventServiceListActiveEventHandler := connect_go.NewUnaryHandler(
+	eventServiceListActiveEventHandler := connect.NewUnaryHandler(
 		EventServiceListActiveEventProcedure,
 		svc.ListActiveEvent,
 		opts...,
 	)
-	eventServiceListEventHandler := connect_go.NewUnaryHandler(
+	eventServiceListEventHandler := connect.NewUnaryHandler(
 		EventServiceListEventProcedure,
 		svc.ListEvent,
 		opts...,
 	)
-	eventServiceListUserEventHandler := connect_go.NewUnaryHandler(
+	eventServiceListUserEventHandler := connect.NewUnaryHandler(
 		EventServiceListUserEventProcedure,
 		svc.ListUserEvent,
 		opts...,
@@ -236,30 +236,30 @@ func NewEventServiceHandler(svc EventServiceHandler, opts ...connect_go.HandlerO
 // UnimplementedEventServiceHandler returns CodeUnimplemented from all methods.
 type UnimplementedEventServiceHandler struct{}
 
-func (UnimplementedEventServiceHandler) CreateEvent(context.Context, *connect_go.Request[v1.CreateEventRequest]) (*connect_go.Response[v1.CreateEventResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("event.v1.EventService.CreateEvent is not implemented"))
+func (UnimplementedEventServiceHandler) CreateEvent(context.Context, *connect.Request[v1.CreateEventRequest]) (*connect.Response[v1.CreateEventResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("event.v1.EventService.CreateEvent is not implemented"))
 }
 
-func (UnimplementedEventServiceHandler) UpdateEvent(context.Context, *connect_go.Request[v1.UpdateEventRequest]) (*connect_go.Response[v1.UpdateEventResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("event.v1.EventService.UpdateEvent is not implemented"))
+func (UnimplementedEventServiceHandler) UpdateEvent(context.Context, *connect.Request[v1.UpdateEventRequest]) (*connect.Response[v1.UpdateEventResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("event.v1.EventService.UpdateEvent is not implemented"))
 }
 
-func (UnimplementedEventServiceHandler) DeleteEvent(context.Context, *connect_go.Request[v1.DeleteEventRequest]) (*connect_go.Response[v1.DeleteEventResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("event.v1.EventService.DeleteEvent is not implemented"))
+func (UnimplementedEventServiceHandler) DeleteEvent(context.Context, *connect.Request[v1.DeleteEventRequest]) (*connect.Response[v1.DeleteEventResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("event.v1.EventService.DeleteEvent is not implemented"))
 }
 
-func (UnimplementedEventServiceHandler) GetEvent(context.Context, *connect_go.Request[v1.GetEventRequest]) (*connect_go.Response[v1.GetEventResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("event.v1.EventService.GetEvent is not implemented"))
+func (UnimplementedEventServiceHandler) GetEvent(context.Context, *connect.Request[v1.GetEventRequest]) (*connect.Response[v1.GetEventResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("event.v1.EventService.GetEvent is not implemented"))
 }
 
-func (UnimplementedEventServiceHandler) ListActiveEvent(context.Context, *connect_go.Request[v1.ListActiveEventRequest]) (*connect_go.Response[v1.ListActiveEventResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("event.v1.EventService.ListActiveEvent is not implemented"))
+func (UnimplementedEventServiceHandler) ListActiveEvent(context.Context, *connect.Request[v1.ListActiveEventRequest]) (*connect.Response[v1.ListActiveEventResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("event.v1.EventService.ListActiveEvent is not implemented"))
 }
 
-func (UnimplementedEventServiceHandler) ListEvent(context.Context, *connect_go.Request[v1.ListEventRequest]) (*connect_go.Response[v1.ListEventResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("event.v1.EventService.ListEvent is not implemented"))
+func (UnimplementedEventServiceHandler) ListEvent(context.Context, *connect.Request[v1.ListEventRequest]) (*connect.Response[v1.ListEventResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("event.v1.EventService.ListEvent is not implemented"))
 }
 
-func (UnimplementedEventServiceHandler) ListUserEvent(context.Context, *connect_go.Request[v1.ListUserEventRequest]) (*connect_go.Response[v1.ListUserEventResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("event.v1.EventService.ListUserEvent is not implemented"))
+func (UnimplementedEventServiceHandler) ListUserEvent(context.Context, *connect.Request[v1.ListUserEventRequest]) (*connect.Response[v1.ListUserEventResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("event.v1.EventService.ListUserEvent is not implemented"))
 }

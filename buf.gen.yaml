@@ -3,12 +3,12 @@ plugins:
   - plugin: buf.build/protocolbuffers/go
     out: gen
     opt: paths=source_relative
-  - plugin: buf.build/bufbuild/connect-go
+  - plugin: buf.build/connectrpc/go
     out: gen
     opt: paths=source_relative
   - plugin: buf.build/bufbuild/es
     out: frontend/src/gen
     opt: target=js+dts
-  - plugin: buf.build/bufbuild/connect-web
+  - plugin: buf.build/bufbuild/connect-es
     out: frontend/src/gen
     opt: target=js+dts

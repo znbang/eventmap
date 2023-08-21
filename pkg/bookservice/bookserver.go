@@ -5,7 +5,7 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/bufbuild/connect-go"
+	"connectrpc.com/connect"
 	"github.com/mitchellh/mapstructure"
 	v1 "github.com/znbang/eventmap/gen/book/v1"
 	"github.com/znbang/eventmap/internal/mvc"

@@ -5,9 +5,9 @@
 package bookv1connect
 
 import (
+	connect "connectrpc.com/connect"
 	context "context"
 	errors "errors"
-	connect_go "github.com/bufbuild/connect-go"
 	v1 "github.com/znbang/eventmap/gen/book/v1"
 	http "net/http"
 	strings "strings"
@@ -18,7 +18,7 @@ import (
 // generated with a version of connect newer than the one compiled into your binary. You can fix the
 // problem by either regenerating this code with an older version of connect or updating the connect
 // version compiled into your binary.
-const _ = connect_go.IsAtLeastVersion0_1_0
+const _ = connect.IsAtLeastVersion0_1_0
 
 const (
 	// BookServiceName is the fully-qualified name of the BookService service.
@@ -65,19 +65,19 @@ const (
 
 // BookServiceClient is a client for the book.v1.BookService service.
 type BookServiceClient interface {
-	CreateBook(context.Context, *connect_go.Request[v1.CreateBookRequest]) (*connect_go.Response[v1.CreateBookResponse], error)
-	UpdateBook(context.Context, *connect_go.Request[v1.UpdateBookRequest]) (*connect_go.Response[v1.UpdateBookResponse], error)
-	DeleteBook(context.Context, *connect_go.Request[v1.DeleteBookRequest]) (*connect_go.Response[v1.DeleteBookResponse], error)
-	DeleteChapter(context.Context, *connect_go.Request[v1.DeleteChapterRequest]) (*connect_go.Response[v1.DeleteChapterResponse], error)
-	GetBook(context.Context, *connect_go.Request[v1.GetBookRequest]) (*connect_go.Response[v1.GetBookResponse], error)
-	GetToc(context.Context, *connect_go.Request[v1.GetTocRequest]) (*connect_go.Response[v1.GetTocResponse], error)
-	GetChapter(context.Context, *connect_go.Request[v1.GetChapterRequest]) (*connect_go.Response[v1.GetChapterResponse], error)
-	ListBook(context.Context, *connect_go.Request[v1.ListBookRequest]) (*connect_go.Response[v1.ListBookResponse], error)
-	SyncNew(context.Context, *connect_go.Request[v1.SyncNewRequest]) (*connect_go.Response[v1.SyncNewResponse], error)
-	SyncAll(context.Context, *connect_go.Request[v1.SyncAllRequest]) (*connect_go.Response[v1.SyncAllResponse], error)
-	StopSync(context.Context, *connect_go.Request[v1.StopSyncRequest]) (*connect_go.Response[v1.StopSyncResponse], error)
-	SyncStatus(context.Context, *connect_go.Request[v1.SyncStatusRequest]) (*connect_go.ServerStreamForClient[v1.SyncStatusResponse], error)
-	DownloadBook(context.Context, *connect_go.Request[v1.DownloadBookRequest]) (*connect_go.Response[v1.DownloadBookResponse], error)
+	CreateBook(context.Context, *connect.Request[v1.CreateBookRequest]) (*connect.Response[v1.CreateBookResponse], error)
+	UpdateBook(context.Context, *connect.Request[v1.UpdateBookRequest]) (*connect.Response[v1.UpdateBookResponse], error)
+	DeleteBook(context.Context, *connect.Request[v1.DeleteBookRequest]) (*connect.Response[v1.DeleteBookResponse], error)
+	DeleteChapter(context.Context, *connect.Request[v1.DeleteChapterRequest]) (*connect.Response[v1.DeleteChapterResponse], error)
+	GetBook(context.Context, *connect.Request[v1.GetBookRequest]) (*connect.Response[v1.GetBookResponse], error)
+	GetToc(context.Context, *connect.Request[v1.GetTocRequest]) (*connect.Response[v1.GetTocResponse], error)
+	GetChapter(context.Context, *connect.Request[v1.GetChapterRequest]) (*connect.Response[v1.GetChapterResponse], error)
+	ListBook(context.Context, *connect.Request[v1.ListBookRequest]) (*connect.Response[v1.ListBookResponse], error)
+	SyncNew(context.Context, *connect.Request[v1.SyncNewRequest]) (*connect.Response[v1.SyncNewResponse], error)
+	SyncAll(context.Context, *connect.Request[v1.SyncAllRequest]) (*connect.Response[v1.SyncAllResponse], error)
+	StopSync(context.Context, *connect.Request[v1.StopSyncRequest]) (*connect.Response[v1.StopSyncResponse], error)
+	SyncStatus(context.Context, *connect.Request[v1.SyncStatusRequest]) (*connect.ServerStreamForClient[v1.SyncStatusResponse], error)
+	DownloadBook(context.Context, *connect.Request[v1.DownloadBookRequest]) (*connect.Response[v1.DownloadBookResponse], error)
 }
 
 // NewBookServiceClient constructs a client for the book.v1.BookService service. By default, it uses
@@ -87,70 +87,70 @@ type BookServiceClient interface {
 //
 // The URL supplied here should be the base URL for the Connect or gRPC server (for example,
 // http://api.acme.com or https://acme.com/grpc).
-func NewBookServiceClient(httpClient connect_go.HTTPClient, baseURL string, opts ...connect_go.ClientOption) BookServiceClient {
+func NewBookServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...connect.ClientOption) BookServiceClient {
 	baseURL = strings.TrimRight(baseURL, "/")
 	return &bookServiceClient{
-		createBook: connect_go.NewClient[v1.CreateBookRequest, v1.CreateBookResponse](
+		createBook: connect.NewClient[v1.CreateBookRequest, v1.CreateBookResponse](
 			httpClient,
 			baseURL+BookServiceCreateBookProcedure,
 			opts...,
 		),
-		updateBook: connect_go.NewClient[v1.UpdateBookRequest, v1.UpdateBookResponse](
+		updateBook: connect.NewClient[v1.UpdateBookRequest, v1.UpdateBookResponse](
 			httpClient,
 			baseURL+BookServiceUpdateBookProcedure,
 			opts...,
 		),
-		deleteBook: connect_go.NewClient[v1.DeleteBookRequest, v1.DeleteBookResponse](
+		deleteBook: connect.NewClient[v1.DeleteBookRequest, v1.DeleteBookResponse](
 			httpClient,
 			baseURL+BookServiceDeleteBookProcedure,
 			opts...,
 		),
-		deleteChapter: connect_go.NewClient[v1.DeleteChapterRequest, v1.DeleteChapterResponse](
+		deleteChapter: connect.NewClient[v1.DeleteChapterRequest, v1.DeleteChapterResponse](
 			httpClient,
 			baseURL+BookServiceDeleteChapterProcedure,
 			opts...,
 		),
-		getBook: connect_go.NewClient[v1.GetBookRequest, v1.GetBookResponse](
+		getBook: connect.NewClient[v1.GetBookRequest, v1.GetBookResponse](
 			httpClient,
 			baseURL+BookServiceGetBookProcedure,
 			opts...,
 		),
-		getToc: connect_go.NewClient[v1.GetTocRequest, v1.GetTocResponse](
+		getToc: connect.NewClient[v1.GetTocRequest, v1.GetTocResponse](
 			httpClient,
 			baseURL+BookServiceGetTocProcedure,
 			opts...,
 		),
-		getChapter: connect_go.NewClient[v1.GetChapterRequest, v1.GetChapterResponse](
+		getChapter: connect.NewClient[v1.GetChapterRequest, v1.GetChapterResponse](
 			httpClient,
 			baseURL+BookServiceGetChapterProcedure,
 			opts...,
 		),
-		listBook: connect_go.NewClient[v1.ListBookRequest, v1.ListBookResponse](
+		listBook: connect.NewClient[v1.ListBookRequest, v1.ListBookResponse](
 			httpClient,
 			baseURL+BookServiceListBookProcedure,
 			opts...,
 		),
-		syncNew: connect_go.NewClient[v1.SyncNewRequest, v1.SyncNewResponse](
+		syncNew: connect.NewClient[v1.SyncNewRequest, v1.SyncNewResponse](
 			httpClient,
 			baseURL+BookServiceSyncNewProcedure,
 			opts...,
 		),
-		syncAll: connect_go.NewClient[v1.SyncAllRequest, v1.SyncAllResponse](
+		syncAll: connect.NewClient[v1.SyncAllRequest, v1.SyncAllResponse](
 			httpClient,
 			baseURL+BookServiceSyncAllProcedure,
 			opts...,
 		),
-		stopSync: connect_go.NewClient[v1.StopSyncRequest, v1.StopSyncResponse](
+		stopSync: connect.NewClient[v1.StopSyncRequest, v1.StopSyncResponse](
 			httpClient,
 			baseURL+BookServiceStopSyncProcedure,
 			opts...,
 		),
-		syncStatus: connect_go.NewClient[v1.SyncStatusRequest, v1.SyncStatusResponse](
+		syncStatus: connect.NewClient[v1.SyncStatusRequest, v1.SyncStatusResponse](
 			httpClient,
 			baseURL+BookServiceSyncStatusProcedure,
 			opts...,
 		),
-		downloadBook: connect_go.NewClient[v1.DownloadBookRequest, v1.DownloadBookResponse](
+		downloadBook: connect.NewClient[v1.DownloadBookRequest, v1.DownloadBookResponse](
 			httpClient,
 			baseURL+BookServiceDownloadBookProcedure,
 			opts...,
@@ -160,101 +160,101 @@ func NewBookServiceClient(httpClient connect_go.HTTPClient, baseURL string, opts
 
 // bookServiceClient implements BookServiceClient.
 type bookServiceClient struct {
-	createBook    *connect_go.Client[v1.CreateBookRequest, v1.CreateBookResponse]
-	updateBook    *connect_go.Client[v1.UpdateBookRequest, v1.UpdateBookResponse]
-	deleteBook    *connect_go.Client[v1.DeleteBookRequest, v1.DeleteBookResponse]
-	deleteChapter *connect_go.Client[v1.DeleteChapterRequest, v1.DeleteChapterResponse]
-	getBook       *connect_go.Client[v1.GetBookRequest, v1.GetBookResponse]
-	getToc        *connect_go.Client[v1.GetTocRequest, v1.GetTocResponse]
-	getChapter    *connect_go.Client[v1.GetChapterRequest, v1.GetChapterResponse]
-	listBook      *connect_go.Client[v1.ListBookRequest, v1.ListBookResponse]
-	syncNew       *connect_go.Client[v1.SyncNewRequest, v1.SyncNewResponse]
-	syncAll       *connect_go.Client[v1.SyncAllRequest, v1.SyncAllResponse]
-	stopSync      *connect_go.Client[v1.StopSyncRequest, v1.StopSyncResponse]
-	syncStatus    *connect_go.Client[v1.SyncStatusRequest, v1.SyncStatusResponse]
-	downloadBook  *connect_go.Client[v1.DownloadBookRequest, v1.DownloadBookResponse]
+	createBook    *connect.Client[v1.CreateBookRequest, v1.CreateBookResponse]
+	updateBook    *connect.Client[v1.UpdateBookRequest, v1.UpdateBookResponse]
+	deleteBook    *connect.Client[v1.DeleteBookRequest, v1.DeleteBookResponse]
+	deleteChapter *connect.Client[v1.DeleteChapterRequest, v1.DeleteChapterResponse]
+	getBook       *connect.Client[v1.GetBookRequest, v1.GetBookResponse]
+	getToc        *connect.Client[v1.GetTocRequest, v1.GetTocResponse]
+	getChapter    *connect.Client[v1.GetChapterRequest, v1.GetChapterResponse]
+	listBook      *connect.Client[v1.ListBookRequest, v1.ListBookResponse]
+	syncNew       *connect.Client[v1.SyncNewRequest, v1.SyncNewResponse]
+	syncAll       *connect.Client[v1.SyncAllRequest, v1.SyncAllResponse]
+	stopSync      *connect.Client[v1.StopSyncRequest, v1.StopSyncResponse]
+	syncStatus    *connect.Client[v1.SyncStatusRequest, v1.SyncStatusResponse]
+	downloadBook  *connect.Client[v1.DownloadBookRequest, v1.DownloadBookResponse]
 }
 
 // CreateBook calls book.v1.BookService.CreateBook.
-func (c *bookServiceClient) CreateBook(ctx context.Context, req *connect_go.Request[v1.CreateBookRequest]) (*connect_go.Response[v1.CreateBookResponse], error) {
+func (c *bookServiceClient) CreateBook(ctx context.Context, req *connect.Request[v1.CreateBookRequest]) (*connect.Response[v1.CreateBookResponse], error) {
 	return c.createBook.CallUnary(ctx, req)
 }
 
 // UpdateBook calls book.v1.BookService.UpdateBook.
-func (c *bookServiceClient) UpdateBook(ctx context.Context, req *connect_go.Request[v1.UpdateBookRequest]) (*connect_go.Response[v1.UpdateBookResponse], error) {
+func (c *bookServiceClient) UpdateBook(ctx context.Context, req *connect.Request[v1.UpdateBookRequest]) (*connect.Response[v1.UpdateBookResponse], error) {
 	return c.updateBook.CallUnary(ctx, req)
 }
 
 // DeleteBook calls book.v1.BookService.DeleteBook.
-func (c *bookServiceClient) DeleteBook(ctx context.Context, req *connect_go.Request[v1.DeleteBookRequest]) (*connect_go.Response[v1.DeleteBookResponse], error) {
+func (c *bookServiceClient) DeleteBook(ctx context.Context, req *connect.Request[v1.DeleteBookRequest]) (*connect.Response[v1.DeleteBookResponse], error) {
 	return c.deleteBook.CallUnary(ctx, req)
 }
 
 // DeleteChapter calls book.v1.BookService.DeleteChapter.
-func (c *bookServiceClient) DeleteChapter(ctx context.Context, req *connect_go.Request[v1.DeleteChapterRequest]) (*connect_go.Response[v1.DeleteChapterResponse], error) {
+func (c *bookServiceClient) DeleteChapter(ctx context.Context, req *connect.Request[v1.DeleteChapterRequest]) (*connect.Response[v1.DeleteChapterResponse], error) {
 	return c.deleteChapter.CallUnary(ctx, req)
 }
 
 // GetBook calls book.v1.BookService.GetBook.
-func (c *bookServiceClient) GetBook(ctx context.Context, req *connect_go.Request[v1.GetBookRequest]) (*connect_go.Response[v1.GetBookResponse], error) {
+func (c *bookServiceClient) GetBook(ctx context.Context, req *connect.Request[v1.GetBookRequest]) (*connect.Response[v1.GetBookResponse], error) {
 	return c.getBook.CallUnary(ctx, req)
 }
 
 // GetToc calls book.v1.BookService.GetToc.
-func (c *bookServiceClient) GetToc(ctx context.Context, req *connect_go.Request[v1.GetTocRequest]) (*connect_go.Response[v1.GetTocResponse], error) {
+func (c *bookServiceClient) GetToc(ctx context.Context, req *connect.Request[v1.GetTocRequest]) (*connect.Response[v1.GetTocResponse], error) {
 	return c.getToc.CallUnary(ctx, req)
 }
 
 // GetChapter calls book.v1.BookService.GetChapter.
-func (c *bookServiceClient) GetChapter(ctx context.Context, req *connect_go.Request[v1.GetChapterRequest]) (*connect_go.Response[v1.GetChapterResponse], error) {
+func (c *bookServiceClient) GetChapter(ctx context.Context, req *connect.Request[v1.GetChapterRequest]) (*connect.Response[v1.GetChapterResponse], error) {
 	return c.getChapter.CallUnary(ctx, req)
 }
 
 // ListBook calls book.v1.BookService.ListBook.
-func (c *bookServiceClient) ListBook(ctx context.Context, req *connect_go.Request[v1.ListBookRequest]) (*connect_go.Response[v1.ListBookResponse], error) {
+func (c *bookServiceClient) ListBook(ctx context.Context, req *connect.Request[v1.ListBookRequest]) (*connect.Response[v1.ListBookResponse], error) {
 	return c.listBook.CallUnary(ctx, req)
 }
 
 // SyncNew calls book.v1.BookService.SyncNew.
-func (c *bookServiceClient) SyncNew(ctx context.Context, req *connect_go.Request[v1.SyncNewRequest]) (*connect_go.Response[v1.SyncNewResponse], error) {
+func (c *bookServiceClient) SyncNew(ctx context.Context, req *connect.Request[v1.SyncNewRequest]) (*connect.Response[v1.SyncNewResponse], error) {
 	return c.syncNew.CallUnary(ctx, req)
 }
 
 // SyncAll calls book.v1.BookService.SyncAll.
-func (c *bookServiceClient) SyncAll(ctx context.Context, req *connect_go.Request[v1.SyncAllRequest]) (*connect_go.Response[v1.SyncAllResponse], error) {
+func (c *bookServiceClient) SyncAll(ctx context.Context, req *connect.Request[v1.SyncAllRequest]) (*connect.Response[v1.SyncAllResponse], error) {
 	return c.syncAll.CallUnary(ctx, req)
 }
 
 // StopSync calls book.v1.BookService.StopSync.
-func (c *bookServiceClient) StopSync(ctx context.Context, req *connect_go.Request[v1.StopSyncRequest]) (*connect_go.Response[v1.StopSyncResponse], error) {
+func (c *bookServiceClient) StopSync(ctx context.Context, req *connect.Request[v1.StopSyncRequest]) (*connect.Response[v1.StopSyncResponse], error) {
 	return c.stopSync.CallUnary(ctx, req)
 }
 
 // SyncStatus calls book.v1.BookService.SyncStatus.
-func (c *bookServiceClient) SyncStatus(ctx context.Context, req *connect_go.Request[v1.SyncStatusRequest]) (*connect_go.ServerStreamForClient[v1.SyncStatusResponse], error) {
+func (c *bookServiceClient) SyncStatus(ctx context.Context, req *connect.Request[v1.SyncStatusRequest]) (*connect.ServerStreamForClient[v1.SyncStatusResponse], error) {
 	return c.syncStatus.CallServerStream(ctx, req)
 }
 
 // DownloadBook calls book.v1.BookService.DownloadBook.
-func (c *bookServiceClient) DownloadBook(ctx context.Context, req *connect_go.Request[v1.DownloadBookRequest]) (*connect_go.Response[v1.DownloadBookResponse], error) {
+func (c *bookServiceClient) DownloadBook(ctx context.Context, req *connect.Request[v1.DownloadBookRequest]) (*connect.Response[v1.DownloadBookResponse], error) {
 	return c.downloadBook.CallUnary(ctx, req)
 }
 
 // BookServiceHandler is an implementation of the book.v1.BookService service.
 type BookServiceHandler interface {
-	CreateBook(context.Context, *connect_go.Request[v1.CreateBookRequest]) (*connect_go.Response[v1.CreateBookResponse], error)
-	UpdateBook(context.Context, *connect_go.Request[v1.UpdateBookRequest]) (*connect_go.Response[v1.UpdateBookResponse], error)
-	DeleteBook(context.Context, *connect_go.Request[v1.DeleteBookRequest]) (*connect_go.Response[v1.DeleteBookResponse], error)
-	DeleteChapter(context.Context, *connect_go.Request[v1.DeleteChapterRequest]) (*connect_go.Response[v1.DeleteChapterResponse], error)
-	GetBook(context.Context, *connect_go.Request[v1.GetBookRequest]) (*connect_go.Response[v1.GetBookResponse], error)
-	GetToc(context.Context, *connect_go.Request[v1.GetTocRequest]) (*connect_go.Response[v1.GetTocResponse], error)
-	GetChapter(context.Context, *connect_go.Request[v1.GetChapterRequest]) (*connect_go.Response[v1.GetChapterResponse], error)
-	ListBook(context.Context, *connect_go.Request[v1.ListBookRequest]) (*connect_go.Response[v1.ListBookResponse], error)
-	SyncNew(context.Context, *connect_go.Request[v1.SyncNewRequest]) (*connect_go.Response[v1.SyncNewResponse], error)
-	SyncAll(context.Context, *connect_go.Request[v1.SyncAllRequest]) (*connect_go.Response[v1.SyncAllResponse], error)
-	StopSync(context.Context, *connect_go.Request[v1.StopSyncRequest]) (*connect_go.Response[v1.StopSyncResponse], error)
-	SyncStatus(context.Context, *connect_go.Request[v1.SyncStatusRequest], *connect_go.ServerStream[v1.SyncStatusResponse]) error
-	DownloadBook(context.Context, *connect_go.Request[v1.DownloadBookRequest]) (*connect_go.Response[v1.DownloadBookResponse], error)
+	CreateBook(context.Context, *connect.Request[v1.CreateBookRequest]) (*connect.Response[v1.CreateBookResponse], error)
+	UpdateBook(context.Context, *connect.Request[v1.UpdateBookRequest]) (*connect.Response[v1.UpdateBookResponse], error)
+	DeleteBook(context.Context, *connect.Request[v1.DeleteBookRequest]) (*connect.Response[v1.DeleteBookResponse], error)
+	DeleteChapter(context.Context, *connect.Request[v1.DeleteChapterRequest]) (*connect.Response[v1.DeleteChapterResponse], error)
+	GetBook(context.Context, *connect.Request[v1.GetBookRequest]) (*connect.Response[v1.GetBookResponse], error)
+	GetToc(context.Context, *connect.Request[v1.GetTocRequest]) (*connect.Response[v1.GetTocResponse], error)
+	GetChapter(context.Context, *connect.Request[v1.GetChapterRequest]) (*connect.Response[v1.GetChapterResponse], error)
+	ListBook(context.Context, *connect.Request[v1.ListBookRequest]) (*connect.Response[v1.ListBookResponse], error)
+	SyncNew(context.Context, *connect.Request[v1.SyncNewRequest]) (*connect.Response[v1.SyncNewResponse], error)
+	SyncAll(context.Context, *connect.Request[v1.SyncAllRequest]) (*connect.Response[v1.SyncAllResponse], error)
+	StopSync(context.Context, *connect.Request[v1.StopSyncRequest]) (*connect.Response[v1.StopSyncResponse], error)
+	SyncStatus(context.Context, *connect.Request[v1.SyncStatusRequest], *connect.ServerStream[v1.SyncStatusResponse]) error
+	DownloadBook(context.Context, *connect.Request[v1.DownloadBookRequest]) (*connect.Response[v1.DownloadBookResponse], error)
 }
 
 // NewBookServiceHandler builds an HTTP handler from the service implementation. It returns the path
@@ -262,68 +262,68 @@ type BookServiceHandler interface {
 //
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
-func NewBookServiceHandler(svc BookServiceHandler, opts ...connect_go.HandlerOption) (string, http.Handler) {
-	bookServiceCreateBookHandler := connect_go.NewUnaryHandler(
+func NewBookServiceHandler(svc BookServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
+	bookServiceCreateBookHandler := connect.NewUnaryHandler(
 		BookServiceCreateBookProcedure,
 		svc.CreateBook,
 		opts...,
 	)
-	bookServiceUpdateBookHandler := connect_go.NewUnaryHandler(
+	bookServiceUpdateBookHandler := connect.NewUnaryHandler(
 		BookServiceUpdateBookProcedure,
 		svc.UpdateBook,
 		opts...,
 	)
-	bookServiceDeleteBookHandler := connect_go.NewUnaryHandler(
+	bookServiceDeleteBookHandler := connect.NewUnaryHandler(
 		BookServiceDeleteBookProcedure,
 		svc.DeleteBook,
 		opts...,
 	)
-	bookServiceDeleteChapterHandler := connect_go.NewUnaryHandler(
+	bookServiceDeleteChapterHandler := connect.NewUnaryHandler(
 		BookServiceDeleteChapterProcedure,
 		svc.DeleteChapter,
 		opts...,
 	)
-	bookServiceGetBookHandler := connect_go.NewUnaryHandler(
+	bookServiceGetBookHandler := connect.NewUnaryHandler(
 		BookServiceGetBookProcedure,
 		svc.GetBook,
 		opts...,
 	)
-	bookServiceGetTocHandler := connect_go.NewUnaryHandler(
+	bookServiceGetTocHandler := connect.NewUnaryHandler(
 		BookServiceGetTocProcedure,
 		svc.GetToc,
 		opts...,
 	)
-	bookServiceGetChapterHandler := connect_go.NewUnaryHandler(
+	bookServiceGetChapterHandler := connect.NewUnaryHandler(
 		BookServiceGetChapterProcedure,
 		svc.GetChapter,
 		opts...,
 	)
-	bookServiceListBookHandler := connect_go.NewUnaryHandler(
+	bookServiceListBookHandler := connect.NewUnaryHandler(
 		BookServiceListBookProcedure,
 		svc.ListBook,
 		opts...,
 	)
-	bookServiceSyncNewHandler := connect_go.NewUnaryHandler(
+	bookServiceSyncNewHandler := connect.NewUnaryHandler(
 		BookServiceSyncNewProcedure,
 		svc.SyncNew,
 		opts...,
 	)
-	bookServiceSyncAllHandler := connect_go.NewUnaryHandler(
+	bookServiceSyncAllHandler := connect.NewUnaryHandler(
 		BookServiceSyncAllProcedure,
 		svc.SyncAll,
 		opts...,
 	)
-	bookServiceStopSyncHandler := connect_go.NewUnaryHandler(
+	bookServiceStopSyncHandler := connect.NewUnaryHandler(
 		BookServiceStopSyncProcedure,
 		svc.StopSync,
 		opts...,
 	)
-	bookServiceSyncStatusHandler := connect_go.NewServerStreamHandler(
+	bookServiceSyncStatusHandler := connect.NewServerStreamHandler(
 		BookServiceSyncStatusProcedure,
 		svc.SyncStatus,
 		opts...,
 	)
-	bookServiceDownloadBookHandler := connect_go.NewUnaryHandler(
+	bookServiceDownloadBookHandler := connect.NewUnaryHandler(
 		BookServiceDownloadBookProcedure,
 		svc.DownloadBook,
 		opts...,
@@ -365,54 +365,54 @@ func NewBookServiceHandler(svc BookServiceHandler, opts ...connect_go.HandlerOpt
 // UnimplementedBookServiceHandler returns CodeUnimplemented from all methods.
 type UnimplementedBookServiceHandler struct{}
 
-func (UnimplementedBookServiceHandler) CreateBook(context.Context, *connect_go.Request[v1.CreateBookRequest]) (*connect_go.Response[v1.CreateBookResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("book.v1.BookService.CreateBook is not implemented"))
+func (UnimplementedBookServiceHandler) CreateBook(context.Context, *connect.Request[v1.CreateBookRequest]) (*connect.Response[v1.CreateBookResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("book.v1.BookService.CreateBook is not implemented"))
 }
 
-func (UnimplementedBookServiceHandler) UpdateBook(context.Context, *connect_go.Request[v1.UpdateBookRequest]) (*connect_go.Response[v1.UpdateBookResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("book.v1.BookService.UpdateBook is not implemented"))
+func (UnimplementedBookServiceHandler) UpdateBook(context.Context, *connect.Request[v1.UpdateBookRequest]) (*connect.Response[v1.UpdateBookResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("book.v1.BookService.UpdateBook is not implemented"))
 }
 
-func (UnimplementedBookServiceHandler) DeleteBook(context.Context, *connect_go.Request[v1.DeleteBookRequest]) (*connect_go.Response[v1.DeleteBookResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("book.v1.BookService.DeleteBook is not implemented"))
+func (UnimplementedBookServiceHandler) DeleteBook(context.Context, *connect.Request[v1.DeleteBookRequest]) (*connect.Response[v1.DeleteBookResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("book.v1.BookService.DeleteBook is not implemented"))
 }
 
-func (UnimplementedBookServiceHandler) DeleteChapter(context.Context, *connect_go.Request[v1.DeleteChapterRequest]) (*connect_go.Response[v1.DeleteChapterResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("book.v1.BookService.DeleteChapter is not implemented"))
+func (UnimplementedBookServiceHandler) DeleteChapter(context.Context, *connect.Request[v1.DeleteChapterRequest]) (*connect.Response[v1.DeleteChapterResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("book.v1.BookService.DeleteChapter is not implemented"))
 }
 
-func (UnimplementedBookServiceHandler) GetBook(context.Context, *connect_go.Request[v1.GetBookRequest]) (*connect_go.Response[v1.GetBookResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("book.v1.BookService.GetBook is not implemented"))
+func (UnimplementedBookServiceHandler) GetBook(context.Context, *connect.Request[v1.GetBookRequest]) (*connect.Response[v1.GetBookResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("book.v1.BookService.GetBook is not implemented"))
 }
 
-func (UnimplementedBookServiceHandler) GetToc(context.Context, *connect_go.Request[v1.GetTocRequest]) (*connect_go.Response[v1.GetTocResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("book.v1.BookService.GetToc is not implemented"))
+func (UnimplementedBookServiceHandler) GetToc(context.Context, *connect.Request[v1.GetTocRequest]) (*connect.Response[v1.GetTocResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("book.v1.BookService.GetToc is not implemented"))
 }
 
-func (UnimplementedBookServiceHandler) GetChapter(context.Context, *connect_go.Request[v1.GetChapterRequest]) (*connect_go.Response[v1.GetChapterResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("book.v1.BookService.GetChapter is not implemented"))
+func (UnimplementedBookServiceHandler) GetChapter(context.Context, *connect.Request[v1.GetChapterRequest]) (*connect.Response[v1.GetChapterResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("book.v1.BookService.GetChapter is not implemented"))
 }
 
-func (UnimplementedBookServiceHandler) ListBook(context.Context, *connect_go.Request[v1.ListBookRequest]) (*connect_go.Response[v1.ListBookResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("book.v1.BookService.ListBook is not implemented"))
+func (UnimplementedBookServiceHandler) ListBook(context.Context, *connect.Request[v1.ListBookRequest]) (*connect.Response[v1.ListBookResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("book.v1.BookService.ListBook is not implemented"))
 }
 
-func (UnimplementedBookServiceHandler) SyncNew(context.Context, *connect_go.Request[v1.SyncNewRequest]) (*connect_go.Response[v1.SyncNewResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("book.v1.BookService.SyncNew is not implemented"))
+func (UnimplementedBookServiceHandler) SyncNew(context.Context, *connect.Request[v1.SyncNewRequest]) (*connect.Response[v1.SyncNewResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("book.v1.BookService.SyncNew is not implemented"))
 }
 
-func (UnimplementedBookServiceHandler) SyncAll(context.Context, *connect_go.Request[v1.SyncAllRequest]) (*connect_go.Response[v1.SyncAllResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("book.v1.BookService.SyncAll is not implemented"))
+func (UnimplementedBookServiceHandler) SyncAll(context.Context, *connect.Request[v1.SyncAllRequest]) (*connect.Response[v1.SyncAllResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("book.v1.BookService.SyncAll is not implemented"))
 }
 
-func (UnimplementedBookServiceHandler) StopSync(context.Context, *connect_go.Request[v1.StopSyncRequest]) (*connect_go.Response[v1.StopSyncResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("book.v1.BookService.StopSync is not implemented"))
+func (UnimplementedBookServiceHandler) StopSync(context.Context, *connect.Request[v1.StopSyncRequest]) (*connect.Response[v1.StopSyncResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("book.v1.BookService.StopSync is not implemented"))
 }
 
-func (UnimplementedBookServiceHandler) SyncStatus(context.Context, *connect_go.Request[v1.SyncStatusRequest], *connect_go.ServerStream[v1.SyncStatusResponse]) error {
-	return connect_go.NewError(connect_go.CodeUnimplemented, errors.New("book.v1.BookService.SyncStatus is not implemented"))
+func (UnimplementedBookServiceHandler) SyncStatus(context.Context, *connect.Request[v1.SyncStatusRequest], *connect.ServerStream[v1.SyncStatusResponse]) error {
+	return connect.NewError(connect.CodeUnimplemented, errors.New("book.v1.BookService.SyncStatus is not implemented"))
 }
 
-func (UnimplementedBookServiceHandler) DownloadBook(context.Context, *connect_go.Request[v1.DownloadBookRequest]) (*connect_go.Response[v1.DownloadBookResponse], error) {
-	return nil, connect_go.NewError(connect_go.CodeUnimplemented, errors.New("book.v1.BookService.DownloadBook is not implemented"))
+func (UnimplementedBookServiceHandler) DownloadBook(context.Context, *connect.Request[v1.DownloadBookRequest]) (*connect.Response[v1.DownloadBookResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("book.v1.BookService.DownloadBook is not implemented"))
 }

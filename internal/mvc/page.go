@@ -3,7 +3,7 @@ package mvc
 import (
 	"errors"
 
-	"github.com/bufbuild/connect-go"
+	"connectrpc.com/connect"
 	"github.com/znbang/eventmap/gen/errdetails"
 	"github.com/znbang/validation"
 )
