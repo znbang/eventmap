@@ -1,7 +1,7 @@
 syntax = "proto3";
 package event.v1;
 import "google/protobuf/timestamp.proto";
-option go_package = "github.com/znbang/eventmap/gen/event/v1;eventv1";
+option go_package = "github.com/znbang/eventmap/internal/gen/event/v1;eventv1";
 
 service EventService {
   rpc CreateEvent (CreateEventRequest) returns (CreateEventResponse);

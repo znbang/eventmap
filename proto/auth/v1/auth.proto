@@ -1,6 +1,6 @@
 syntax = "proto3";
 package auth.v1;
-option go_package = "github.com/znbang/eventmap/gen/auth/v1;authv1";
+option go_package = "github.com/znbang/eventmap/internal/gen/auth/v1;authv1";
 
 service AuthService {
   rpc ListProvider (ListProviderRequest) returns (ListProviderResponse);

@@ -12,7 +12,7 @@ import (
 
 	"connectrpc.com/connect"
 	"github.com/golang-jwt/jwt"
-	v1 "github.com/znbang/eventmap/gen/auth/v1"
+	v1 "github.com/znbang/eventmap/internal/gen/auth/v1"
 	"github.com/znbang/eventmap/internal/env"
 	"github.com/znbang/eventmap/pkg/login"
 	"github.com/znbang/eventmap/pkg/userservice"

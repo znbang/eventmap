@@ -1,10 +1,10 @@
 version: v1
 plugins:
   - plugin: buf.build/protocolbuffers/go
-    out: gen
+    out: internal/gen
     opt: paths=source_relative
   - plugin: buf.build/connectrpc/go
-    out: gen
+    out: internal/gen
     opt: paths=source_relative
   - plugin: buf.build/bufbuild/es
     out: frontend/src/gen

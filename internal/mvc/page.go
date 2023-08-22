@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	"connectrpc.com/connect"
-	"github.com/znbang/eventmap/gen/errdetails"
+	"github.com/znbang/eventmap/internal/gen/errdetails"
 	"github.com/znbang/validation"
 )
 

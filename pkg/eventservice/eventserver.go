@@ -5,7 +5,7 @@ import (
 
 	"connectrpc.com/connect"
 	"github.com/mitchellh/mapstructure"
-	v1 "github.com/znbang/eventmap/gen/event/v1"
+	v1 "github.com/znbang/eventmap/internal/gen/event/v1"
 	"github.com/znbang/eventmap/internal/mvc"
 	"github.com/znbang/eventmap/pkg/auth"
 	"github.com/znbang/eventmap/pkg/userservice"

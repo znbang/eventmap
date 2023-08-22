@@ -8,7 +8,7 @@ import (
 	connect "connectrpc.com/connect"
 	context "context"
 	errors "errors"
-	v1 "github.com/znbang/eventmap/gen/book/v1"
+	v1 "github.com/znbang/eventmap/internal/gen/book/v1"
 	http "net/http"
 	strings "strings"
 )
