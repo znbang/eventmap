@@ -18,7 +18,7 @@ import (
 // generated with a version of connect newer than the one compiled into your binary. You can fix the
 // problem by either regenerating this code with an older version of connect or updating the connect
 // version compiled into your binary.
-const _ = connect.IsAtLeastVersion0_1_0
+const _ = connect.IsAtLeastVersion1_13_0
 
 const (
 	// EventServiceName is the fully-qualified name of the EventService service.
@@ -54,6 +54,18 @@ const (
 	EventServiceListUserEventProcedure = "/event.v1.EventService/ListUserEvent"
 )
 
+// These variables are the protoreflect.Descriptor objects for the RPCs defined in this package.
+var (
+	eventServiceServiceDescriptor               = v1.File_event_v1_event_proto.Services().ByName("EventService")
+	eventServiceCreateEventMethodDescriptor     = eventServiceServiceDescriptor.Methods().ByName("CreateEvent")
+	eventServiceUpdateEventMethodDescriptor     = eventServiceServiceDescriptor.Methods().ByName("UpdateEvent")
+	eventServiceDeleteEventMethodDescriptor     = eventServiceServiceDescriptor.Methods().ByName("DeleteEvent")
+	eventServiceGetEventMethodDescriptor        = eventServiceServiceDescriptor.Methods().ByName("GetEvent")
+	eventServiceListActiveEventMethodDescriptor = eventServiceServiceDescriptor.Methods().ByName("ListActiveEvent")
+	eventServiceListEventMethodDescriptor       = eventServiceServiceDescriptor.Methods().ByName("ListEvent")
+	eventServiceListUserEventMethodDescriptor   = eventServiceServiceDescriptor.Methods().ByName("ListUserEvent")
+)
+
 // EventServiceClient is a client for the event.v1.EventService service.
 type EventServiceClient interface {
 	CreateEvent(context.Context, *connect.Request[v1.CreateEventRequest]) (*connect.Response[v1.CreateEventResponse], error)
@@ -78,37 +90,44 @@ func NewEventServiceClient(httpClient connect.HTTPClient, baseURL string, opts .
 		createEvent: connect.NewClient[v1.CreateEventRequest, v1.CreateEventResponse](
 			httpClient,
 			baseURL+EventServiceCreateEventProcedure,
-			opts...,
+			connect.WithSchema(eventServiceCreateEventMethodDescriptor),
+			connect.WithClientOptions(opts...),
 		),
 		updateEvent: connect.NewClient[v1.UpdateEventRequest, v1.UpdateEventResponse](
 			httpClient,
 			baseURL+EventServiceUpdateEventProcedure,
-			opts...,
+			connect.WithSchema(eventServiceUpdateEventMethodDescriptor),
+			connect.WithClientOptions(opts...),
 		),
 		deleteEvent: connect.NewClient[v1.DeleteEventRequest, v1.DeleteEventResponse](
 			httpClient,
 			baseURL+EventServiceDeleteEventProcedure,
-			opts...,
+			connect.WithSchema(eventServiceDeleteEventMethodDescriptor),
+			connect.WithClientOptions(opts...),
 		),
 		getEvent: connect.NewClient[v1.GetEventRequest, v1.GetEventResponse](
 			httpClient,
 			baseURL+EventServiceGetEventProcedure,
-			opts...,
+			connect.WithSchema(eventServiceGetEventMethodDescriptor),
+			connect.WithClientOptions(opts...),
 		),
 		listActiveEvent: connect.NewClient[v1.ListActiveEventRequest, v1.ListActiveEventResponse](
 			httpClient,
 			baseURL+EventServiceListActiveEventProcedure,
-			opts...,
+			connect.WithSchema(eventServiceListActiveEventMethodDescriptor),
+			connect.WithClientOptions(opts...),
 		),
 		listEvent: connect.NewClient[v1.ListEventRequest, v1.ListEventResponse](
 			httpClient,
 			baseURL+EventServiceListEventProcedure,
-			opts...,
+			connect.WithSchema(eventServiceListEventMethodDescriptor),
+			connect.WithClientOptions(opts...),
 		),
 		listUserEvent: connect.NewClient[v1.ListUserEventRequest, v1.ListUserEventResponse](
 			httpClient,
 			baseURL+EventServiceListUserEventProcedure,
-			opts...,
+			connect.WithSchema(eventServiceListUserEventMethodDescriptor),
+			connect.WithClientOptions(opts...),
 		),
 	}
 }
@@ -179,37 +198,44 @@ func NewEventServiceHandler(svc EventServiceHandler, opts ...connect.HandlerOpti
 	eventServiceCreateEventHandler := connect.NewUnaryHandler(
 		EventServiceCreateEventProcedure,
 		svc.CreateEvent,
-		opts...,
+		connect.WithSchema(eventServiceCreateEventMethodDescriptor),
+		connect.WithHandlerOptions(opts...),
 	)
 	eventServiceUpdateEventHandler := connect.NewUnaryHandler(
 		EventServiceUpdateEventProcedure,
 		svc.UpdateEvent,
-		opts...,
+		connect.WithSchema(eventServiceUpdateEventMethodDescriptor),
+		connect.WithHandlerOptions(opts...),
 	)
 	eventServiceDeleteEventHandler := connect.NewUnaryHandler(
 		EventServiceDeleteEventProcedure,
 		svc.DeleteEvent,
-		opts...,
+		connect.WithSchema(eventServiceDeleteEventMethodDescriptor),
+		connect.WithHandlerOptions(opts...),
 	)
 	eventServiceGetEventHandler := connect.NewUnaryHandler(
 		EventServiceGetEventProcedure,
 		svc.GetEvent,
-		opts...,
+		connect.WithSchema(eventServiceGetEventMethodDescriptor),
+		connect.WithHandlerOptions(opts...),
 	)
 	eventServiceListActiveEventHandler := connect.NewUnaryHandler(
 		EventServiceListActiveEventProcedure,
 		svc.ListActiveEvent,
-		opts...,
+		connect.WithSchema(eventServiceListActiveEventMethodDescriptor),
+		connect.WithHandlerOptions(opts...),
 	)
 	eventServiceListEventHandler := connect.NewUnaryHandler(
 		EventServiceListEventProcedure,
 		svc.ListEvent,
-		opts...,
+		connect.WithSchema(eventServiceListEventMethodDescriptor),
+		connect.WithHandlerOptions(opts...),
 	)
 	eventServiceListUserEventHandler := connect.NewUnaryHandler(
 		EventServiceListUserEventProcedure,
 		svc.ListUserEvent,
-		opts...,
+		connect.WithSchema(eventServiceListUserEventMethodDescriptor),
+		connect.WithHandlerOptions(opts...),
 	)
 	return "/event.v1.EventService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {

@@ -18,7 +18,7 @@ import (
 // generated with a version of connect newer than the one compiled into your binary. You can fix the
 // problem by either regenerating this code with an older version of connect or updating the connect
 // version compiled into your binary.
-const _ = connect.IsAtLeastVersion0_1_0
+const _ = connect.IsAtLeastVersion1_13_0
 
 const (
 	// BookServiceName is the fully-qualified name of the BookService service.
@@ -63,6 +63,24 @@ const (
 	BookServiceDownloadBookProcedure = "/book.v1.BookService/DownloadBook"
 )
 
+// These variables are the protoreflect.Descriptor objects for the RPCs defined in this package.
+var (
+	bookServiceServiceDescriptor             = v1.File_book_v1_book_proto.Services().ByName("BookService")
+	bookServiceCreateBookMethodDescriptor    = bookServiceServiceDescriptor.Methods().ByName("CreateBook")
+	bookServiceUpdateBookMethodDescriptor    = bookServiceServiceDescriptor.Methods().ByName("UpdateBook")
+	bookServiceDeleteBookMethodDescriptor    = bookServiceServiceDescriptor.Methods().ByName("DeleteBook")
+	bookServiceDeleteChapterMethodDescriptor = bookServiceServiceDescriptor.Methods().ByName("DeleteChapter")
+	bookServiceGetBookMethodDescriptor       = bookServiceServiceDescriptor.Methods().ByName("GetBook")
+	bookServiceGetTocMethodDescriptor        = bookServiceServiceDescriptor.Methods().ByName("GetToc")
+	bookServiceGetChapterMethodDescriptor    = bookServiceServiceDescriptor.Methods().ByName("GetChapter")
+	bookServiceListBookMethodDescriptor      = bookServiceServiceDescriptor.Methods().ByName("ListBook")
+	bookServiceSyncNewMethodDescriptor       = bookServiceServiceDescriptor.Methods().ByName("SyncNew")
+	bookServiceSyncAllMethodDescriptor       = bookServiceServiceDescriptor.Methods().ByName("SyncAll")
+	bookServiceStopSyncMethodDescriptor      = bookServiceServiceDescriptor.Methods().ByName("StopSync")
+	bookServiceSyncStatusMethodDescriptor    = bookServiceServiceDescriptor.Methods().ByName("SyncStatus")
+	bookServiceDownloadBookMethodDescriptor  = bookServiceServiceDescriptor.Methods().ByName("DownloadBook")
+)
+
 // BookServiceClient is a client for the book.v1.BookService service.
 type BookServiceClient interface {
 	CreateBook(context.Context, *connect.Request[v1.CreateBookRequest]) (*connect.Response[v1.CreateBookResponse], error)
@@ -93,67 +111,80 @@ func NewBookServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 		createBook: connect.NewClient[v1.CreateBookRequest, v1.CreateBookResponse](
 			httpClient,
 			baseURL+BookServiceCreateBookProcedure,
-			opts...,
+			connect.WithSchema(bookServiceCreateBookMethodDescriptor),
+			connect.WithClientOptions(opts...),
 		),
 		updateBook: connect.NewClient[v1.UpdateBookRequest, v1.UpdateBookResponse](
 			httpClient,
 			baseURL+BookServiceUpdateBookProcedure,
-			opts...,
+			connect.WithSchema(bookServiceUpdateBookMethodDescriptor),
+			connect.WithClientOptions(opts...),
 		),
 		deleteBook: connect.NewClient[v1.DeleteBookRequest, v1.DeleteBookResponse](
 			httpClient,
 			baseURL+BookServiceDeleteBookProcedure,
-			opts...,
+			connect.WithSchema(bookServiceDeleteBookMethodDescriptor),
+			connect.WithClientOptions(opts...),
 		),
 		deleteChapter: connect.NewClient[v1.DeleteChapterRequest, v1.DeleteChapterResponse](
 			httpClient,
 			baseURL+BookServiceDeleteChapterProcedure,
-			opts...,
+			connect.WithSchema(bookServiceDeleteChapterMethodDescriptor),
+			connect.WithClientOptions(opts...),
 		),
 		getBook: connect.NewClient[v1.GetBookRequest, v1.GetBookResponse](
 			httpClient,
 			baseURL+BookServiceGetBookProcedure,
-			opts...,
+			connect.WithSchema(bookServiceGetBookMethodDescriptor),
+			connect.WithClientOptions(opts...),
 		),
 		getToc: connect.NewClient[v1.GetTocRequest, v1.GetTocResponse](
 			httpClient,
 			baseURL+BookServiceGetTocProcedure,
-			opts...,
+			connect.WithSchema(bookServiceGetTocMethodDescriptor),
+			connect.WithClientOptions(opts...),
 		),
 		getChapter: connect.NewClient[v1.GetChapterRequest, v1.GetChapterResponse](
 			httpClient,
 			baseURL+BookServiceGetChapterProcedure,
-			opts...,
+			connect.WithSchema(bookServiceGetChapterMethodDescriptor),
+			connect.WithClientOptions(opts...),
 		),
 		listBook: connect.NewClient[v1.ListBookRequest, v1.ListBookResponse](
 			httpClient,
 			baseURL+BookServiceListBookProcedure,
-			opts...,
+			connect.WithSchema(bookServiceListBookMethodDescriptor),
+			connect.WithClientOptions(opts...),
 		),
 		syncNew: connect.NewClient[v1.SyncNewRequest, v1.SyncNewResponse](
 			httpClient,
 			baseURL+BookServiceSyncNewProcedure,
-			opts...,
+			connect.WithSchema(bookServiceSyncNewMethodDescriptor),
+			connect.WithClientOptions(opts...),
 		),
 		syncAll: connect.NewClient[v1.SyncAllRequest, v1.SyncAllResponse](
 			httpClient,
 			baseURL+BookServiceSyncAllProcedure,
-			opts...,
+			connect.WithSchema(bookServiceSyncAllMethodDescriptor),
+			connect.WithClientOptions(opts...),
 		),
 		stopSync: connect.NewClient[v1.StopSyncRequest, v1.StopSyncResponse](
 			httpClient,
 			baseURL+BookServiceStopSyncProcedure,
-			opts...,
+			connect.WithSchema(bookServiceStopSyncMethodDescriptor),
+			connect.WithClientOptions(opts...),
 		),
 		syncStatus: connect.NewClient[v1.SyncStatusRequest, v1.SyncStatusResponse](
 			httpClient,
 			baseURL+BookServiceSyncStatusProcedure,
-			opts...,
+			connect.WithSchema(bookServiceSyncStatusMethodDescriptor),
+			connect.WithClientOptions(opts...),
 		),
 		downloadBook: connect.NewClient[v1.DownloadBookRequest, v1.DownloadBookResponse](
 			httpClient,
 			baseURL+BookServiceDownloadBookProcedure,
-			opts...,
+			connect.WithSchema(bookServiceDownloadBookMethodDescriptor),
+			connect.WithClientOptions(opts...),
 		),
 	}
 }
@@ -266,67 +297,80 @@ func NewBookServiceHandler(svc BookServiceHandler, opts ...connect.HandlerOption
 	bookServiceCreateBookHandler := connect.NewUnaryHandler(
 		BookServiceCreateBookProcedure,
 		svc.CreateBook,
-		opts...,
+		connect.WithSchema(bookServiceCreateBookMethodDescriptor),
+		connect.WithHandlerOptions(opts...),
 	)
 	bookServiceUpdateBookHandler := connect.NewUnaryHandler(
 		BookServiceUpdateBookProcedure,
 		svc.UpdateBook,
-		opts...,
+		connect.WithSchema(bookServiceUpdateBookMethodDescriptor),
+		connect.WithHandlerOptions(opts...),
 	)
 	bookServiceDeleteBookHandler := connect.NewUnaryHandler(
 		BookServiceDeleteBookProcedure,
 		svc.DeleteBook,
-		opts...,
+		connect.WithSchema(bookServiceDeleteBookMethodDescriptor),
+		connect.WithHandlerOptions(opts...),
 	)
 	bookServiceDeleteChapterHandler := connect.NewUnaryHandler(
 		BookServiceDeleteChapterProcedure,
 		svc.DeleteChapter,
-		opts...,
+		connect.WithSchema(bookServiceDeleteChapterMethodDescriptor),
+		connect.WithHandlerOptions(opts...),
 	)
 	bookServiceGetBookHandler := connect.NewUnaryHandler(
 		BookServiceGetBookProcedure,
 		svc.GetBook,
-		opts...,
+		connect.WithSchema(bookServiceGetBookMethodDescriptor),
+		connect.WithHandlerOptions(opts...),
 	)
 	bookServiceGetTocHandler := connect.NewUnaryHandler(
 		BookServiceGetTocProcedure,
 		svc.GetToc,
-		opts...,
+		connect.WithSchema(bookServiceGetTocMethodDescriptor),
+		connect.WithHandlerOptions(opts...),
 	)
 	bookServiceGetChapterHandler := connect.NewUnaryHandler(
 		BookServiceGetChapterProcedure,
 		svc.GetChapter,
-		opts...,
+		connect.WithSchema(bookServiceGetChapterMethodDescriptor),
+		connect.WithHandlerOptions(opts...),
 	)
 	bookServiceListBookHandler := connect.NewUnaryHandler(
 		BookServiceListBookProcedure,
 		svc.ListBook,
-		opts...,
+		connect.WithSchema(bookServiceListBookMethodDescriptor),
+		connect.WithHandlerOptions(opts...),
 	)
 	bookServiceSyncNewHandler := connect.NewUnaryHandler(
 		BookServiceSyncNewProcedure,
 		svc.SyncNew,
-		opts...,
+		connect.WithSchema(bookServiceSyncNewMethodDescriptor),
+		connect.WithHandlerOptions(opts...),
 	)
 	bookServiceSyncAllHandler := connect.NewUnaryHandler(
 		BookServiceSyncAllProcedure,
 		svc.SyncAll,
-		opts...,
+		connect.WithSchema(bookServiceSyncAllMethodDescriptor),
+		connect.WithHandlerOptions(opts...),
 	)
 	bookServiceStopSyncHandler := connect.NewUnaryHandler(
 		BookServiceStopSyncProcedure,
 		svc.StopSync,
-		opts...,
+		connect.WithSchema(bookServiceStopSyncMethodDescriptor),
+		connect.WithHandlerOptions(opts...),
 	)
 	bookServiceSyncStatusHandler := connect.NewServerStreamHandler(
 		BookServiceSyncStatusProcedure,
 		svc.SyncStatus,
-		opts...,
+		connect.WithSchema(bookServiceSyncStatusMethodDescriptor),
+		connect.WithHandlerOptions(opts...),
 	)
 	bookServiceDownloadBookHandler := connect.NewUnaryHandler(
 		BookServiceDownloadBookProcedure,
 		svc.DownloadBook,
-		opts...,
+		connect.WithSchema(bookServiceDownloadBookMethodDescriptor),
+		connect.WithHandlerOptions(opts...),
 	)
 	return "/book.v1.BookService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
