@@ -9,7 +9,7 @@ import (
 type BanXia struct{}
 
 func (s *BanXia) Supports(url string) bool {
-	return strings.HasPrefix(url, "https://www.banxia.co/")
+	return strings.HasPrefix(url, "https://www.xbanxia.com/")
 }
 
 func (s *BanXia) Download(result *Result, url string) error {
