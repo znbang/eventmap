@@ -9,7 +9,7 @@ import (
 type UUKanShuCom struct{}
 
 func (s *UUKanShuCom) Supports(url string) bool {
-	return strings.HasPrefix(url, "https://www.uukanshu.com/") || strings.HasPrefix(url, "https://tw.uukanshu.com/")
+	return strings.HasPrefix(url, "https://www.uukanshu.com/") || strings.HasPrefix(url, "https://tw.uukanshu.net/")
 }
 
 func (s *UUKanShuCom) Download(result *Result, url string) error {
