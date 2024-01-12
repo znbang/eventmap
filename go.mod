@@ -3,7 +3,7 @@ module github.com/znbang/eventmap
 go 1.21
 
 require (
-	connectrpc.com/connect v1.13.0
+	connectrpc.com/connect v1.14.0
 	github.com/PuerkitoBio/goquery v1.8.1
 	github.com/gocolly/colly/v2 v2.1.0
 	github.com/golang-jwt/jwt v3.2.2+incompatible
@@ -13,9 +13,9 @@ require (
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/oklog/ulid/v2 v2.1.0
 	github.com/znbang/validation v0.0.0-20230224070611-692a30e6c48a
-	golang.org/x/net v0.19.0
-	golang.org/x/oauth2 v0.15.0
-	google.golang.org/protobuf v1.31.0
+	golang.org/x/net v0.20.0
+	golang.org/x/oauth2 v0.16.0
+	google.golang.org/protobuf v1.32.0
 	gorm.io/driver/sqlite v1.5.4
 	gorm.io/gorm v1.25.5
 )
@@ -41,8 +41,8 @@ require (
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/saintfish/chardet v0.0.0-20120816061221-3af4cd4741ca // indirect
 	github.com/temoto/robotstxt v1.1.1 // indirect
-	golang.org/x/crypto v0.16.0 // indirect
-	golang.org/x/sys v0.15.0 // indirect
+	golang.org/x/crypto v0.18.0 // indirect
+	golang.org/x/sys v0.16.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 )
