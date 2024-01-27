@@ -28,10 +28,7 @@ func (s *UUKanShuCom) Download(result *Result, url string) error {
 	})
 
 	c.OnHTML("div#contentbox", func(e *colly.HTMLElement) {
-		result.Body = paragraphNode(e)
-		if result.Body == "" {
-			result.Body = textNode(e)
-		}
+		result.Body = textNode(e)
 	})
 
 	return c.Visit(url)

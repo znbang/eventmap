@@ -87,12 +87,10 @@ func textNode(e *colly.HTMLElement) string {
 	var sb strings.Builder
 
 	e.DOM.Contents().Each(func(i int, s *goquery.Selection) {
-		if goquery.NodeName(s) == "#text" {
-			line := strings.TrimSpace(s.Text())
-			if line != "" {
-				sb.WriteString(line)
-				sb.WriteString("\n")
-			}
+		line := strings.TrimSpace(s.Text())
+		if line != "" {
+			sb.WriteString(line)
+			sb.WriteString("\n")
 		}
 	})
 
