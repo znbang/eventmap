@@ -30,6 +30,7 @@ func New() *CrawlerService {
 			&BanXia{},
 			&BiQuGe{},
 			&Ck101{},
+			&Czbooks{},
 			&Ixdzs{},
 			&MiaoBiGe{},
 			&MingZW{},
