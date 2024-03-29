@@ -3,7 +3,7 @@ module github.com/znbang/eventmap
 go 1.22
 
 require (
-	connectrpc.com/connect v1.15.0
+	connectrpc.com/connect v1.16.0
 	github.com/PuerkitoBio/goquery v1.9.1
 	github.com/gocolly/colly/v2 v2.1.0
 	github.com/golang-jwt/jwt v3.2.2+incompatible
@@ -17,7 +17,7 @@ require (
 	golang.org/x/oauth2 v0.18.0
 	google.golang.org/protobuf v1.33.0
 	gorm.io/driver/sqlite v1.5.5
-	gorm.io/gorm v1.25.7
+	gorm.io/gorm v1.25.9
 )
 
 require (
