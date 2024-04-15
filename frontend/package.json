@@ -19,15 +19,15 @@
     "@googlemaps/js-api-loader": "^1.16.6",
     "@googlemaps/markerclusterer": "^2.5.3",
     "@quasar/cli": "^2.4.0",
-    "@quasar/extras": "^1.16.10",
+    "@quasar/extras": "^1.16.11",
     "axios": "^1.6.8",
     "core-js": "^3.36.1",
     "dotenv": "^16.4.5",
     "pinia": "^2.1.7",
-    "quasar": "^2.15.1",
+    "quasar": "^2.15.2",
     "vue": "^3.4.21",
     "vue-gtag": "^2.0.1",
-    "vue-i18n": "^9.10.2",
+    "vue-i18n": "^9.12.1",
     "vue-router": "^4.3.0"
   },
   "devDependencies": {
@@ -36,7 +36,7 @@
     "autoprefixer": "^10.4.19",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^8.10.0",
-    "eslint-plugin-vue": "^9.24.0",
+    "eslint-plugin-vue": "^9.25.0",
     "postcss": "^8.4.38",
     "prettier": "^3.2.5"
   },
