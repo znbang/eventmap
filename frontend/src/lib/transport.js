@@ -1,10 +1,10 @@
 import { createConnectTransport } from '@bufbuild/connect-web'
-import { currentUser } from 'boot/auth'
+import { getToken } from 'boot/auth'
 
 const auth = (next) => async (req) => {
-  const user = currentUser()
-  if (user?.token) {
-    req.header.set('Authorization', 'Bearer ' + user.token)
+  const token = getToken()
+  if (token) {
+    req.header.set('Authorization', 'Bearer ' + token)
   }
   return await next(req)
 }

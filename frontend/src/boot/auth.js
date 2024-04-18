@@ -28,6 +28,10 @@ export function currentUser() {
   return state.user
 }
 
+export function getToken() {
+  return state.user?.token
+}
+
 export default boot(async ({ router }) => {
   router.beforeEach((to, from) => {
     if (to.path === '/_=_') {
