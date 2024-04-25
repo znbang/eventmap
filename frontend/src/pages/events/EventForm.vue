@@ -42,7 +42,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { Loader } from '@googlemaps/js-api-loader'
 import { eventService } from 'src/lib/service'
 import { Timestamp } from '@bufbuild/protobuf'
-import { Code, ConnectError } from '@bufbuild/connect'
+import { Code, ConnectError } from '@connectrpc/connect'
 import { ValidationError } from 'src/gen/errdetails/validation_pb'
 
 const $q = useQuasar()

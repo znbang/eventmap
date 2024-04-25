@@ -9,6 +9,6 @@ plugins:
   - plugin: buf.build/bufbuild/es
     out: frontend/src/gen
     opt: target=js+dts
-  - plugin: buf.build/bufbuild/connect-es
+  - plugin: buf.build/connectrpc/es
     out: frontend/src/gen
     opt: target=js+dts

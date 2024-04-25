@@ -16,7 +16,7 @@ import { ref } from 'vue'
 import { useQuasar } from 'quasar'
 import { useRoute, useRouter } from 'vue-router'
 import { bookService } from 'src/lib/service'
-import { Code, ConnectError } from '@bufbuild/connect'
+import { Code, ConnectError } from '@connectrpc/connect'
 import { ValidationError } from 'src/gen/errdetails/validation_pb'
 
 const $q = useQuasar()

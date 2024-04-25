@@ -1,4 +1,4 @@
-import { createConnectTransport } from '@bufbuild/connect-web'
+import { createConnectTransport } from '@connectrpc/connect-web'
 import { getToken } from 'boot/auth'
 
 const auth = (next) => async (req) => {
