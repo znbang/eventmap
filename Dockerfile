@@ -1,4 +1,4 @@
-FROM node:18-alpine AS base
+FROM node:20-alpine AS base
 COPY --from=golang:alpine /usr/local/go /usr/local/go
 ENV GOPATH /go
 ENV PATH "$GOPATH/bin:/usr/local/go/bin:$PATH"
