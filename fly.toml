@@ -28,7 +28,7 @@ kill_timeout = "5s"
 
 [env]
   COOKIE_NAME = "EVENTMAP_SID"
-  DATABASE_URL = "/data/eventmap.db?_journal_mode=WAL"
+  DATABASE_URL = "/data/eventmap.db?_journal_mode=WAL&_txlock=immediate"
 #  FACEBOOK_CLIENT_ID=""
 #  FACEBOOK_CLIENT_SECRET=""
   FACEBOOK_REDIRECT_URI = "https://eventmap.app/login/oauth2/code/facebook"
