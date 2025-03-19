@@ -118,7 +118,11 @@ export default defineConfig((ctx) => {
       plugins: [
         'Dialog',
         'Notify',
-      ]
+      ],
+
+      env: {
+        GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY
+      }
     },
 
     // animations: 'all', // --- includes all animations
