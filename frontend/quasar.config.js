@@ -64,6 +64,10 @@ export default defineConfig((ctx) => {
       // extendViteConf (viteConf) {},
       // viteVuePluginOptions: {},
  
+      env: {
+        GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY
+      },
+
       vitePlugins: [
         ['@intlify/unplugin-vue-i18n/vite', {
           // if you want to use Vue I18n Legacy API, you need to set `compositionOnly: false`
@@ -118,11 +122,7 @@ export default defineConfig((ctx) => {
       plugins: [
         'Dialog',
         'Notify',
-      ],
-
-      env: {
-        GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY
-      }
+      ]
     },
 
     // animations: 'all', // --- includes all animations
