@@ -31,6 +31,7 @@ import { date } from 'quasar'
 import { ref, reactive, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { eventService } from 'src/lib/service'
+import { timestampDate } from '@bufbuild/protobuf/wkt'
 
 const $route = useRoute()
 const item = reactive({})
@@ -39,8 +40,8 @@ const mapSrc = ref('')
 const getEvent = async (id) => {
   const response = await eventService.getEvent({ id })
   Object.assign(item, response.event)
-  item.startDate = item.startDate.toDate()
-  item.endDate = item.endDate.toDate()
+  item.startDate = timestampDate(item.startDate)
+  item.endDate = timestampDate(item.endDate)
   mapSrc.value = `https://www.google.com/maps/embed/v1/place?key=${process.env.GOOGLE_MAPS_API_KEY}&zoom=${item.zoom}&q=${item.lat},${item.lng}`
 }
 

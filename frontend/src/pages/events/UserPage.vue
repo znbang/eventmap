@@ -27,6 +27,7 @@ import { useRoute, onBeforeRouteUpdate } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useSwipePage } from 'src/lib/swipe'
 import { eventService } from 'src/lib/service'
+import { timestampDate } from '@bufbuild/protobuf/wkt'
 import RoutePagination from 'components/RoutePagination.vue'
 
 const $q = useQuasar()
@@ -56,8 +57,8 @@ async function updateState(to = $route) {
   }
   const { items, total } = await eventService.listUserEvent(params)
   items.forEach(item => {
-    item.startDate = item.startDate.toDate()
-    item.endDate = item.endDate.toDate()
+    item.startDate = timestampDate(item.startDate)
+    item.endDate = timestampDate(item.endDate)
   })
   Object.assign(state, { items, total })
 }

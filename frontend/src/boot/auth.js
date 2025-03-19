@@ -33,7 +33,7 @@ export function getToken() {
 }
 
 export default boot(async ({ router }) => {
-  router.beforeEach((to, from) => {
+  router.beforeEach((to) => {
     if (to.path === '/_=_') {
       return '/'
     } else if (to.matched.some(record => record.meta.auth) && !isAuthenticated()) {

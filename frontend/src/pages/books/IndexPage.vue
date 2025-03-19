@@ -103,9 +103,9 @@ async function downloadRpc(id) {
   URL.revokeObjectURL(a.href)
 }
 
-function downloadLink(id) {
-  location.href= `/api/download-book?id=${id}`
-}
+// function downloadLink(id) {
+//   location.href= `/api/download-book?id=${id}`
+// }
 
 function getIcon(book) {
   switch (book.job?.status || 0) {
@@ -126,22 +126,24 @@ function syncStatusStream() {
           }
         })
       }
-    } catch (e) {}
+    } catch { 
+      // no-op 
+    }
   })()
 }
 
-function syncStatusSse() {
-  const eventSource = new EventSource('/api/sync-book-status')
-  eventSource.addEventListener('message', async (event) => {
-    const task = JSON.parse(event.data)
-    state.items.forEach(item => {
-      if (item.job?.id === task.id) {
-        item.job.message = task.message
-        item.job.status = task.status
-      }
-    })
-  })
-}
+// function syncStatusSse() {
+//   const eventSource = new EventSource('/api/sync-book-status')
+//   eventSource.addEventListener('message', async (event) => {
+//     const task = JSON.parse(event.data)
+//     state.items.forEach(item => {
+//       if (item.job?.id === task.id) {
+//         item.job.message = task.message
+//         item.job.status = task.status
+//       }
+//     })
+//   })
+// }
 
 onMounted(syncStatusStream)
 // onMounted(syncStatusSse)

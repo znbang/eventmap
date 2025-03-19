@@ -42,14 +42,6 @@ const (
 	AuthServiceLogoutProcedure = "/auth.v1.AuthService/Logout"
 )
 
-// These variables are the protoreflect.Descriptor objects for the RPCs defined in this package.
-var (
-	authServiceServiceDescriptor            = v1.File_auth_v1_auth_proto.Services().ByName("AuthService")
-	authServiceListProviderMethodDescriptor = authServiceServiceDescriptor.Methods().ByName("ListProvider")
-	authServiceGetUserMethodDescriptor      = authServiceServiceDescriptor.Methods().ByName("GetUser")
-	authServiceLogoutMethodDescriptor       = authServiceServiceDescriptor.Methods().ByName("Logout")
-)
-
 // AuthServiceClient is a client for the auth.v1.AuthService service.
 type AuthServiceClient interface {
 	ListProvider(context.Context, *connect.Request[v1.ListProviderRequest]) (*connect.Response[v1.ListProviderResponse], error)
@@ -66,23 +58,24 @@ type AuthServiceClient interface {
 // http://api.acme.com or https://acme.com/grpc).
 func NewAuthServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...connect.ClientOption) AuthServiceClient {
 	baseURL = strings.TrimRight(baseURL, "/")
+	authServiceMethods := v1.File_auth_v1_auth_proto.Services().ByName("AuthService").Methods()
 	return &authServiceClient{
 		listProvider: connect.NewClient[v1.ListProviderRequest, v1.ListProviderResponse](
 			httpClient,
 			baseURL+AuthServiceListProviderProcedure,
-			connect.WithSchema(authServiceListProviderMethodDescriptor),
+			connect.WithSchema(authServiceMethods.ByName("ListProvider")),
 			connect.WithClientOptions(opts...),
 		),
 		getUser: connect.NewClient[v1.GetUserRequest, v1.GetUserResponse](
 			httpClient,
 			baseURL+AuthServiceGetUserProcedure,
-			connect.WithSchema(authServiceGetUserMethodDescriptor),
+			connect.WithSchema(authServiceMethods.ByName("GetUser")),
 			connect.WithClientOptions(opts...),
 		),
 		logout: connect.NewClient[v1.LogoutRequest, v1.LogoutResponse](
 			httpClient,
 			baseURL+AuthServiceLogoutProcedure,
-			connect.WithSchema(authServiceLogoutMethodDescriptor),
+			connect.WithSchema(authServiceMethods.ByName("Logout")),
 			connect.WithClientOptions(opts...),
 		),
 	}
@@ -123,22 +116,23 @@ type AuthServiceHandler interface {
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
 func NewAuthServiceHandler(svc AuthServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
+	authServiceMethods := v1.File_auth_v1_auth_proto.Services().ByName("AuthService").Methods()
 	authServiceListProviderHandler := connect.NewUnaryHandler(
 		AuthServiceListProviderProcedure,
 		svc.ListProvider,
-		connect.WithSchema(authServiceListProviderMethodDescriptor),
+		connect.WithSchema(authServiceMethods.ByName("ListProvider")),
 		connect.WithHandlerOptions(opts...),
 	)
 	authServiceGetUserHandler := connect.NewUnaryHandler(
 		AuthServiceGetUserProcedure,
 		svc.GetUser,
-		connect.WithSchema(authServiceGetUserMethodDescriptor),
+		connect.WithSchema(authServiceMethods.ByName("GetUser")),
 		connect.WithHandlerOptions(opts...),
 	)
 	authServiceLogoutHandler := connect.NewUnaryHandler(
 		AuthServiceLogoutProcedure,
 		svc.Logout,
-		connect.WithSchema(authServiceLogoutMethodDescriptor),
+		connect.WithSchema(authServiceMethods.ByName("Logout")),
 		connect.WithHandlerOptions(opts...),
 	)
 	return "/auth.v1.AuthService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

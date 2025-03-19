@@ -41,9 +41,9 @@ import { ref, reactive, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Loader } from '@googlemaps/js-api-loader'
 import { eventService } from 'src/lib/service'
-import { Timestamp } from '@bufbuild/protobuf'
+import { timestampDate, timestampFromDate } from '@bufbuild/protobuf/wkt'
 import { Code, ConnectError } from '@connectrpc/connect'
-import { ValidationError } from 'src/gen/errdetails/validation_pb'
+import { ValidationErrorSchema } from 'src/gen/errdetails/validation_pb'
 
 const $q = useQuasar()
 const $route = useRoute()
@@ -103,8 +103,8 @@ const initMap = (google) => {
 const getEvent = async (id) => {
   const response = await eventService.getEvent({ id })
   Object.assign(form, response.event)
-  const startDate = date.formatDate(form.startDate.toDate(), 'YYYY-MM-DD')
-  const endDate = date.formatDate(form.endDate.toDate(), 'YYYY-MM-DD')
+  const startDate = date.formatDate(timestampDate(form.startDate), 'YYYY-MM-DD')
+  const endDate = date.formatDate(timestampDate(form.endDate), 'YYYY-MM-DD')
   if (startDate === endDate) {
     dateInput.value = startDate
     dateRange.value = startDate
@@ -131,16 +131,16 @@ function onDateUpdate(value) {
   if (value) {
     if (typeof value === 'string') {
       dateInput.value = value
-      form.startDate = form.endDate = Timestamp.fromDate(new Date(date.formatDate(value, 'YYYY-MM-DDTHH:mm:ss.SSSZ')))
+      form.startDate = form.endDate = timestampFromDate(new Date(date.formatDate(value, 'YYYY-MM-DDTHH:mm:ss.SSSZ')))
     } else {
       dateInput.value = value.from + ' - ' + value.to
-      form.startDate = Timestamp.fromDate(new Date(date.formatDate(value.from, 'YYYY-MM-DDTHH:mm:ss.SSSZ')))
-      form.endDate = Timestamp.fromDate(new Date(date.formatDate(value.to, 'YYYY-MM-DDTHH:mm:ss.SSSZ')))
+      form.startDate = timestampFromDate(new Date(date.formatDate(value.from, 'YYYY-MM-DDTHH:mm:ss.SSSZ')))
+      form.endDate = timestampFromDate(new Date(date.formatDate(value.to, 'YYYY-MM-DDTHH:mm:ss.SSSZ')))
     }
   } else {
     dateInput.value = ''
-    form.startDate = Timestamp.fromDate(new Date(0))
-    form.endDate = Timestamp.fromDate(new Date(0))
+    form.startDate = timestampFromDate(new Date(0))
+    form.endDate = timestampFromDate(new Date(0))
   }
 }
 
@@ -151,7 +151,7 @@ function onSubmit() {
     .then(() => $router.push('/events/user'))
     .catch(e => {
       if (e instanceof ConnectError && e.code === Code.InvalidArgument) {
-        const err = e.findDetails(ValidationError).find(it => it.errors)
+        const err = e.findDetails(ValidationErrorSchema).find(it => it.errors)
         errors.value = tr(err?.errors || {})
       } else {
         $q.notify(e)

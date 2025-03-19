@@ -11,6 +11,7 @@ import { useRouter } from 'vue-router'
 import { Loader } from '@googlemaps/js-api-loader'
 import { MarkerClusterer } from '@googlemaps/markerclusterer'
 import { eventService } from 'src/lib/service'
+import { timestampDate } from '@bufbuild/protobuf/wkt'
 
 export default defineComponent({
   setup() {
@@ -21,7 +22,7 @@ export default defineComponent({
       libraries: ['places'],
     })
 
-    function addMarkers(map, events) {
+    function addMarkers(map, events, google) {
       const infoWindow = new google.maps.InfoWindow()
       const markers = events.map(event => {
         const marker = new google.maps.Marker({
@@ -67,11 +68,11 @@ export default defineComponent({
           const response = await eventService.listActiveEvent({})
           const items = response.items || []
           const events = items.map(a => {
-            a.startDate = date.formatDate(a.startDate.toDate(), 'YYYY-MM-DD')
-            a.endDate = date.formatDate(a.endDate.toDate(), 'YYYY-MM-DD')
+            a.startDate = date.formatDate(timestampDate(a.startDate), 'YYYY-MM-DD')
+            a.endDate = date.formatDate(timestampDate(a.endDate), 'YYYY-MM-DD')
             return a
           })
-          addMarkers(map, events)
+          addMarkers(map, events, google)
         })
         .catch(error => {
           $q.notify({

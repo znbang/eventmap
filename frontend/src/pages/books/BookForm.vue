@@ -17,7 +17,7 @@ import { useQuasar } from 'quasar'
 import { useRoute, useRouter } from 'vue-router'
 import { bookService } from 'src/lib/service'
 import { Code, ConnectError } from '@connectrpc/connect'
-import { ValidationError } from 'src/gen/errdetails/validation_pb'
+import { ValidationErrorSchema } from 'src/gen/errdetails/validation_pb'
 
 const $q = useQuasar()
 const $route = useRoute()
@@ -40,7 +40,7 @@ async function onSubmit() {
     .then(() => $router.push('/books'))
     .catch(e => {
       if (e instanceof ConnectError && e.code === Code.InvalidArgument) {
-        const err = e.findDetails(ValidationError).find(it => it.errors)
+        const err = e.findDetails(ValidationErrorSchema).find(it => it.errors)
         errors.value = tr(err?.errors || {})
       } else {
         $q.notify(e)
