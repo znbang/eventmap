@@ -2,9 +2,10 @@ package mvc
 
 import (
 	"errors"
+	"maps"
 
 	"connectrpc.com/connect"
-	"github.com/znbang/eventmap/internal/gen/errdetails"
+	errdetailsv1 "github.com/znbang/eventmap/internal/gen/errdetails"
 	"github.com/znbang/validation"
 )
 
@@ -25,9 +26,7 @@ func PageSize(p, s int32) (page, size int) {
 
 func NewValidationError(validate *validation.Validation) error {
 	validationError := errdetailsv1.ValidationError{Errors: map[string]string{}}
-	for k, v := range validate.Errors {
-		validationError.Errors[k] = v
-	}
+	maps.Copy(validationError.Errors, validate.Errors)
 	err := connect.NewError(connect.CodeInvalidArgument, errors.New("validation failed"))
 	if detail, detailErr := connect.NewErrorDetail(&validationError); detailErr == nil {
 		err.AddDetail(detail)

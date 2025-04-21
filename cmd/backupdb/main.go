@@ -22,21 +22,21 @@ var tables = []string{
 
 func genInsertSql(table string, columns []string) string {
 	var cols []string
-	for i := 0; i < len(columns); i++ {
+	for range columns {
 		cols = append(cols, "?")
 	}
 	return fmt.Sprintf("insert into %s (%s) values (%s)", table, strings.Join(columns, ","), strings.Join(cols, ","))
 }
 
-func sliceScan(rs *sql.Rows) ([]interface{}, error) {
+func sliceScan(rs *sql.Rows) ([]any, error) {
 	columns, err := rs.Columns()
 	if err != nil {
-		return []interface{}{}, err
+		return []any{}, err
 	}
 
-	values := make([]interface{}, len(columns))
+	values := make([]any, len(columns))
 	for i := range values {
-		values[i] = new(interface{})
+		values[i] = new(any)
 	}
 
 	err = rs.Scan(values...)
@@ -45,13 +45,13 @@ func sliceScan(rs *sql.Rows) ([]interface{}, error) {
 	}
 
 	for i := range columns {
-		values[i] = *(values[i].(*interface{}))
+		values[i] = *(values[i].(*any))
 	}
 
 	return values, rs.Err()
 }
 
-func query(src *sql.DB, table string, id any) ([][]interface{}, []string, error) {
+func query(src *sql.DB, table string, id any) ([][]any, []string, error) {
 	queryStmt, err := func() (*sql.Stmt, error) {
 		if id == nil {
 			return src.Prepare(fmt.Sprintf("select * from %s order by id limit 1000", table))
@@ -81,7 +81,7 @@ func query(src *sql.DB, table string, id any) ([][]interface{}, []string, error)
 		return nil, nil, err
 	}
 
-	var rows [][]interface{}
+	var rows [][]any
 
 	for rs.Next() {
 		row, err := sliceScan(rs)

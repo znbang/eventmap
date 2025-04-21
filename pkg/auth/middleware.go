@@ -22,7 +22,7 @@ func WithUser(userService *userservice.UserService, loginService *login.Service,
 			return
 		}
 
-		token, err := jwt.ParseWithClaims(bearerToken, &jwt.StandardClaims{}, func(token *jwt.Token) (interface{}, error) {
+		token, err := jwt.ParseWithClaims(bearerToken, &jwt.StandardClaims{}, func(token *jwt.Token) (any, error) {
 			return jwtSecret, nil
 		})
 		if err != nil {
